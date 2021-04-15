@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "allegro_native_dialog.h": "c",
+        "allegro_font.h": "c",
+        "biblioteca.h": "c",
+        "functional": "c"
+    }
+}
