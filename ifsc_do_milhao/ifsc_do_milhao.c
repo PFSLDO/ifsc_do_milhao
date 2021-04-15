@@ -15,7 +15,7 @@ void Thematic(event_queue, option1, option2, option3); //modalidade das pergunta
 void GameInitiation(); //iniciação da rodada
 void NewQuestion(); //gera uma pergunta nova
 void Points(); //Pontuação do jogador, quantos pedidos de ajuda ainda podem ser solicitados, etc
-void Answer(); //analise da resposta
+void Answer(int ans); //analise da resposta
 
 void Character(); //escolha  de personagem
 void CharacterUpdate(); //atualiza o personagem do jogador
@@ -128,22 +128,14 @@ int main(void) {
         return -1;
     }
 
-	// // Alocamos o retângulo central da tela
-    // area_central = al_create_bitmap(WIDTH/2, HEIGHT/2);
-    // if (!area_central){
-    //     Error("Falha ao criar bitmap");
-    //     al_destroy_display(display);
-    //     return -1;
-    // }
-
-	// // Alocamos o botão para fechar a aplicação
-    // exit = al_create_bitmap(100, 50);
-    // if (!exit){
-    //     error_msg("Falha ao criar botão de saída");
-    //     al_destroy_bitmap(area_central);
-    //     al_destroy_display(display);
-    //     return -1;
-    // }
+	// Alocamos o botão para fechar a aplicação
+    exit = al_create_bitmap(WIDTH-100, 100);
+    if (!exit){
+        Error("Falha ao criar botão de saída");
+        al_destroy_bitmap(exit);
+        al_destroy_display(display);
+        return -1;
+    }
 
 	event_queue = al_create_event_queue();
     if (!event_queue){
@@ -286,168 +278,50 @@ void Thematic(ev_queue, op1, op2, op3) { //melhorar usando vetores
         ev.mouse.x <= al_get_bitmap_width(op1) + 150 &&
     	ev.mouse.y >= al_get_bitmap_height(op1) - 50 &&
     	ev.mouse.y <= al_get_bitmap_height(op1) + 50){
-        	Answer(); //chama a função que analisa a resposta que foi pressionada
+        	GameInitiation(1); //chama a função que analisa a resposta que foi pressionada
+        }
+		else if (ev.mouse.x >= al_get_bitmap_width(op2) - 150 &&
+        ev.mouse.x <= al_get_bitmap_width(op2) + 150 &&
+    	ev.mouse.y >= al_get_bitmap_height(op2) - 50 &&
+    	ev.mouse.y <= al_get_bitmap_height(op2) + 50){
+        	GameInitiation(2); //chama a função que analisa a resposta que foi pressionada
+        }
+		else if (ev.mouse.x >= al_get_bitmap_width(op3) - 150 &&
+        ev.mouse.x <= al_get_bitmap_width(op3) + 150 &&
+    	ev.mouse.y >= al_get_bitmap_height(op3) - 50 &&
+    	ev.mouse.y <= al_get_bitmap_height(op3) + 50){
+        	GameInitiation(3); //chama a função que analisa a resposta que foi pressionada
         }
 	}
 }
 
+void GameInitiation(int choice) {
 
-
-
-
-
-
-
-
-void InitShip(struct SpaceShip *ship) {
-	ship->x = WIDTH/2;
-	ship->y = HEIGHT-20;
-	ship->ID = PLAYER;
-	ship->lives = 3;
-	ship->speed = 7;
-	ship->boundx = 6;
-	ship->boundy = 7;
-	ship->score = 0;
-}
-void DrawShip(struct SpaceShip *ship)
-{
-	al_draw_filled_rectangle(ship->x - 7, ship->y, ship->x - 9, ship->y - 10, al_map_rgb(255, 0, 0));
-	al_draw_filled_rectangle(ship->x + 7, ship->y, ship->x + 9, ship->y - 10, al_map_rgb(255, 0, 0));
-
-	al_draw_filled_triangle(ship->x - 17, ship->y + 12, ship->x, ship->y-12, ship->x + 17, ship->y + 12, al_map_rgb(0, 255, 0));
-	al_draw_filled_rectangle(ship->x + 2, ship->y + 12, ship->x - 2, ship->y - 15, al_map_rgb(0, 0, 255));
-}
-void MoveShipUp(struct SpaceShip *ship) {
-	ship->y -= ship->speed;
-	if(ship->y < HEIGHT - 150) {
-		ship->y = HEIGHT - 150;
-	}
-}
-void MoveShipDown(struct SpaceShip *ship) {
-	ship->y += ship->speed;
-	if(ship->y > HEIGHT) {
-		ship->y = HEIGHT;
-	}
-}
-void MoveShipLeft(struct SpaceShip *ship) {
-	ship->x -= ship->speed;
-	if(ship->x < 0) {
-		ship->x = 0;
-	}
-}
-void MoveShipRight(struct SpaceShip *ship) {
-	ship->x += ship->speed;
-	if(ship->x > WIDTH) {
-		ship->x = WIDTH;
-	}
-}
-
-void InitBullet(struct Bullet bullet[], int size) {
-	for(int i = 0; i < size; i++) {
-		bullet[i].ID = BULLET;
-		bullet[i].speed = 10;
-		bullet[i].live = false;
-	}
-}
-void DrawBullet(struct Bullet bullet[], int size) {
-	for( int i = 0; i < size; i++) {
-		if(bullet[i].live) {
-			al_draw_filled_circle(bullet[i].x, bullet[i].y, 2, al_map_rgb(255, 255, 255));
-		}
-	}
-}
-void FireBullet(struct Bullet bullet[], int size, struct SpaceShip *ship) {
-	for( int i = 0; i < size; i++) {
-		if(!bullet[i].live) {
-			bullet[i].x = ship->x;
-			bullet[i].y = ship->y - 17;
-			bullet[i].live = true;
-			break;
-		}
-	}
-}
-void UpdateBullet(struct Bullet bullet[], int size) {
-	for(int i = 0; i < size; i++) {
-		if(bullet[i].live) {
-			bullet[i].y -= bullet[i].speed;
-			if(bullet[i].y < 0) {
-				bullet[i].live = false;
-			}
-		}
-	}
-}
-void CollideBullet(struct Bullet bullet[], int bSize, struct Comet comets[], int cSize, struct SpaceShip *ship) {
-	for(int i = 0; i < bSize; i++) {
-		if(bullet[i].live) {
-			for(int j =0; j < cSize; j++) {
-				if(comets[j].live) {
-					ship->boundx = comets[j].x/20;
-					ship->boundy = comets[j].y/20;
-					if(bullet[i].x > (comets[j].x - comets[j].boundx) &&
-						bullet[i].x < (comets[j].x + comets[j].boundx) &&
-						bullet[i].y > (comets[j].y - comets[j].boundy) &&
-						bullet[i].y < (comets[j].y + comets[j].boundy)) {
-						bullet[i].live = false;
-						comets[j].live = false;
-						ship->score++;
-					}
-				}
-			}
+	for (int i=0; i<3; i++) {
+		if (choice == i) {
+			NewQuestion(i);
 		}
 	}
 }
 
-void InitComet(struct Comet comets[], int size) {
-	for(int i = 0; i < size; i++) {
-		comets[i].ID = ENEMY;
-		comets[i].live = false;
-		comets[i].speed = 5;
-		comets[i].boundx = 18;
-		comets[i].boundy = 18;
+void Answer(int answer) {
+	if (answer == ) {
+		
 	}
 }
-void DrawComet(struct Comet comets[], int size) {
-	for(int i = 0; i < size; i++) {
-		if(comets[i].live) {
-			al_draw_filled_circle(comets[i].x, comets[i].y, comets[i].y/10, al_map_rgb(rand() % 255, rand() % 255, rand() % 255));
-		}
-	}
-}
-void StartComet(struct Comet comets[], int size) {
-	for(int i = 0; i < size; i++) {
-		if(!comets[i].live) {
-			if(rand() % 500 == 0) {
-				comets[i].live = true;
-				comets[i].x = 30 + rand() % (WIDTH - 60);
-				comets[i].y = 0;
-				break;
-			}
-		}
-	}
-}
-void UpdateComet(struct Comet comets[], int size) {
-	for(int i = 0; i < size; i++) {
-		if(comets[i].live) {
-			comets[i].y += comets[i].speed;
-		}
-	}
-}
-void CollideComet(struct Comet comets[], int cSize, struct SpaceShip *ship) {
-	for(int i = 0; i < cSize; i++) {
-		if(comets[i].live) {
-			ship->boundx = comets[i].x/20;
-			ship->boundy = comets[i].y/20;
-			if(comets[i].x - comets[i].boundx < ship->x + ship->boundx &&
-				comets[i].x + comets[i].boundx > ship->x - ship->boundx &&
-				comets[i].y - comets[i].boundy < ship->y + ship->boundy &&
-				comets[i].y + comets[i].boundy > ship->y - ship->boundy) {
-				ship->lives--;
-				comets[i].live = false;
-			}
-			else if(comets[i].x < 0) {
-				comets[i].live = false;
-				ship->lives--;
-			}
-		}
+
+void Stop(ev_queue, exit) {
+	// Verificamos se há eventos na fila
+    while (!al_is_event_queue_empty(ev_queue)){
+        ALLEGRO_EVENT ev;
+    	al_wait_for_event(ev_queue, &ev);
+		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+            if (ev.mouse.x >= al_get_bitmap_width(exit) - 20 &&
+            ev.mouse.x <= al_get_bitmap_width(exit) + 20 &&
+			ev.mouse.y <= al_get_bitmap_height(exit) + 10 &&
+            ev.mouse.y >= al_get_bitmap_height(exit) - 10){
+				return 1;
+            }
+    	}
 	}
 }
