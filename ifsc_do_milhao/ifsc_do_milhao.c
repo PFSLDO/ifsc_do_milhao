@@ -12,7 +12,7 @@ const int HEIGHT = 800;
 //prototypes
 void Boot(); //iniciação do jogo
 void Thematic(event_queue, option1, option2, option3); //modalidade das perguntas
-void GameInitiation(); //iniciação da rodada
+void GameInitiation(int theme); //iniciação da rodada
 void NewQuestion(); //gera uma pergunta nova
 void Points(); //Pontuação do jogador, quantos pedidos de ajuda ainda podem ser solicitados, etc
 void Answer(int ans); //analise da resposta
@@ -213,8 +213,10 @@ int main(void) {
 			al_clear_to_color(al_map_rgb(0,0,0));
 		}
 	}
-	al_destroy_bitmap(botao_sair);
-    al_destroy_bitmap(area_central);
+	al_destroy_bitmap(exit);
+    al_destroy_bitmap(option1);
+	al_destroy_bitmap(option2);
+	al_destroy_bitmap(option3);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
 	al_destroy_font(font18);
@@ -295,10 +297,14 @@ void Thematic(ev_queue, op1, op2, op3) { //melhorar usando vetores
 	}
 }
 
-void GameInitiation(int choice) {
-
+void GameInitiation(int theme, exit) {
+	al_set_target_bitmap(exit);
+    al_clear_to_color(al_map_rgb(255, 0, 0));
+	al_draw_bitmap(exit, LARGURA_TELA - al_get_bitmap_width(exit) - 10,
+        ALTURA_TELA - al_get_bitmap_height(exit) - 10, 0);
+	
 	for (int i=0; i<3; i++) {
-		if (choice == i) {
+		if (theme == i) {
 			NewQuestion(i);
 		}
 	}
