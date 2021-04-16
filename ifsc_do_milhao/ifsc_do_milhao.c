@@ -11,41 +11,25 @@ const int HEIGHT = 800;
 
 //prototypes
 void Boot(); //iniciação do jogo
-void Thematic(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *option1, ALLEGRO_BITMAP *option2, ALLEGRO_BITMAP *option3); //modalidade das perguntas
+void Thematic(); //modalidade das perguntas
+int CheckMouse(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BITMAP *op2, ALLEGRO_BITMAP *op3); //checa a posição do mouse sobre as opções na tela e o clique sobre o botão de sair
+
 void GameInitiation(int theme, ALLEGRO_BITMAP *exit); //iniciação da rodada
-void NewQuestion(); //gera uma pergunta nova
+int NewQuestion(int theme); //gera uma pergunta nova
 void Points(); //Pontuação do jogador, quantos pedidos de ajuda ainda podem ser solicitados, etc
-void Answer(int answer); //analise da resposta
+void Answer(int answer, int realanswer, struct Character *score); //analise da resposta
 
-void Character(); //escolha  de personagem
-void CharacterUpdate(); //atualiza o personagem do jogador
-void Professor(); //aparição de um professor
-void ProfessorUpdate(); //atualiza o professor (quando há pedido de ajuda para os universitários)
-void Interviewer(); //aparição de um entrevistador
-void InterviewerUpdate(); //atualiza o personagem do entrevistador
+void ChooseCharacter (struct Character *player); //escolha do personagem do jogador
+void Character(struct Character *player, int charc); //inicia o personagem do jogador
+void CharacterUpdate(struct Character *player, int charc); //atualiza o personagem do jogador
+void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
+void ProfessorUpdate(struct Extras *x, struct Extras *y); //atualiza o professor (quando há pedido de ajuda para os universitários)
+int Interviewer(struct Extras *pamela, struct Extras *valter, int quest); //aparição de um entrevistador
+void InterviewerUpdate(int interviewer); //atualiza o personagem do entrevistador
 
-void Help(); //ajuda aos universitários
+void Help(struct Extras *x, struct Extras *y); //ajuda aos universitários
 void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit); //parar de jogar
 void Tutorial(); //explicação do funcionamento do jogo
-
-// void InitShip(struct SpaceShip *ship);
-// void DrawShip(struct SpaceShip *ship);
-// void MoveShipUp(struct SpaceShip *ship);
-// void MoveShipDown(struct SpaceShip *ship);
-// void MoveShipLeft(struct SpaceShip *ship);
-// void MoveShipRight(struct SpaceShip *ship);
-
-// void InitBullet(struct Bullet bullet[], int size);
-// void DrawBullet(struct Bullet bullet[], int size);
-// void FireBullet(struct Bullet bullet[], int size, struct SpaceShip *ship);
-// void UpdateBullet(struct Bullet bullet[], int size);
-// void CollideBullet(struct Bullet bullet[], int bSize, struct Comet comets[], int cSize, struct SpaceShip *ship);
-
-// void InitComet(struct Comet comets[], int size);
-// void DrawComet(struct Comet comets[], int size);
-// void StartComet(struct Comet comets[], int size);
-// void UpdateComet(struct Comet comets[], int size);
-// void CollideComet(struct Comet comets[], int cSize, struct SpaceShip *ship);
 
 void Error(char *text){
 	al_show_native_message_box(NULL,"ERRO", "Ocorreu o seguinte erro e o programa sera finalizado:",text,NULL,ALLEGRO_MESSAGEBOX_ERROR);
@@ -57,11 +41,17 @@ int main(void) {
 	bool redraw = true;
 	const int FPS = 60;
 	bool isGameOver = false;
+	int thematic;
+	int playr;
+	int question;
+	int interv;
 
 	//object variables
-	// struct SpaceShip ship;
-	// struct Bullet bullets[NUM_BULLETS];
-	// struct Comet comets[NUM_COMETS];
+	struct Character player;
+	struct Extras pamela;
+	struct Extras valter;
+	struct Extras x; //professor 1
+	struct Extras y; //professor 2 etc
 
 	//Allegro variables
 	ALLEGRO_DISPLAY *display = NULL;
@@ -155,9 +145,21 @@ int main(void) {
     al_register_event_source(event_queue, al_get_mouse_event_source());
 
 	srand(time(NULL));
-	// InitShip(&ship);
-	// InitBullet(bullets, NUM_BULLETS);
-	// InitComet(comets, NUM_COMETS);
+
+	Boot(); //inicia o jogador
+	ChooseCharacter (&player); //mostra as opções de personagem
+	playr = CheckMouse(event_queue, op1, op2, op3); //checa a opção escolhida pelo usuário
+	Thematic(); //mostra as opções de temática para as perguntas
+	thematic = CheckMouse(event_queue, op1, op2, op3); //checa a opção escolhida pelo usuário
+	Character(&player, playr); //inicia o personagem do jogador
+	Interviewer(&pamela, &valter); //inicia o personagem do entrevistador
+	GameInitiation(thematic, exit); //inicia o jogo
+	CharacterUpdate(&player, playr);
+	question = NewQuestion(thematic);
+	interv = Interviewer(&pamela, &valter, question);
+	InterviewerUpdate(interv);
+
+
 	
 	font18 = al_load_font("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/arial.ttf", 18, 0);
 
@@ -187,9 +189,6 @@ int main(void) {
 				// CollideBullet(bullets, NUM_BULLETS, comets, NUM_COMETS, &ship);
 				// CollideComet(comets, NUM_COMETS, &ship);
 
-				// if(ship.lives <= 0) {
-				// 	isGameOver = true;
-				// }
 			}
 		}
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -224,99 +223,161 @@ int main(void) {
 
 	return 0;
 }
-void Thematic(ALLEGRO_EVENT_QUEUE *ev_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BITMAP *op2, ALLEGRO_BITMAP *op3) { //melhorar usando vetores
-    // Verificamos se há eventos na fila
-    while (!al_is_event_queue_empty(ev_queue)){
+
+void Thematic() {
+    //colocar fundo do display com imagem para esta escolha
+	//colocar textos em cima dos blocos de opções
+}
+
+void GameInitiation(int theme, ALLEGRO_BITMAP *exit) {
+	al_set_target_bitmap(exit);
+    al_clear_to_color(al_map_rgb(255, 0, 0)); //pinta botão de sair do jogo de vermelho
+	
+	for (int i=0; i<3; i++) {
+		if (theme == i) {
+			for (int j=0; j<10; j++) {
+				NewQuestion(i);
+				//funcao checar cursor do usuario
+			}
+		}
+	}
+}
+
+void ChooseCharacter (struct Character *player) {
+	//pergunta qual jogador ele quer ser "professor", "aluno" ou "aleatorio"
+}
+
+void Character(struct Character *player, int charc) { //inicia o personagem
+	player->ID = charc;
+	player->x = 25;
+	player->y = HEIGHT;
+	player->lives = 3;
+	player->score = 0;
+}
+
+void CharacterUpdate(struct Character *player, int charc); {
+	for (int i=player->y; i>HEIGHT-25; i--) {
+		player->y = i;
+	}
+}
+
+void Professor(struct Extras *x, struct Extras *y) {
+	char choice;
+	//pergunta qual jogador ele quer ser "professor", "aluno" ou "aleatorio"
+	//ler a escolha
+	if () {
+
+	}
+	x->ID = choice;
+	x->x = 25;
+	x->y = HEIGHT;
+}
+
+void ProfessorUpdate(struct Extras *x, struct Extras *y) {
+
+}
+
+int Interviewer(struct Extras *pamela, struct Extras *valter, int quest) {
+	int interv; //qual entrevistador da vez
+
+	return interv;
+}
+
+void InterviewerUpdate(int interviewer) {
+
+}
+
+int NewQuestion(int theme) { //implementar logica para nao repetir pergunta
+	int quest;
+	if (theme == 1) {
+		//print de uma pergunta aleatoria dentre todas as categorias
+	}
+	if (theme == 2) {
+		//print de uma pergunta aleatoria dentre as de professor
+	}
+	if (theme == 3) {
+		//print de uma pergunta aleatoria dentre as de aluno
+	}
+	return quest;
+}
+
+int CheckMouse(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BITMAP *op2, ALLEGRO_BITMAP *op3) { //melhorar usando vetores
+	int result;
+	while (!al_is_event_queue_empty(event_queue)){
         ALLEGRO_EVENT ev;
-        al_wait_for_event(ev_queue, &ev);
- 
-        // Se o evento foi de movimentação do mouse
-        if (ev.type == ALLEGRO_EVENT_MOUSE_AXES){
-			//Verifica se o cursor está sobre a opção 1
-			if (ev.mouse.x >= al_get_bitmap_width(op1) - 150 &&
-            ev.mouse.x <= al_get_bitmap_width(op1) + 150 &&
-        	ev.mouse.y >= al_get_bitmap_height(op1) - 50 &&
-        	ev.mouse.y <= al_get_bitmap_height(op1) + 50){
-            	// Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
-        		al_set_target_bitmap(op1);
-				al_clear_to_color(al_map_rgb(0, 255, 0));
-        	}
-			else {
-				al_clear_to_color(al_map_rgb(255, 255, 255));
-			}
-
-			//Verifica se o cursor está sobre a opção 2
-			if (ev.mouse.x >= al_get_bitmap_width(op2) - 150 &&
-            ev.mouse.x <= al_get_bitmap_width(op2) + 150 &&
-        	ev.mouse.y >= al_get_bitmap_height(op2) - 50 &&
-        	ev.mouse.y <= al_get_bitmap_height(op2) + 50){
-            	// Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
-        		al_set_target_bitmap(op2);
-				al_clear_to_color(al_map_rgb(0, 255, 0));
-        	}
-			else {
-				al_clear_to_color(al_map_rgb(255, 255, 255));
-			}
-
-			//Verifica se o cursor está sobre a opção 3
-			if (ev.mouse.x >= al_get_bitmap_width(op3) - 150 &&
-            ev.mouse.x <= al_get_bitmap_width(op3) + 150 &&
-        	ev.mouse.y >= al_get_bitmap_height(op3) - 50 &&
-        	ev.mouse.y <= al_get_bitmap_height(op3) + 50){
-            	// Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
-        		al_set_target_bitmap(op3);
-				al_clear_to_color(al_map_rgb(0, 255, 0));
-        	}
-			else {
-				al_clear_to_color(al_map_rgb(255, 255, 255));
-			}
-        }
-
-        //se o evento foi um clique do mouse
-		else if (ev.mouse.x >= al_get_bitmap_width(op1) - 150 &&
+        al_wait_for_event(event_queue, &ev);
+		if (ev.mouse.x >= al_get_bitmap_width(op1) - 150 &&
         ev.mouse.x <= al_get_bitmap_width(op1) + 150 &&
     	ev.mouse.y >= al_get_bitmap_height(op1) - 50 &&
     	ev.mouse.y <= al_get_bitmap_height(op1) + 50){
-        	GameInitiation(1); //chama a função que analisa a resposta que foi pressionada
+            // Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
+        	al_set_target_bitmap(op1);
+			al_clear_to_color(al_map_rgb(0, 255, 0));
+    	}	
+		else {
+			al_clear_to_color(al_map_rgb(255, 255, 255));
+		}
+
+		//Verifica se o cursor está sobre a opção 2
+		if (ev.mouse.x >= al_get_bitmap_width(op2) - 150 &&
+        ev.mouse.x <= al_get_bitmap_width(op2) + 150 &&
+        ev.mouse.y >= al_get_bitmap_height(op2) - 50 &&
+        ev.mouse.y <= al_get_bitmap_height(op2) + 50){
+            // Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
+        	al_set_target_bitmap(op2);
+			al_clear_to_color(al_map_rgb(0, 255, 0));
+        }
+		else {
+			al_clear_to_color(al_map_rgb(255, 255, 255));
+		}
+
+		//Verifica se o cursor está sobre a opção 3
+		if (ev.mouse.x >= al_get_bitmap_width(op3) - 150 &&
+        ev.mouse.x <= al_get_bitmap_width(op3) + 150 &&
+        ev.mouse.y >= al_get_bitmap_height(op3) - 50 &&
+        ev.mouse.y <= al_get_bitmap_height(op3) + 50){
+            // Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
+        	al_set_target_bitmap(op3);
+			al_clear_to_color(al_map_rgb(0, 255, 0));
+        }
+		else {
+			al_clear_to_color(al_map_rgb(255, 255, 255));
+		}
+
+		//se o evento foi um clique do mouse
+		if (ev.mouse.x >= al_get_bitmap_width(op1) - 150 &&
+        ev.mouse.x <= al_get_bitmap_width(op1) + 150 &&
+    	ev.mouse.y >= al_get_bitmap_height(op1) - 50 &&
+    	ev.mouse.y <= al_get_bitmap_height(op1) + 50){
+        	result = 1;
         }
 		else if (ev.mouse.x >= al_get_bitmap_width(op2) - 150 &&
         ev.mouse.x <= al_get_bitmap_width(op2) + 150 &&
     	ev.mouse.y >= al_get_bitmap_height(op2) - 50 &&
     	ev.mouse.y <= al_get_bitmap_height(op2) + 50){
-        	GameInitiation(2); //chama a função que analisa a resposta que foi pressionada
+        	result = 2;
         }
 		else if (ev.mouse.x >= al_get_bitmap_width(op3) - 150 &&
         ev.mouse.x <= al_get_bitmap_width(op3) + 150 &&
     	ev.mouse.y >= al_get_bitmap_height(op3) - 50 &&
     	ev.mouse.y <= al_get_bitmap_height(op3) + 50){
-        	GameInitiation(3); //chama a função que analisa a resposta que foi pressionada
+        	result = 3;
         }
 	}
+return result;
 }
 
-void GameInitiation(int theme, ALLEGRO_BITMAP *exit) {
-	al_set_target_bitmap(exit);
-    al_clear_to_color(al_map_rgb(255, 0, 0));
-	al_draw_bitmap(exit, LARGURA_TELA - al_get_bitmap_width(exit) - 10, ALTURA_TELA - al_get_bitmap_height(exit) - 10, 0);
-	
-	for (int i=0; i<3; i++) {
-		if (theme == i) {
-			NewQuestion(i);
-		}
-	}
-}
-
-void Answer(int answer) {
-	if (answer == ) {
-		
+void Answer(int answer, int realanswer, struct Character *score) {
+	if (answer == realanswer) {
+		score++;
 	}
 }
 
 void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit) {
 	// Verificamos se há eventos na fila
-    while (!al_is_event_queue_empty(ev_queue)){
+    while (!al_is_event_queue_empty(event_queue)){
         ALLEGRO_EVENT ev;
-    	al_wait_for_event(ev_queue, &ev);
+    	al_wait_for_event(event_queue, &ev);
 		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
             if (ev.mouse.x >= al_get_bitmap_width(exit) - 20 &&
             ev.mouse.x <= al_get_bitmap_width(exit) + 20 &&

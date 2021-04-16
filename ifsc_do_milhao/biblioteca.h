@@ -1,5 +1,5 @@
 //Object IDS
-enum IDS{PLAYER, INTERVIEWER_VALTER, INTERVIEWER_PAMELA};
+enum IDS{STUDENT, PROFESSOR_X, PROFESSOR_Y, INTERVIEWER_VALTER, INTERVIEWER_PAMELA};
 
 //Our Player
 struct Character {
@@ -10,13 +10,8 @@ struct Character {
 	int score;
 };
 
-struct InterviewerValter {
-	int ID;
-	int x;
-	int y;
-};
-
-struct InterviewerPamela {
+//Our Interviewer and Professor
+struct Extras {
 	int ID;
 	int x;
 	int y;
