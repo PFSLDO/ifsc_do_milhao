@@ -29,7 +29,6 @@ int Interviewer(struct Extras *pamela, struct Extras *valter, int quest); //apar
 void InterviewerUpdate(int interviewer); //atualiza o personagem do entrevistador
 
 void Help(struct Extras *x, struct Extras *y); //ajuda aos universitários
-void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit); //parar de jogar
 void Tutorial(); //explicação do funcionamento do jogo
 
 void Error(char *text){
@@ -101,7 +100,7 @@ int main(void) {
 	//carrega o fundo
     bootimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/boot.png");
     if (!bootimage){
-        error_msg("Falha ao carregar fundo");
+        Error("Falha ao carregar fundo");
         al_destroy_display(display);
         return 0;
     }
@@ -158,13 +157,12 @@ int main(void) {
 
 	srand(time(NULL));
 
-	Boot(); //inicia o jogador
+	Boot(bootimage); //inicia o jogador
 	ChooseCharacter (&player); //mostra as opções de personagem
-	playr = CheckMouse(event_queue, op1, op2, op3); //checa a opção escolhida pelo usuário
+	playr = CheckMouse(event_queue, option1, option2, option3); //checa a opção escolhida pelo usuário
 	Thematic(); //mostra as opções de temática para as perguntas
-	thematic = CheckMouse(event_queue, op1, op2, op3); //checa a opção escolhida pelo usuário
+	thematic = CheckMouse(event_queue, option1, option2, option3); //checa a opção escolhida pelo usuário
 	Character(&player, playr); //inicia o personagem do jogador
-	Interviewer(&pamela, &valter); //inicia o personagem do entrevistador
 	GameInitiation(thematic, exit); //inicia o jogo
 	CharacterUpdate(&player, playr);
 	question = NewQuestion(thematic);
@@ -185,9 +183,16 @@ int main(void) {
 			//teclado tutorial "T"
 			//sair do jogo
 			redraw = true;
+			if (ev.mouse.x >= al_get_bitmap_width(exit) - 20 &&
+            ev.mouse.x <= al_get_bitmap_width(exit) + 20 &&
+			ev.mouse.y <= al_get_bitmap_height(exit) + 10 &&
+            ev.mouse.y >= al_get_bitmap_height(exit) - 10){
+				done = true;
+            }
+
 			if(!isGameOver) {
 				NewQuestion(thematic);
-				answer = CheckMouse(event_queue, op1, op2, op3); //checa a opção escolhida pelo usuário
+				answer = CheckMouse(event_queue, option1, option2, option3); //checa a opção escolhida pelo usuário
 				Answer(answer, feedback, &player);
 				
 			}
@@ -200,7 +205,7 @@ int main(void) {
 			if(!isGameOver) {
 				al_draw_textf(font18, al_map_rgb(255, 0, 255), 5, 5, 0, "Player has %i lives left. Player has destroyed %i objects", player.lives, player.score);
 				if (Points(&player) == 1) {
-					al_draw_textf(font18, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns! Você se formou com 10", player.score); //mensagem para o ganhador //arrumar para variar conforme o personagem do jogador
+					//mensagem quando ganha
 				}
 			}
 			else {
@@ -251,7 +256,7 @@ void Character(struct Character *player, int charc) { //inicia o personagem
 	player->score = 0;
 }
 
-void CharacterUpdate(struct Character *player, int charc); {
+void CharacterUpdate(struct Character *player, int charc) {
 	for (int i=player->y; i>HEIGHT-25; i--) {
 		player->y = i;
 	}
@@ -259,11 +264,7 @@ void CharacterUpdate(struct Character *player, int charc); {
 
 void Professor(struct Extras *x, struct Extras *y) {
 	char choice;
-	//pergunta qual jogador ele quer ser "professor", "aluno" ou "aleatorio"
-	//ler a escolha
-	if () {
-
-	}
+	//id conforme o escolhido
 	x->ID = choice;
 	x->x = 25;
 	x->y = HEIGHT;
@@ -372,24 +373,10 @@ bool Answer(int answer, int realanswer, struct Character *player) {
 	return point;
 }
 
-void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit) {
-	// Verificamos se há eventos na fila
-    while (!al_is_event_queue_empty(event_queue)){
-        ALLEGRO_EVENT ev;
-    	al_wait_for_event(event_queue, &ev);
-		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-            if (ev.mouse.x >= al_get_bitmap_width(exit) - 20 &&
-            ev.mouse.x <= al_get_bitmap_width(exit) + 20 &&
-			ev.mouse.y <= al_get_bitmap_height(exit) + 10 &&
-            ev.mouse.y >= al_get_bitmap_height(exit) - 10){
-				return 1;
-            }
-    	}
-	}
-}
-
 int Points(struct Character *player) {
+	int win;
 	if (player->score == 10) {
-		return 1;
+		win = 1;
 	}
+	return 1;
 }
