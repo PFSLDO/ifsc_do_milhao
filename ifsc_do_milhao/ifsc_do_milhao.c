@@ -3,6 +3,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_image.h>
 #include "biblioteca.h"
 
 //GLOBALS==============================
@@ -10,7 +11,7 @@ const int WIDTH = 800;
 const int HEIGHT = 800;
 
 //prototypes
-void Boot(); //iniciação do jogo
+void Boot(ALLEGRO_BITMAP *bootimage); //iniciação do jogo
 void Thematic(); //modalidade das perguntas
 int CheckMouse(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BITMAP *op2, ALLEGRO_BITMAP *op3); //checa a posição do mouse sobre as opções na tela e o clique sobre o botão de sair
 
@@ -61,6 +62,7 @@ int main(void) {
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_FONT *font18 = NULL;
 	ALLEGRO_BITMAP *exit = NULL, *option1 = NULL, *option2 = NULL, *option3 = NULL;
+	ALLEGRO_BITMAP *bootimage = NULL;
 
 	al_init_primitives_addon();
 	al_install_mouse();
@@ -94,6 +96,14 @@ int main(void) {
         Error("Falha ao atribuir ponteiro do mouse");
         al_destroy_display(display);
         return -1;
+    }
+
+	//carrega o fundo
+    bootimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/boot.png");
+    if (!bootimage){
+        error_msg("Falha ao carregar fundo");
+        al_destroy_display(display);
+        return 0;
     }
 
 	// Alocamos a primeira opção de resposta/escolha
@@ -211,6 +221,11 @@ int main(void) {
 	al_destroy_display(display);						//destroy our display object
 
 	return 0;
+}
+
+void Boot(ALLEGRO_BITMAP *bootimage) {
+	//desenha o fundo na tela
+    al_draw_bitmap_region(bootimage,0,0,WIDTH,HEIGHT,0,0,0);
 }
 
 void Thematic() {
