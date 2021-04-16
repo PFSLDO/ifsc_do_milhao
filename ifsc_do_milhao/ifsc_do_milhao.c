@@ -11,11 +11,11 @@ const int HEIGHT = 800;
 
 //prototypes
 void Boot(); //iniciação do jogo
-void Thematic(event_queue, option1, option2, option3); //modalidade das perguntas
-void GameInitiation(int theme); //iniciação da rodada
+void Thematic(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *option1, ALLEGRO_BITMAP *option2, ALLEGRO_BITMAP *option3); //modalidade das perguntas
+void GameInitiation(int theme, ALLEGRO_BITMAP *exit); //iniciação da rodada
 void NewQuestion(); //gera uma pergunta nova
 void Points(); //Pontuação do jogador, quantos pedidos de ajuda ainda podem ser solicitados, etc
-void Answer(int ans); //analise da resposta
+void Answer(int answer); //analise da resposta
 
 void Character(); //escolha  de personagem
 void CharacterUpdate(); //atualiza o personagem do jogador
@@ -25,7 +25,7 @@ void Interviewer(); //aparição de um entrevistador
 void InterviewerUpdate(); //atualiza o personagem do entrevistador
 
 void Help(); //ajuda aos universitários
-void Stop(); //parar de jogar
+void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit); //parar de jogar
 void Tutorial(); //explicação do funcionamento do jogo
 
 // void InitShip(struct SpaceShip *ship);
@@ -224,10 +224,7 @@ int main(void) {
 
 	return 0;
 }
-
-void Thematic(ev_queue, op1, op2, op3) { //melhorar usando vetores
-	bool general = false, professor = false, student = false;
-
+void Thematic(ALLEGRO_EVENT_QUEUE *ev_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BITMAP *op2, ALLEGRO_BITMAP *op3) { //melhorar usando vetores
     // Verificamos se há eventos na fila
     while (!al_is_event_queue_empty(ev_queue)){
         ALLEGRO_EVENT ev;
@@ -297,11 +294,10 @@ void Thematic(ev_queue, op1, op2, op3) { //melhorar usando vetores
 	}
 }
 
-void GameInitiation(int theme, exit) {
+void GameInitiation(int theme, ALLEGRO_BITMAP *exit) {
 	al_set_target_bitmap(exit);
     al_clear_to_color(al_map_rgb(255, 0, 0));
-	al_draw_bitmap(exit, LARGURA_TELA - al_get_bitmap_width(exit) - 10,
-        ALTURA_TELA - al_get_bitmap_height(exit) - 10, 0);
+	al_draw_bitmap(exit, LARGURA_TELA - al_get_bitmap_width(exit) - 10, ALTURA_TELA - al_get_bitmap_height(exit) - 10, 0);
 	
 	for (int i=0; i<3; i++) {
 		if (theme == i) {
@@ -316,7 +312,7 @@ void Answer(int answer) {
 	}
 }
 
-void Stop(ev_queue, exit) {
+void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit) {
 	// Verificamos se há eventos na fila
     while (!al_is_event_queue_empty(ev_queue)){
         ALLEGRO_EVENT ev;
