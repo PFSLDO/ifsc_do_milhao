@@ -16,8 +16,8 @@ int CheckMouse(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BI
 
 void GameInitiation(int theme, ALLEGRO_BITMAP *exit); //iniciação da rodada
 int NewQuestion(int theme); //gera uma pergunta nova
-void Points(); //Pontuação do jogador, quantos pedidos de ajuda ainda podem ser solicitados, etc
-void Answer(int answer, int realanswer, struct Character *score); //analise da resposta
+int Points(struct Character *player); //Pontuação do jogador, quantos pedidos de ajuda ainda podem ser solicitados, etc
+bool Answer(int answer, int realanswer, struct Character *player); //analise da resposta
 
 void ChooseCharacter (struct Character *player); //escolha do personagem do jogador
 void Character(struct Character *player, int charc); //inicia o personagem do jogador
@@ -41,10 +41,12 @@ int main(void) {
 	bool redraw = true;
 	const int FPS = 60;
 	bool isGameOver = false;
-	int thematic;
-	int playr;
-	int question;
-	int interv;
+	int thematic; //temica escolhida
+	int playr; //jogador escolhido
+	int question; //questao da vez
+	int interv; //entrevistador da vez
+	int answer; //resposta dada pelo usuario
+	int feedback; //gabarito da questao
 
 	//object variables
 	struct Character player;
@@ -159,8 +161,6 @@ int main(void) {
 	interv = Interviewer(&pamela, &valter, question);
 	InterviewerUpdate(interv);
 
-
-	
 	font18 = al_load_font("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/arial.ttf", 18, 0);
 
 	al_register_event_source(event_queue, al_get_mouse_event_source());
@@ -172,23 +172,14 @@ int main(void) {
 		al_wait_for_event(event_queue, &ev);
 
 		if(ev.type == ALLEGRO_EVENT_TIMER) {
-			// redraw = true;
-			// if(keys[UP])
-			// 	MoveShipUp(&ship);
-			// if(keys[DOWN])
-			// 	MoveShipDown(&ship);
-			// if(keys[LEFT])
-			// 	MoveShipLeft(&ship);
-			// if(keys[RIGHT])
-			// 	MoveShipRight(&ship);
-
+			//teclado tutorial "T"
+			//sair do jogo
+			redraw = true;
 			if(!isGameOver) {
-				// UpdateBullet(bullets, NUM_BULLETS);
-				// StartComet(comets, NUM_COMETS);
-				// UpdateComet(comets, NUM_COMETS);
-				// CollideBullet(bullets, NUM_BULLETS, comets, NUM_COMETS, &ship);
-				// CollideComet(comets, NUM_COMETS, &ship);
-
+				NewQuestion(thematic);
+				answer = CheckMouse(event_queue, op1, op2, op3); //checa a opção escolhida pelo usuário
+				Answer(answer, feedback, &player);
+				
 			}
 		}
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -196,16 +187,14 @@ int main(void) {
 		}
 		if(redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false; 
-
 			if(!isGameOver) {
-				// DrawShip(&ship);
-				// DrawBullet(bullets, NUM_BULLETS);
-				// DrawComet(comets, NUM_COMETS);
-
-				// al_draw_textf(font18, al_map_rgb(255, 0, 255), 5, 5, 0, "Player has %i lives left. Player has destroyed %i objects", ship.lives, ship.score);
+				al_draw_textf(font18, al_map_rgb(255, 0, 255), 5, 5, 0, "Player has %i lives left. Player has destroyed %i objects", player.lives, player.score);
+				if (Points(&player) == 1) {
+					al_draw_textf(font18, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns! Você se formou com 10", player.score); //mensagem para o ganhador //arrumar para variar conforme o personagem do jogador
+				}
 			}
 			else {
-				// al_draw_textf(font18, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Game Over. Final Score: %i", ship.score);
+				al_draw_textf(font18, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Game Over. Final Score: %i", player.score);
 			}
 		
 			al_flip_display();
@@ -232,15 +221,7 @@ void Thematic() {
 void GameInitiation(int theme, ALLEGRO_BITMAP *exit) {
 	al_set_target_bitmap(exit);
     al_clear_to_color(al_map_rgb(255, 0, 0)); //pinta botão de sair do jogo de vermelho
-	
-	for (int i=0; i<3; i++) {
-		if (theme == i) {
-			for (int j=0; j<10; j++) {
-				NewQuestion(i);
-				//funcao checar cursor do usuario
-			}
-		}
-	}
+	//botao de ajuda para universitarios
 }
 
 void ChooseCharacter (struct Character *player) {
@@ -367,10 +348,13 @@ int CheckMouse(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BI
 return result;
 }
 
-void Answer(int answer, int realanswer, struct Character *score) {
+bool Answer(int answer, int realanswer, struct Character *player) {
+	bool point;
 	if (answer == realanswer) {
-		score++;
+		point = true;
+		player->score++;
 	}
+	return point;
 }
 
 void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit) {
@@ -386,5 +370,11 @@ void Stop(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *exit) {
 				return 1;
             }
     	}
+	}
+}
+
+int Points(struct Character *player) {
+	if (player->score == 10) {
+		return 1;
 	}
 }
