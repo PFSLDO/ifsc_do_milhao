@@ -1,0 +1,182 @@
+QuestionID,AlternativesID,AlternativeText,VerifyID
+1101,1111,A) Xerox imprimir trabalho,1
+1101,1121,B) Jogar um truco pra passar o tempo,0
+1101,1131,C) Fofocar com o pessoal da limpeza,0
+1102,1112,A) Passar na UFSC,0
+1102,1122,B) Arranjar um amor,0
+1102,1132,C) Ganhar extra score no laboratório do Anésio,1
+1103,1113,A) Pois é um bloco só,0
+1103,1123,B) Pois é onde ocorre a maioria das aulas das fases finais dos cursos técnicos,0
+1103,1133,C) Pois é onde ocorre a maioria das aulas das fases iniciais dos cursos técnicos,1
+1201,1211,A) Paulo Ricardo Rangel,0
+1201,1221,B) Alexandre (sobrenome dele não sei escrever vô ter que pesquisar),0
+1201,1231,C) Cláudio Hibbert,1
+1202,1212,A) Gisele Luz,0
+1202,1222,B) Gizelle Kaminski,1
+1202,1232,C) Gizely Cesconetto,0
+1203,1223,A) Química,1
+1203,1223,B) Matemática,0
+1203,1233,C) Biologia,0
+1301,1311,A) Pois viram rebeldes e não se reportam a ninguém,0
+1301,1321,B) Passam a se reportar ao departamento de seus devidos cursos,1
+1301,1331,C) Passam a se reportar diretamente a coordenação do campus,0
+1302,1312,A) Pegar um papelzinho de atraso no fluxo,1
+1302,1322,B) Arranjar uma briga com o professor até ele deixar assistir a aula,0
+1302,1332,C) Entrar acompanhado dos responsáveis,0
+1303,1313,A) Almox,1
+1303,1323,B) Almoxerife,0
+1303,1333,C) Alma do xari fado,0
+1401,1411,A) Facilitação de subida e descida de estudantes e professores com dificuldades de locomoção,1
+1401,1421,B) Facilitação de subida e descida de estudantes e professores com preguiça,0
+1401,1431,C) Facilitação de subida e descida de estudantes e professores com dificuldades familiar,0
+1402,1412,A) Marcos Paulo,0
+1402,1422,B) Albertinho,0
+1402,1432,C) Waldyrzinho,1
+1403,1413,A) Eurides,0
+1403,1423,B) Marcos Paulo,1
+1403,1433,C) Paula,0
+1501,1511,A) Cantina,0
+1501,1521,B) Refeitorio,1
+1501,1531,C) Praça de Alimentação,0
+1502,1512,A) Bandeiras,1
+1502,1522,B) Mastro de bandeira,0
+1502,1532,C) Local para se sentar,0
+1503,1513,A) Informação,0
+1503,1523,B) Computadores,1
+1503,1533,C) Laboratório para diluir substâncias,0
+1601,1611,A) Sala de aula,0
+1601,1621,B) Almox,1
+1601,1631,C) Hall de entrada,0
+1602,1612,A) Cameras para gravar as jogadas,0
+1602,1622,B) Traves para gol,0
+1602,1632,C) Cestas de basquete,1
+1603,1613,A) Caixinha de som (JBL),1
+1603,1623,B) Medalhas,0
+1603,1633,C) Pote com as lágrimas dos adversários,0
+1701,1711,A) Joao Goulart,1
+1701,1721,B) Jânio Quadros,0
+1701,1731,C) Luiz Inácio,0
+1702,1712,A) Lá o Wi-fi do campus pega melhor,1
+1702,1722,B) Ele gosta do frio da parede,0
+1702,1732,"C) Ele está com covid - 19 e mantendo seu afastamento social de 1,5m ou mais",0
+1703,1713,A) Aulas de Reposição,1
+1703,1723,B) Grande vontade de aprender por parte dos alunos,0
+1703,1733,C) Tortura por parte dos professores,0
+1801,1811,A) Comprar refrigerante na cantina pois é gelado e ajuda com a dor hmmm coquinha gelada,0
+1801,1821,B) Chamar o SAMU,0
+1801,1831,C) Ir até a enfermaria onde será muito bem atendido pois a moça é uma fofa :),1
+1802,1812,A) IFSC - Visitante,1
+1802,1822,B) IFSC - Alunos,0
+1802,1832,C) IFSC - Professores,0
+1803,1813,A) Quadra fechada,1
+1803,1823,B) Quadra aberta,0
+1803,1833,C) Quadra de futset,0
+1901,1911,A) Paciência,0
+1901,1921,B) Poker,0
+1901,1931,C) Truco,1
+1902,1912,A) Tênis de mesa,0
+1902,1922,B) Lançamento de dardo,1
+1902,1932,C) Salto a distância,0
+1903,1913,A) 30%,0
+1903,1923,B) 25%,1
+1903,1933,C) 20%,0
+1001,1011,A) A primeira tia da limpeza que aparecer,0
+1001,1021,B) O apoio pedagógico,1
+1001,1031,C) Um amigo que não tem instruções e estudo de como ajudar psicologicamente e pedagogicamente alguém,0
+1002,1012,A) André Luís Dalcastagnê,1
+1002,1022,B) Matheus Leitzke Pinto,0
+1002,1032,C) Alexandre Leizor Szczupak,0
+1003,1013,A) Química,1
+1003,1023,B) Eletrotécnica,0
+1003,1033,C) Edificações,0
+,,,
+2101,2111,A) Diamante,0
+2101,2121,B) Adamantium,1
+2101,2131,C) Vibranium,0
+2102,2112,A) Engenheiro Civil,0
+2102,2122,B) Arquiteto,1
+2102,2132,C) Pedreiro,0
+2103,2113,A) Matilha,1
+2103,2123,B) Manada,0
+2103,2133,C) Alcateia,0
+2201,2211,A) Equilátero,0
+2201,2221,B) Isósceles,0
+2201,2231,C) Escaleno,1
+2202,2212,A) Veneno,0
+2202,2222,B) Veia,1
+2202,2232,C) Vela,0
+2203,2223,A) Estômago,0
+2203,2223,B) Pâncreas,0
+2203,2233,C) Boca,1
+2301,2311,A) 12 Signos,1
+2301,2321,B) 10 Signos,0
+2301,2331,C) 14 Signos,0
+2302,2312,A) Curupira,0
+2302,2322,B) Saci Perere,1
+2302,2332,C) Boitatá,0
+2303,2313,A) Papagaio,0
+2303,2323,B) Arara,1
+2303,2333,C) Tucano,0
+2401,2411,A) Repercussão,0
+2401,2421,B) Percussão,0
+2401,2431,C) Cordas,1
+2402,2412,A) Espanha,1
+2402,2422,B) França,0
+2402,2432,C) Bélgica,0
+2403,2413,A) Chicago,0
+2403,2423,B) Nova York,0
+2403,2433,C) Washington,1
+2501,2511,A) Arnold Schwarzenegger,0
+2501,2521,B) Sylvester Stallone,1
+2501,2531,C) Jean-Claude Van Damme,0
+2502,2512,A) Rocky Balboa,0
+2502,2522,B) Apollo Creed,1
+2502,2532,C) Ivan Drago,0
+2503,2513,A) Adonis Creed,0
+2503,2523,B) Rocky Balboa,0
+2503,2533,C) Ivan Drago,1
+2601,2611,A) Nauru e China,0
+2601,2621,B) São Marino e Índia,0
+2601,2631,C) Vaticano e Rússia,1
+2602,2612,A) 6 contando o goleiro,0
+2602,2622,B) 10 contando o goleiro,0
+2602,2632,C) 7 contando o goleiro,1
+2603,2613,A) Cubana,0
+2603,2623,B) Argentina,1
+2603,2633,C) Boliviana,0
+2701,2711,A) Pico da Neblina,1
+2701,2721,B) Pico Paraná,0
+2701,2731,C) Pico Maior de Friburgo,0
+2702,2712,A) Montesquieu,0
+2702,2722,B) Maquiavel,1
+2702,2732,C) Thomas Hobbes,0
+2703,2713,A) Brasil,0
+2703,2723,B) Rússia,1
+2703,2733,C) Estados Unidos,0
+2801,2811,A) Oceano Atlântico,0
+2801,2821,B) Oceano Índico,1
+2801,2831,C) Oceano Ártico,0
+2802,2812,A) Cobre,0
+2802,2822,B) Ouro,1
+2802,2832,C) Manganês,0
+2803,2813,A) Leonardo da Vinci,0
+2803,2823,B) Michelangelo,1
+2803,2833,C) Donatello,0
+2901,2911,A) Pink Floyd,0
+2901,2921,B) The Police,0
+2901,2931,C) The Doors,1
+2902,2912,A) Norueguesa,0
+2902,2922,B) Inglesa,0
+2902,2932,C) Francesa,1
+2903,2913,"A) Diana, a Princesa de Gales",1
+2903,2923,B) Carlota Joaquina,0
+2903,2933,C) Joana d’Arc,0
+2001,2011,A) Marie Curie,1
+2001,2021,B) Elizabeth Blackweel,0
+2001,2031,C) Madre Teresa de Calcutá,0
+2002,2012,A) Decapitado,0
+2002,2022,B) Enforcado,1
+2002,2032,C) Suicídio,0
+2003,2013,A) Alemanha,0
+2003,2023,B) Áustria,0
+2003,2033,C) Polônia,1
