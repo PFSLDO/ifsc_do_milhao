@@ -81,7 +81,7 @@ int main(void) {
     ALLEGRO_SAMPLE_INSTANCE *game_theme_instance = NULL;
 
 	//Initialization Functions
-	if (!al_init()){ 
+	if (!al_init()) { 
         Error("Falha ao inicializar o Allegro");
         return -1;
     }
@@ -217,35 +217,42 @@ int main(void) {
 		else if(ev.type == ALLEGRO_EVENT_TIMER) {
 			redraw = true;
 			if (state == MENU) {
-                if(keys[SPACE])
+                if(keys[SPACE]) {
 					//printf("Voce deu um espaco");
                     state = CHOOSE_CHARACTER;
-                if(keys[ESC])
+				}
+                if(keys[ESC]) {
 					//printf("Voce deu esc");
                     done = true;
+				}
             }
 			else if (state == CHOOSE_CHARACTER) {
-                if(keys[P])
+                if(keys[P]) {
 					//printf("Voce apertou p");
 					ChooseCharacter(&player, 2);
 					state = CHOOSE_THEMATIC;
-				if(keys[A])
+				}
+				if(keys[A]) {
 					//printf("Voce apertou a");
 					ChooseCharacter(&player, 1);
 					state = CHOOSE_THEMATIC;
-                if(keys[ESC])
-                    done = true;
+				}
+                if(keys[ESC]) {
+					done = true;
+				}
             }
 			else if (state == CHOOSE_THEMATIC) {
 				for(int i=1; i<4; i++) {
-					if(keys[i])
+					if(keys[i]) {
 						//printf("Voce apertou %d", i);
 						thematic = i;
 						ChooseThematic(thematic);
 						state = PLAYING;
+					}
 				}
-                if(keys[ESC])
-                    done = true;
+                if(keys[ESC]) {
+					done = true;
+				}
             }
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar no mapa pela primeira vez
@@ -259,10 +266,10 @@ int main(void) {
                 if(keys[ESC])
                     state = GAMEOVER;
             }
-			else if (state == GAMEOVER)
-            {
-                if(keys[ESC])
-                    done = true;
+			else if (state == GAMEOVER) {
+                if(keys[ESC]) {
+					done = true;
+				}
                 else if (keys[SPACE]) {
                     state = MENU;
                 }
