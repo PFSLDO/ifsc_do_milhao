@@ -284,12 +284,12 @@ int main(void) {
 				}
             	else if (state == PLAYING) {
                 	if(!isGameOver) {
-                    // al_draw_textf(font, al_map_rgb(255,255,255), 760, 5, 0, "PONTOS");
-                    // al_draw_textf(font, al_map_rgb(255,255,255), 800, 150, 0, "%d", Player1.Score+Player1.GhostScore);
+                    	al_draw_textf(font, al_map_rgb(255,255,255), 760, 5, 0, "PONTOS");
+                    	al_draw_textf(font, al_map_rgb(255,255,255), 800, 150, 0, "%d", player.score);
 					}
                 	else {
-                    FirstTime = true;
-                    state = GAMEOVER;
+                    	FirstTime = true;
+                    	state = GAMEOVER;
                 	}
             	}
             	else if (state == GAMEOVER) {
