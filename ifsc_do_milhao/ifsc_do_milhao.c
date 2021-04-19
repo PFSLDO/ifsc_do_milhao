@@ -287,8 +287,9 @@ int main(void) {
 				}
 				else if (state == CHOOSE_THEMATIC) {
 					al_draw_bitmap(menuimage,0,0,0); //imagem menu da tematica
-					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "A PARA JOGAR COM ALUNO");
-                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P PARA JOGAR COM PROFESSORA");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "1 PARA JOGAR COM TEMÁTICA IFSC");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "2 PARA JOGAR COM TEMÁTICA CONHECIMENTOS GERAIS");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "3 PARA JOGAR COM TODAS AS TEMÁTICA");
 				}
             	else if (state == PLAYING) {
                 	if(!isGameOver) {
