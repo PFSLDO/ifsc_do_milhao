@@ -11,7 +11,7 @@
 //GLOBALS==============================
 const int WIDTH = 800;
 const int HEIGHT = 800;
-enum KEYS {SPACE, ESCAPE, NUM1, NUM2, NUM3, P, A};
+enum KEYS {SPACE, ESC, NUM1, NUM2, NUM3, P, A};
 enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 
 //prototypes
@@ -22,7 +22,7 @@ void GameInitiation(int theme); //iniciação da rodada
 int NewQuestion(int theme); //gera uma pergunta nova
 bool Answer(int answer, int realanswer, struct Character *player); //analise da resposta
 
-void ChooseCharacter (struct Character *player, char which); //escolha do personagem do jogador
+void ChooseCharacter (struct Character *player, int which); //escolha do personagem do jogador
 void Character(struct Character *player, int charc); //inicia o personagem do jogador
 void CharacterUpdate(struct Character *player, int charc); //atualiza o personagem do jogador
 void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
@@ -142,7 +142,7 @@ int main(void) {
     }
 
 	//Carrega os arquivos utilizados
-    menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/boot.png"); //carrega a imagem do menu
+    menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_image.png"); //carrega a imagem do menu
     option1 = al_create_bitmap(WIDTH/2, HEIGHT/2+25);	// Alocamos a primeira opção de resposta/escolha
     option2 = al_create_bitmap(WIDTH/2, HEIGHT/2+150);
     option3 = al_create_bitmap(WIDTH/2, HEIGHT/2+275);
@@ -170,7 +170,7 @@ int main(void) {
 		if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
 			switch(ev.keyboard.keycode) {
 				case ALLEGRO_KEY_ESCAPE:
-                	keys[ESCAPE] = true;
+                	keys[ESC] = true;
                 	break;
 				case ALLEGRO_KEY_SPACE:
                 	keys[SPACE] = true;
@@ -198,7 +198,7 @@ int main(void) {
                 keys[SPACE] = false;
                 break;
             case ALLEGRO_KEY_ESCAPE:
-                keys[ESCAPE] = false;
+                keys[ESC] = false;
                 break;
 			case ALLEGRO_KEY_P:
                 keys[P] = false;
@@ -225,7 +225,7 @@ int main(void) {
 			if (state == MENU) {
                 if(keys[SPACE])
                     state = CHOOSE_CHARACTER;
-                if(keys[ESCAPE])
+                if(keys[ESC])
                     done = true;
             }
 			else if (state == CHOOSE_CHARACTER) {
@@ -238,29 +238,29 @@ int main(void) {
 					playr = 1;
 					ChooseCharacter(&player, playr);
 					state = CHOOSE_THEMATIC;
-                if(keys[ESCAPE])
+                if(keys[ESC])
                     done = true;
             }
 			else if (state == CHOOSE_THEMATIC) {
 				for(int i=1; i<4; i++) {
 					if(keys[i])
-						which = i;
-						thematic = ChooseThematic(player, which);
+						thematic = i;
+						ChooseThematic(thematic);
 						state = PLAYING;
 				}
-                if(keys[ESCAPE])
+                if(keys[ESC])
                     done = true;
             }
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar no mapa pela primeira vez
-                    Character(player, playr); //inicia o personagem do jogador
-					CharacterUpdate(player, playr); //atualiza o personagem do jogador
-					quest = NewQuestion(int theme);
-					interv = Interviewer(pamela, valter, quest); //aparição de um entrevistador
+                    Character(&player, playr); //inicia o personagem do jogador
+					CharacterUpdate(&player, playr); //atualiza o personagem do jogador
+					question = NewQuestion(thematic);
+					interv = Interviewer(&pamela, &valter, question); //aparição de um entrevistador
 					InterviewerUpdate(interv); //atualiza o personagem do entrevistador
                     FirstTime = false; //Joga firstTime para false, de modo a não entrar no If novamente
                 }
-                if(keys[ESCAPE])
+                if(keys[ESC])
                     state = GAMEOVER;
             }
 			else if (state == GAMEOVER)
@@ -278,7 +278,7 @@ int main(void) {
 					al_draw_bitmap(menuimage,0,0,0);
 					//textos
 					//tutorial
-					al_draw_text(font, al_map_rgb(0,0,255), 190, 50, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
+					al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 200, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
                 	al_draw_text(font, al_map_rgb(255,40,40), 240, 220, ALLEGRO_ALIGN_CENTER, "PRESSIONE ESC A QUALQUER MOMENTO");
                 	al_draw_text(font, al_map_rgb(255,40,40), 240, 245, ALLEGRO_ALIGN_CENTER, "PARA SAIR DO JOGO");
                 	al_draw_text(font, al_map_rgb(255,255,0), 240, 280, ALLEGRO_ALIGN_CENTER, "APERTE SPACE PARA SER");
@@ -301,7 +301,7 @@ int main(void) {
 					//escolha com o teclado (1 - x; 2 - y; 3 - todas)
 				}
             	else if (state == PLAYING) {
-                	if(GameIsOver == 0) {
+                	if(!isGameOver) {
                     // GameIsOver = CheckColision(Player1, Ghosts, pacman_eatghost);
                     // CheckIfVulnerable(Player1, Ghosts);
                     // CheckScore(Player1, Ghosts);
@@ -320,15 +320,15 @@ int main(void) {
                 	}
             	}
             	else if (state == GAMEOVER) {
-                	InitPacman(Player1);
-                	InitGhosts(Ghosts);
-                	InitPoseMap();
-                	IsGameOver = 0;
+                	// InitPacman(Player1);
+                	// InitGhosts(Ghosts);
+                	// InitPoseMap();
+                	isGameOver = 0;
                 	al_draw_text(font, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "DERROTA");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ENTER para sair");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER, "pressione SPACE para ir ao menu");
-                	al_draw_textf(font, al_map_rgb(0,0,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"high score: %d", finalScore);
+                	al_draw_textf(font, al_map_rgb(0,0,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"high score: %d", player.score);
             	}
 
             al_flip_display();
@@ -379,7 +379,7 @@ void GameInitiation(int theme) {
     
 }
 
-void ChooseCharacter (struct Character *player) {
+void ChooseCharacter (struct Character *player, int which) {
 	//pergunta qual jogador ele quer ser "professor", "aluno" ou "aleatorio"
 }
 
