@@ -26,8 +26,8 @@ int NewQuestion(int theme); //gera uma pergunta nova
 bool Answer(int answer, int realanswer, struct Character *player); //analise da resposta
 
 void ChooseCharacter (struct Character *player, int which); //escolha do personagem do jogador
-void Character(struct Character *player, int charc); //inicia o personagem do jogador
-void CharacterUpdate(struct Character *player, int charc); //atualiza o personagem do jogador
+void Character(struct Character *player); //inicia o personagem do jogador
+void CharacterUpdate(struct Character *player); //atualiza o personagem do jogador
 void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
 void ProfessorUpdate(struct Extras *x, struct Extras *y); //atualiza o professor (quando há pedido de ajuda para os universitários)
 int Interviewer(struct Extras *pamela, struct Extras *valter, int quest); //aparição de um entrevistador
@@ -52,7 +52,6 @@ int main(void) {
 	char titlealt[100], AltID[180], Alternatives[180];
 
 	int thematic; //temica escolhida
-	int playr; //jogador escolhido
 	int question; //questao da vez
 	int interv; //entrevistador da vez
 	int answer; //resposta dada pelo usuario
@@ -213,18 +212,20 @@ int main(void) {
 			redraw = true;
 			if (state == MENU) {
                 if(keys[SPACE])
+					//printf("Voce deu um espaco");
                     state = CHOOSE_CHARACTER;
                 if(keys[ESC])
+					//printf("Voce deu esc");
                     done = true;
             }
 			else if (state == CHOOSE_CHARACTER) {
                 if(keys[P])
-					playr = 2;
-					ChooseCharacter(&player, playr);
+					//printf("Voce apertou p");
+					ChooseCharacter(&player, 2);
 					state = CHOOSE_THEMATIC;
 				if(keys[A])
-					playr = 1;
-					ChooseCharacter(&player, playr);
+					//printf("Voce apertou a");
+					ChooseCharacter(&player, 1);
 					state = CHOOSE_THEMATIC;
                 if(keys[ESC])
                     done = true;
@@ -232,6 +233,7 @@ int main(void) {
 			else if (state == CHOOSE_THEMATIC) {
 				for(int i=1; i<4; i++) {
 					if(keys[i])
+						//printf("Voce apertou %d", i);
 						thematic = i;
 						ChooseThematic(thematic);
 						state = PLAYING;
@@ -241,8 +243,8 @@ int main(void) {
             }
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar no mapa pela primeira vez
-                    Character(&player, playr); //inicia o personagem do jogador
-					CharacterUpdate(&player, playr); //atualiza o personagem do jogador
+                    Character(&player); //inicia o personagem do jogador
+					CharacterUpdate(&player); //atualiza o personagem do jogador
 					question = NewQuestion(thematic);
 					interv = Interviewer(&pamela, &valter, question); //aparição de um entrevistador
 					InterviewerUpdate(interv); //atualiza o personagem do entrevistador
@@ -263,9 +265,7 @@ int main(void) {
 			if(redraw && al_is_event_queue_empty(event_queue)) {
             	redraw = false;
 				if (state == MENU) {
-					al_draw_bitmap(menuimage,0,0,0);
-					//textos
-					//tutorial
+					al_draw_bitmap(menuimage,0,0,0); //imagem de fundo
 					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 290, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 320, ALLEGRO_ALIGN_CENTER, "Utilize as teclas do seu computador para fazer as escolhas!");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 340, ALLEGRO_ALIGN_CENTER, "A escolha da resposta é feita com as teclas 1, 2 e 3");
@@ -274,13 +274,15 @@ int main(void) {
 					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "SPACE PARA COMEÇAR A JOGAR");
             	}
-				if (state == CHOOSE_CHARACTER) {
+				else if (state == CHOOSE_CHARACTER) {
 					al_draw_bitmap(charactermenu,0,0,0); //imagem menu de personagem
 					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "A PARA JOGAR COM ALUNO");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P PARA JOGAR COM PROFESSORA");
 				}
-				if (state == CHOOSE_THEMATIC) {
-					al_draw_bitmap(menuimage,0,0,0);
+				else if (state == CHOOSE_THEMATIC) {
+					al_draw_bitmap(menuimage,0,0,0); //imagem menu da tematica
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "A PARA JOGAR COM ALUNO");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P PARA JOGAR COM PROFESSORA");
 				}
             	else if (state == PLAYING) {
                 	if(!isGameOver) {
@@ -357,15 +359,15 @@ void ChooseCharacter (struct Character *player, int which) {
 	}
 }
 
-void Character(struct Character *player, int charc) { //inicia o personagem
-	player->ID = charc;
+void Character(struct Character *player) { //inicia o personagem
+	//player->ID = charc;
 	player->x = 25;
 	player->y = HEIGHT;
 	player->lives = 3;
 	player->score = 0;
 }
 
-void CharacterUpdate(struct Character *player, int charc) {
+void CharacterUpdate(struct Character *player) {
 	for (int i=player->y; i>HEIGHT-25; i--) {
 		player->y = i;
 	}
