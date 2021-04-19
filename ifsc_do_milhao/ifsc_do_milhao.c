@@ -278,19 +278,16 @@ int main(void) {
 					al_draw_bitmap(menuimage,0,0,0);
 					//textos
 					//tutorial
-					al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 200, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
-                	al_draw_text(font, al_map_rgb(255,40,40), 240, 220, ALLEGRO_ALIGN_CENTER, "PRESSIONE ESC A QUALQUER MOMENTO");
-                	al_draw_text(font, al_map_rgb(255,40,40), 240, 245, ALLEGRO_ALIGN_CENTER, "PARA SAIR DO JOGO");
-                	al_draw_text(font, al_map_rgb(255,255,0), 240, 280, ALLEGRO_ALIGN_CENTER, "APERTE SPACE PARA SER");
-                	al_draw_text(font, al_map_rgb(255,255,0), 240, 305, ALLEGRO_ALIGN_CENTER, "REDIRECIONADO A PARTIDA");
-                	al_draw_text(font, al_map_rgb(0,255,0), 240, 340, ALLEGRO_ALIGN_CENTER, "BOA SORTE!");
-                	al_draw_text(font, al_map_rgb(0,0,255), 280, 400, ALLEGRO_ALIGN_CENTER, "DESENVOLVIDO POR:");
-                	al_draw_text(font, al_map_rgb(255,255,255), 40, 460, 0, "Pamela Fialho");
-                	al_draw_text(font, al_map_rgb(255,255,255), 40, 490, 0, "Valter da Silva");
-                	al_draw_text(font, al_map_rgb(0,0,255), 250, 550, ALLEGRO_ALIGN_CENTER, "Sob orientação de:");
-                	al_draw_text(font, al_map_rgb(255,255,255), 40, 610, 0, "Professor Fernando Santana Pacheco");
-                	al_draw_text(font, al_map_rgb(255,255,255), 40, 640, 0, "Mike Geig (FixByProximity)");
-                	al_draw_text(font, al_map_rgb(255,255,255), 40, 670, 0, "TURMA 722 (2017/2)");
+					al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 350, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
+                	al_draw_text(font, al_map_rgb(255,40,40), WIDTH/2, 220, ALLEGRO_ALIGN_CENTER, "Utilize as teclas do seu computador!");
+                	al_draw_text(font, al_map_rgb(255,255,0), WIDTH/2, 280, ALLEGRO_ALIGN_CENTER, "A escolha da resposta é feita com as teclas 1, 2 e 3");
+                	al_draw_text(font, al_map_rgb(255,255,0), WIDTH/2, 305, ALLEGRO_ALIGN_CENTER, "Você poderá escolher o personagem e a temática das perguntas a seguir");
+                	al_draw_text(font, al_map_rgb(0,255,0), WIDTH/2, 340, ALLEGRO_ALIGN_CENTER, "BOA SORTE!");
+					al_draw_text(font, al_map_rgb(255,40,40), WIDTH/2, 220, ALLEGRO_ALIGN_CENTER, "Pressione ESC a qualquer momento para sair do jogo");
+                	al_draw_text(font, al_map_rgb(255,255,0), WIDTH/2, 280, ALLEGRO_ALIGN_CENTER, "Pressione SPACE para começar a jogar");
+                	al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 400, ALLEGRO_ALIGN_CENTER, "DESENVOLVIDO POR: Pamela Fialho e Valter da Silva");
+                	al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 550, ALLEGRO_ALIGN_CENTER, "ORIENTADO POR: Professor Fernando Santana Pacheco");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 670, 0, "TURMA 722 (2017/2)");
             	}
 				if (state == CHOOSE_CHARACTER) {
 					//imagem menu de personagem
