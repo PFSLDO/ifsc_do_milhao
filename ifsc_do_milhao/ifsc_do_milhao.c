@@ -9,14 +9,17 @@
 #include "biblioteca.h"
 
 //GLOBALS==============================
-const int WIDTH = 800;
-const int HEIGHT = 800;
+const int WIDTH = 700;
+const int HEIGHT = 700;
+const char QUEST[] = "questions.csv";
+const char ALT[] = "alternatives.csv";
+FILE  *fileques;
+FILE  *filealt;
 enum KEYS {SPACE, ESC, NUM1, NUM2, NUM3, P, A};
 enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 
 //prototypes
 void ChooseThematic(int which); //modalidade das perguntas
-int CheckMouse(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BITMAP *op2, ALLEGRO_BITMAP *op3); //checa a posição do mouse sobre as opções na tela e o clique sobre o botão de sair
 
 void GameInitiation(int theme); //iniciação da rodada
 int NewQuestion(int theme); //gera uma pergunta nova
@@ -44,6 +47,9 @@ int main(void) {
 	bool FirstTime = true;
 	bool keys[7] = {false, false, false, false, false, false, false};
 	int state = MENU; //inicia no menu
+	//Variáveis para leitura arquivos csv
+	char titleques[100], QuestID[60], Questions[60];
+	char titlealt[100], AltID[180], Alternatives[180];
 
 	int thematic; //temica escolhida
 	int playr; //jogador escolhido
@@ -64,12 +70,11 @@ int main(void) {
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_FONT *font = NULL;
-	ALLEGRO_BITMAP *option1 = NULL;
-	ALLEGRO_BITMAP *option2 = NULL;
-	ALLEGRO_BITMAP *option3 = NULL;
 
 	//Allegro image variables
 	ALLEGRO_BITMAP *menuimage = NULL;
+	ALLEGRO_BITMAP *charactermenu = NULL;
+	ALLEGRO_BITMAP *thematicmenu = NULL;
 
 	//Allegro audio variables
 	ALLEGRO_SAMPLE *game_theme = NULL;
@@ -119,7 +124,6 @@ int main(void) {
     }
 
 	al_init_primitives_addon();
-	al_install_mouse();
 	al_init_font_addon();
 	al_init_ttf_addon();
 	al_init_image_addon();
@@ -127,26 +131,11 @@ int main(void) {
 	// Configura o título da janela
     al_set_window_title(display, "IFSC do Milhão");
 
-	// Torna apto o uso de mouse na aplicação
-    if (!al_install_mouse()){
-        Error("Falha ao inicializar o mouse");
-        al_destroy_display(display);
-        return -1;
-    }
-
-	// Atribui o cursor padrão do sistema para ser usado
-    if (!al_set_system_mouse_cursor(display, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT)){
-        Error("Falha ao atribuir ponteiro do mouse");
-        al_destroy_display(display);
-        return -1;
-    }
-
 	//Carrega os arquivos utilizados
     menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_image.png"); //carrega a imagem do menu
-    option1 = al_create_bitmap(WIDTH/2, HEIGHT/2+25);	// Alocamos a primeira opção de resposta/escolha
-    option2 = al_create_bitmap(WIDTH/2, HEIGHT/2+150);
-    option3 = al_create_bitmap(WIDTH/2, HEIGHT/2+275);
-	font = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 18, 0);
+	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_character.png"); //carrega a imagem do menu
+	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_thematic.png"); //carrega a imagem do menu
+	font = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 20, 0);
 	//Carrega o Audio
 	al_reserve_samples(2);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
     game_theme = al_load_sample("Audio/pacman_theme.wav");//carrega o tema do pacman
@@ -233,7 +222,6 @@ int main(void) {
 					playr = 2;
 					ChooseCharacter(&player, playr);
 					state = CHOOSE_THEMATIC;
-
 				if(keys[A])
 					playr = 1;
 					ChooseCharacter(&player, playr);
@@ -278,49 +266,34 @@ int main(void) {
 					al_draw_bitmap(menuimage,0,0,0);
 					//textos
 					//tutorial
-					al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 350, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
-                	al_draw_text(font, al_map_rgb(255,40,40), WIDTH/2, 220, ALLEGRO_ALIGN_CENTER, "Utilize as teclas do seu computador!");
-                	al_draw_text(font, al_map_rgb(255,255,0), WIDTH/2, 280, ALLEGRO_ALIGN_CENTER, "A escolha da resposta é feita com as teclas 1, 2 e 3");
-                	al_draw_text(font, al_map_rgb(255,255,0), WIDTH/2, 305, ALLEGRO_ALIGN_CENTER, "Você poderá escolher o personagem e a temática das perguntas a seguir");
-                	al_draw_text(font, al_map_rgb(0,255,0), WIDTH/2, 340, ALLEGRO_ALIGN_CENTER, "BOA SORTE!");
-					al_draw_text(font, al_map_rgb(255,40,40), WIDTH/2, 220, ALLEGRO_ALIGN_CENTER, "Pressione ESC a qualquer momento para sair do jogo");
-                	al_draw_text(font, al_map_rgb(255,255,0), WIDTH/2, 280, ALLEGRO_ALIGN_CENTER, "Pressione SPACE para começar a jogar");
-                	al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 400, ALLEGRO_ALIGN_CENTER, "DESENVOLVIDO POR: Pamela Fialho e Valter da Silva");
-                	al_draw_text(font, al_map_rgb(0,0,255), WIDTH/2, 550, ALLEGRO_ALIGN_CENTER, "ORIENTADO POR: Professor Fernando Santana Pacheco");
-                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 670, 0, "TURMA 722 (2017/2)");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 290, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 320, ALLEGRO_ALIGN_CENTER, "Utilize as teclas do seu computador para fazer as escolhas!");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 340, ALLEGRO_ALIGN_CENTER, "A escolha da resposta é feita com as teclas 1, 2 e 3");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 360, ALLEGRO_ALIGN_CENTER, "Você poderá escolher o personagem e a temática das perguntas a seguir");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 390, ALLEGRO_ALIGN_CENTER, "BOA SORTE!");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "SPACE PARA COMEÇAR A JOGAR");
             	}
 				if (state == CHOOSE_CHARACTER) {
-					//imagem menu de personagem
-					//escolha com o teclado (A - aluno; P - professor)
+					al_draw_bitmap(charactermenu,0,0,0); //imagem menu de personagem
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "A PARA JOGAR COM ALUNO");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P PARA JOGAR COM PROFESSORA");
 				}
 				if (state == CHOOSE_THEMATIC) {
-					//imagem menu de tematica
-					//escolha com o teclado (1 - x; 2 - y; 3 - todas)
+					al_draw_bitmap(menuimage,0,0,0);
 				}
             	else if (state == PLAYING) {
                 	if(!isGameOver) {
-                    // GameIsOver = CheckColision(Player1, Ghosts, pacman_eatghost);
-                    // CheckIfVulnerable(Player1, Ghosts);
-                    // CheckScore(Player1, Ghosts);
-                    // DrawMap(parede, comida, cafe, seta, seta2);
-                    // DrawPacman(Player1, pacmanfinal, curFrame, frameWidth, frameHeight);
-                    // DrawGhosts(Ghosts, enemy1, enemy2, enemy3, enemy4, timer2);
                     // al_draw_textf(font, al_map_rgb(255,255,255), 760, 5, 0, "PONTOS");
                     // al_draw_textf(font, al_map_rgb(255,255,255), 800, 150, 0, "%d", Player1.Score+Player1.GhostScore);
 					}
                 	else {
-                    // al_play_sample(pacman_death,1,0,1,ALLEGRO_PLAYMODE_ONCE, NULL);
-                    // al_stop_sample_instance(pacman_theme_instance);
-                    // finalScore = Player1.Score + Player1.GhostScore;
-                    FirstTime = 0;
+                    FirstTime = true;
                     state = GAMEOVER;
                 	}
             	}
             	else if (state == GAMEOVER) {
-                	// InitPacman(Player1);
-                	// InitGhosts(Ghosts);
-                	// InitPoseMap();
-                	isGameOver = 0;
+                	isGameOver = true;
                 	al_draw_text(font, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "DERROTA");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ENTER para sair");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
@@ -355,10 +328,9 @@ int main(void) {
 			al_clear_to_color(al_map_rgb(0,0,0));
 		}
 	}
-    al_destroy_bitmap(option1);
-	al_destroy_bitmap(option2);
-	al_destroy_bitmap(option3);
 	al_destroy_bitmap(menuimage);
+	al_destroy_bitmap(charactermenu);
+	al_destroy_bitmap(thematicmenu);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
 	al_destroy_font(font);
@@ -377,7 +349,12 @@ void GameInitiation(int theme) {
 }
 
 void ChooseCharacter (struct Character *player, int which) {
-	//pergunta qual jogador ele quer ser "professor", "aluno" ou "aleatorio"
+	if (which == 1) {
+		player->ID = STUDENT;
+	}
+	if (which == 2) {
+		player->ID = PROFESSOR;
+	}
 }
 
 void Character(struct Character *player, int charc) { //inicia o personagem
@@ -436,72 +413,6 @@ int NewQuestion(int theme) { //implementar logica para nao repetir pergunta
 		quest = 0;
 	}
 	return quest;
-}
-
-int CheckMouse(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_BITMAP *op1, ALLEGRO_BITMAP *op2, ALLEGRO_BITMAP *op3) { //melhorar usando vetores
-	int result;
-	while (!al_is_event_queue_empty(event_queue)){
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(event_queue, &ev);
-		if (ev.mouse.x >= al_get_bitmap_width(op1) - 150 &&
-        ev.mouse.x <= al_get_bitmap_width(op1) + 150 &&
-    	ev.mouse.y >= al_get_bitmap_height(op1) - 50 &&
-    	ev.mouse.y <= al_get_bitmap_height(op1) + 50){
-            // Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
-        	al_set_target_bitmap(op1);
-			al_clear_to_color(al_map_rgb(0, 255, 0));
-    	}	
-		else {
-			al_clear_to_color(al_map_rgb(255, 255, 255));
-		}
-
-		//Verifica se o cursor está sobre a opção 2
-		if (ev.mouse.x >= al_get_bitmap_width(op2) - 150 &&
-        ev.mouse.x <= al_get_bitmap_width(op2) + 150 &&
-        ev.mouse.y >= al_get_bitmap_height(op2) - 50 &&
-        ev.mouse.y <= al_get_bitmap_height(op2) + 50){
-            // Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
-        	al_set_target_bitmap(op2);
-			al_clear_to_color(al_map_rgb(0, 255, 0));
-        }
-		else {
-			al_clear_to_color(al_map_rgb(255, 255, 255));
-		}
-
-		//Verifica se o cursor está sobre a opção 3
-		if (ev.mouse.x >= al_get_bitmap_width(op3) - 150 &&
-        ev.mouse.x <= al_get_bitmap_width(op3) + 150 &&
-        ev.mouse.y >= al_get_bitmap_height(op3) - 50 &&
-        ev.mouse.y <= al_get_bitmap_height(op3) + 50){
-            // Colorimos o bitmap correspondente ao retângulo que o cursor está por cima
-        	al_set_target_bitmap(op3);
-			al_clear_to_color(al_map_rgb(0, 255, 0));
-        }
-		else {
-			al_clear_to_color(al_map_rgb(255, 255, 255));
-		}
-
-		//se o evento foi um clique do mouse
-		if (ev.mouse.x >= al_get_bitmap_width(op1) - 150 &&
-        ev.mouse.x <= al_get_bitmap_width(op1) + 150 &&
-    	ev.mouse.y >= al_get_bitmap_height(op1) - 50 &&
-    	ev.mouse.y <= al_get_bitmap_height(op1) + 50){
-        	result = 1;
-        }
-		else if (ev.mouse.x >= al_get_bitmap_width(op2) - 150 &&
-        ev.mouse.x <= al_get_bitmap_width(op2) + 150 &&
-    	ev.mouse.y >= al_get_bitmap_height(op2) - 50 &&
-    	ev.mouse.y <= al_get_bitmap_height(op2) + 50){
-        	result = 2;
-        }
-		else if (ev.mouse.x >= al_get_bitmap_width(op3) - 150 &&
-        ev.mouse.x <= al_get_bitmap_width(op3) + 150 &&
-    	ev.mouse.y >= al_get_bitmap_height(op3) - 50 &&
-    	ev.mouse.y <= al_get_bitmap_height(op3) + 50){
-        	result = 3;
-        }
-	}
-return result;
 }
 
 bool Answer(int answer, int realanswer, struct Character *player) {
