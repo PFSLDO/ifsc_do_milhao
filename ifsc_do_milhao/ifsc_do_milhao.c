@@ -20,19 +20,14 @@ enum KEYS {SPACE, ESC, NUM1, NUM2, NUM3, P, A};
 enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 
 //prototypes
-void ChooseThematic(int which); //modalidade das perguntas
-
-void GameInitiation(int theme); //iniciação da rodada
-int NewQuestion(int theme); //gera uma pergunta nova
-bool Answer(int answer, int realanswer, struct Character *player); //analise da resposta
-
 void ChooseCharacter (struct Character *player, int which); //escolha do personagem do jogador
+void ChooseThematic(int which); //modalidade das perguntas
 void Character(struct Character *player); //inicia o personagem do jogador
-void CharacterUpdate(struct Character *player); //atualiza o personagem do jogador
 void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
-void ProfessorUpdate(struct Extras *x, struct Extras *y); //atualiza o professor (quando há pedido de ajuda para os universitários)
-int Interviewer(struct Extras *pamela, struct Extras *valter, int quest); //aparição de um entrevistador
-void InterviewerUpdate(int interviewer); //atualiza o personagem do entrevistador
+void Interviewer(struct Extras *interviewer, int quest); //aparição de um entrevistador
+
+void NewQuestion(struct Question quest); //gera uma pergunta nova
+void Answer(struct Character *player, struct Question *quest); //analise da resposta
 void Help(struct Extras *x, struct Extras *y); //ajuda aos universitários
 
 void Error(char *text){
@@ -52,18 +47,12 @@ int main(void) {
 	char titleques[100], QuestID[60], Questions[60];
 	char titlealt[100], AltID[180], Alternatives[180];
 
-	int thematic; //temica escolhida
-	int question; //questao da vez
-	int interv; //entrevistador da vez
-	int answer; //resposta dada pelo usuario
-	int feedback; //gabarito da questao
-
 	//object variables
 	struct Character player; //cria o jogador
-	struct Extras pamela; //cria a entrevistadora Pamela
-	struct Extras valter; //cria o entrevistador Valter
+	struct Extras interviewer; //cria a entrevistador
 	struct Extras x; //cria o professor x
 	struct Extras y; //cria o professor y
+	struct Question quest; //cria uma estrutura para organizar a resposta
 
 	//Allegro variables
 	ALLEGRO_DISPLAY *display = NULL;
@@ -218,22 +207,18 @@ int main(void) {
 			redraw = true;
 			if (state == MENU) {
                 if(keys[SPACE]) {
-					//printf("Voce deu um espaco");
                     state = CHOOSE_CHARACTER;
 				}
                 if(keys[ESC]) {
-					//printf("Voce deu esc");
                     done = true;
 				}
             }
 			else if (state == CHOOSE_CHARACTER) {
                 if(keys[P]) {
-					//printf("Voce apertou p");
 					ChooseCharacter(&player, 2);
 					state = CHOOSE_THEMATIC;
 				}
 				if(keys[A]) {
-					//printf("Voce apertou a");
 					ChooseCharacter(&player, 1);
 					state = CHOOSE_THEMATIC;
 				}
@@ -244,9 +229,7 @@ int main(void) {
 			else if (state == CHOOSE_THEMATIC) {
 				for(int i=1; i<4; i++) {
 					if(keys[i]) {
-						//printf("Voce apertou %d", i);
-						thematic = i;
-						ChooseThematic(thematic);
+						ChooseThematic(i);
 						state = PLAYING;
 					}
 				}
@@ -257,14 +240,33 @@ int main(void) {
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar no mapa pela primeira vez
                     Character(&player); //inicia o personagem do jogador
-					CharacterUpdate(&player); //atualiza o personagem do jogador
-					question = NewQuestion(thematic);
-					interv = Interviewer(&pamela, &valter, question); //aparição de um entrevistador
-					InterviewerUpdate(interv); //atualiza o personagem do entrevistador
+					//help professor
+					Interviewer(&interviewer, &quest); //aparição de um entrevistador
                     FirstTime = false; //Joga firstTime para false, de modo a não entrar no If novamente
                 }
-                if(keys[ESC]) {
+				NewQuestion(&quest);
+				for (int i=1; i<4; i++) {
+					if (keys[NUM1]) {
+						quest.player_answer = 1;
+						Answer(&player, &quest);
+					}
+					else if (keys[NUM2]) {
+						quest.player_answer = 2;
+						Answer(&player, &quest);
+					}
+					else if (keys[NUM3]) {
+						quest.player_answer = 3;
+						Answer(&player, &quest);
+					}
+				}
+				if(player.score == 10) {
+					state = WON;
+				}
+				if(player.score < 6 && quest.num == 10) {
 					state = GAMEOVER;
+				}
+                if(keys[ESC]) {
+					done = true;
 				}
             }
 			else if (state == GAMEOVER) {
@@ -361,31 +363,26 @@ void ChooseThematic(int which) {
 	//colocar textos em cima dos blocos de opções
 }
 
-void GameInitiation(int theme) {
-    
-}
-
 void ChooseCharacter (struct Character *player, int which) {
 	if (which == 1) {
 		player->ID = STUDENT;
 	}
-	if (which == 2) {
+	else if (which == 2) {
 		player->ID = PROFESSOR;
 	}
 }
 
 void Character(struct Character *player) { //inicia o personagem
-	//player->ID = charc;
+	if (player->ID = STUDENT) {
+		//imagem do estudante
+	}
+	if (player->ID = PROFESSOR) {
+		//imagem do estudante
+	}
 	player->x = 25;
 	player->y = HEIGHT;
 	player->lives = 3;
 	player->score = 0;
-}
-
-void CharacterUpdate(struct Character *player) {
-	for (int i=player->y; i>HEIGHT-25; i--) {
-		player->y = i;
-	}
 }
 
 void Professor(struct Extras *x, struct Extras *y) {
@@ -396,47 +393,19 @@ void Professor(struct Extras *x, struct Extras *y) {
 	// x->y = HEIGHT;
 }
 
-void ProfessorUpdate(struct Extras *x, struct Extras *y) {
-
-}
-
-int Interviewer(struct Extras *pamela, struct Extras *valter, int quest) {
+void Interviewer(struct Extras *interviewer, int quest) {
 // 	int interv; //qual entrevistador da vez
 
 // 	return interv;
 }
 
-void InterviewerUpdate(int interviewer) {
-
-}
-
-int NewQuestion(int theme) { //implementar logica para nao repetir pergunta
+void NewQuestion(struct Question quest) { //implementar logica para nao repetir pergunta
 	int quest;
-	// int level = 0;
-	// level++;
-
-	// if (level != 11) {
-	// 	if (theme == 1) {
-	// 	//print de uma pergunta aleatoria dentre todas as categorias
-	// 	}
-	// 	if (theme == 2) {
-	// 		//print de uma pergunta aleatoria dentre as de professor
-	// 	}
-	// 	if (theme == 3) {
-	// 		//print de uma pergunta aleatoria dentre as de aluno
-	// 	}
-	// }
-	// else if (level == 11) {
-	// 	quest = 0;
-	// }
-	return quest;
+	
 }
 
-bool Answer(int answer, int realanswer, struct Character *player) {
-	bool point = false;
-	// if (answer == realanswer) {
-	// 	point = true;
-	// 	player->score++;
-	// }
-	return point;
+void Answer(struct Character *player, struct Question *quest) {
+	if (quest->player_answer == quest->answer) {
+		player->score++;
+	}
 }

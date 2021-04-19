@@ -16,3 +16,11 @@ struct Extras {
 	int x;
 	int y;
 };
+
+//Our Questions
+struct Question {
+	int ID;
+	int thematic;
+	int answer;
+	int player_answer;
+}
