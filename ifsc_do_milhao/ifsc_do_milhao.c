@@ -6,6 +6,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <stdio.h>
 #include "biblioteca.h"
 
 //GLOBALS==============================
