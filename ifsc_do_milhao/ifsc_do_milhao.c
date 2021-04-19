@@ -132,16 +132,21 @@ int main(void) {
     al_set_window_title(display, "IFSC do Milhão");
 
 	//Carrega os arquivos utilizados
-    menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_image.png"); //carrega a imagem do menu
-	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_character.png"); //carrega a imagem do menu
-	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_thematic.png"); //carrega a imagem do menu
-	font = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 20, 0);
+    menuimage = al_load_bitmap("menu_image.png"); //carrega a imagem do menu
+	charactermenu = al_load_bitmap("menu_character.png"); //carrega a imagem do menu
+	thematicmenu = al_load_bitmap("menu_thematic.png"); //carrega a imagem do menu
+	font = al_load_font("arial.ttf", 20, 0);
 	//Carrega o Audio
 	al_reserve_samples(2);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
     game_theme = al_load_sample("Audio/game_theme.wav");//carrega o tema
     game_theme_instance = al_create_sample_instance(game_theme);//cria uma sample instance e coloca o tema dentro
     al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP);//configura o playmode da sample instance, nesse caso loop
     al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());//da o "atach" da sample_instance ao mixer
+
+	//testar carregamento dos arquivos
+	///
+	//
+	//
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
