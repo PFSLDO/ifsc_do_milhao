@@ -132,10 +132,10 @@ int main(void) {
     al_set_window_title(display, "IFSC do Milhão");
 
 	//Carrega os arquivos utilizados
-    menuimage = al_load_bitmap("menu_image.png"); //carrega a imagem do menu
-	charactermenu = al_load_bitmap("menu_character.png"); //carrega a imagem do menu
-	thematicmenu = al_load_bitmap("menu_thematic.png"); //carrega a imagem do menu
-	font = al_load_font("arial.ttf", 20, 0);
+	menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_image.png"); //carrega a imagem do menu
+	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_character.png"); //carrega a imagem do menu
+	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_thematic.png"); //carrega a imagem do menu
+	font = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 20, 0);
 	//Carrega o Audio
 	al_reserve_samples(2);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
     game_theme = al_load_sample("Audio/game_theme.wav");//carrega o tema
@@ -263,8 +263,9 @@ int main(void) {
 					InterviewerUpdate(interv); //atualiza o personagem do entrevistador
                     FirstTime = false; //Joga firstTime para false, de modo a não entrar no If novamente
                 }
-                if(keys[ESC])
-                    state = GAMEOVER;
+                if(keys[ESC]) {
+					state = GAMEOVER;
+				}
             }
 			else if (state == GAMEOVER) {
                 if(keys[ESC]) {
@@ -388,11 +389,11 @@ void CharacterUpdate(struct Character *player) {
 }
 
 void Professor(struct Extras *x, struct Extras *y) {
-	char choice;
-	//id conforme o escolhido
-	x->ID = choice;
-	x->x = 25;
-	x->y = HEIGHT;
+	// char choice;
+	// //id conforme o escolhido
+	// x->ID = choice;
+	// x->x = 25;
+	// x->y = HEIGHT;
 }
 
 void ProfessorUpdate(struct Extras *x, struct Extras *y) {
@@ -400,9 +401,9 @@ void ProfessorUpdate(struct Extras *x, struct Extras *y) {
 }
 
 int Interviewer(struct Extras *pamela, struct Extras *valter, int quest) {
-	int interv; //qual entrevistador da vez
+// 	int interv; //qual entrevistador da vez
 
-	return interv;
+// 	return interv;
 }
 
 void InterviewerUpdate(int interviewer) {
@@ -411,31 +412,31 @@ void InterviewerUpdate(int interviewer) {
 
 int NewQuestion(int theme) { //implementar logica para nao repetir pergunta
 	int quest;
-	int level = 0;
-	level++;
+	// int level = 0;
+	// level++;
 
-	if (level != 11) {
-		if (theme == 1) {
-		//print de uma pergunta aleatoria dentre todas as categorias
-		}
-		if (theme == 2) {
-			//print de uma pergunta aleatoria dentre as de professor
-		}
-		if (theme == 3) {
-			//print de uma pergunta aleatoria dentre as de aluno
-		}
-	}
-	else if (level == 11) {
-		quest = 0;
-	}
+	// if (level != 11) {
+	// 	if (theme == 1) {
+	// 	//print de uma pergunta aleatoria dentre todas as categorias
+	// 	}
+	// 	if (theme == 2) {
+	// 		//print de uma pergunta aleatoria dentre as de professor
+	// 	}
+	// 	if (theme == 3) {
+	// 		//print de uma pergunta aleatoria dentre as de aluno
+	// 	}
+	// }
+	// else if (level == 11) {
+	// 	quest = 0;
+	// }
 	return quest;
 }
 
 bool Answer(int answer, int realanswer, struct Character *player) {
-	bool point;
-	if (answer == realanswer) {
-		point = true;
-		player->score++;
-	}
+	bool point = false;
+	// if (answer == realanswer) {
+	// 	point = true;
+	// 	player->score++;
+	// }
 	return point;
 }
