@@ -74,6 +74,7 @@ int main(void) {
 	ALLEGRO_BITMAP *menuimage = NULL;
 	ALLEGRO_BITMAP *charactermenu = NULL;
 	ALLEGRO_BITMAP *thematicmenu = NULL;
+	ALLEGRO_BITMAP *menuplaying = NULL;
 
 	//Variáveis do Allegro relacionadas a audio
 	ALLEGRO_SAMPLE *game_theme = NULL;
@@ -135,6 +136,7 @@ int main(void) {
 	menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_image.png"); //carrega a imagem do menu
 	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_character.png"); //carrega a imagem do menu de personagens
 	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_thematic.png"); //carrega a imagem do menu de temáticas
+	menuplaying = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_playing.png"); //carrega a imagem do menu da jogada
 	
 	//Carrega os arquivos relacionados a fonte
 	font = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 20, 0);
@@ -281,7 +283,7 @@ int main(void) {
 					//help professor
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
 					quest.num = 0;
-                    FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodade
+                    FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
 				NewQuestion(&quest); //Chama a função que printa nova pergunta
 				for (int i=1; i<4; i++) {
@@ -319,9 +321,6 @@ int main(void) {
 
 			if(redraw && al_is_event_queue_empty(event_queue)) {
             	redraw = false;
-				if(!isGameOver) {
-					al_draw_textf(font, al_map_rgb(255, 255, 255), 5, 5, 0, "Você pode pedir ajuda para os universitários %i vezes. Sua nota atual: %i", player.lives, player.score);
-				}
 				if (state == MENU) {
 					al_draw_bitmap(menuimage,0,0,0); //imagem de fundo
 					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 290, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
@@ -348,9 +347,13 @@ int main(void) {
 					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "3) PARA JOGAR COM A TODAS AS TEMÁTICA");
 				}
             	else if (state == PLAYING) {
+					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
-                    	al_draw_textf(font, al_map_rgb(255,255,255), 760, 5, 0, "PONTOS");
-                    	al_draw_textf(font, al_map_rgb(255,255,255), 800, 150, 0, "%d", player.score);
+                    	al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
+						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
+						al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
+						al_draw_textf(font, al_map_rgb(255, 255, 255), 575, 540, 0, "Sair (ESC)");
+						al_draw_textf(font, al_map_rgb(255, 255, 255), 575, 670, 0, "Ajuda (H)");
 					}
                 	else {
                     	FirstTime = true;
