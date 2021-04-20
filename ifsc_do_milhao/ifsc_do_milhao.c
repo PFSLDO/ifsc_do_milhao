@@ -12,8 +12,8 @@
 //VARIIÁVEIS GLOBAIS
 const int WIDTH = 700;
 const int HEIGHT = 700;
-const char QUEST[] = "questions.csv";
-const char ALT[] = "alternatives.csv";
+const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/questions.csv";
+const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/alternatives.csv";
 FILE  *fileques;
 FILE  *filealt;
 enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, P, A, H};
@@ -45,13 +45,16 @@ int main(void) {
 	bool isGameOver = false;
 	bool FirstTime = true;
 	int state = MENU; //inicia no menu
+	int n = 0; //controla o número de linhas lidas do arquivo csv
 
 	//Leitura do teclado
 	bool keys[8] = {false, false, false, false, false, false, false, false};
 
 	//Variáveis para leitura arquivos csv
-	char titleques[100], QuestID[60], Questions[60];
-	char titlealt[100], AltID[180], Alternatives[180];
+	char titleques[100], Questions[60];
+	int QuestID[60];
+	char titlealt[100], Alternatives[180];
+	int AltID[180];
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
@@ -144,6 +147,33 @@ int main(void) {
     al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP);//configura o playmode da sample instance, nesse caso loop
     al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());//da o "atach" da sample_instance ao mixer
 
+	//Faz a leitura dos arquivos com as perguntas
+	fileques = fopen(QUEST, "r");
+    if (fileques == NULL) {
+        Error("Erro ao abrir o arquivo de perguntas.\n");
+        return 0;
+    }
+    for(int i=0; i<80; i++) {
+        fgets(titleques, sizeof(titleques),fileques);
+        n=fscanf(fileques, "%d, %s", &QuestID[i], &Questions[i]);
+        if (n==EOF) {
+            break;
+        }
+    }
+    fclose(fileques);
+
+	//Faz a leitura dos arquivos com as respostas
+	filealt = fopen(ALT, "r");
+    if (filealt == NULL) {
+        Error("Erro ao abrir o arquivo de perguntas.\n");
+        return 0;
+    }
+    for(int i=0; i<180; i++) {
+        fgets(titlealt, sizeof(titlealt),filealt);
+        n=fscanf(filealt, "%d, %s", &AltID[i], &Alternatives[i]);
+    }
+    fclose(fileques);
+	
 	//CONTROLE DE TEMPO DO JOGO
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
