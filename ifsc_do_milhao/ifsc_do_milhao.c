@@ -9,67 +9,74 @@
 #include <stdio.h>
 #include "biblioteca.h"
 
-//GLOBALS==============================
+//VARIIÁVEIS GLOBAIS
 const int WIDTH = 700;
 const int HEIGHT = 700;
 const char QUEST[] = "questions.csv";
 const char ALT[] = "alternatives.csv";
 FILE  *fileques;
 FILE  *filealt;
-enum KEYS {SPACE, ESC, NUM1, NUM2, NUM3, P, A};
+enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, P, A, H};
 enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 
-//prototypes
+//PROTÓTIPO DE FUNÇÕES
+//Relacionadas aos personagens
 void ChooseCharacter (struct Character *player, int which); //escolha do personagem do jogador
 void ChooseThematic(int which); //modalidade das perguntas
 void Character(struct Character *player); //inicia o personagem do jogador
 void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
-void Interviewer(struct Extras *interviewer, int quest); //aparição de um entrevistador
+void Interviewer(struct Extras *interviewer, struct Question *quest); //aparição de um entrevistador
 
-void NewQuestion(struct Question quest); //gera uma pergunta nova
+//Relaciondas ao jogo
+void NewQuestion(struct Question *quest); //gera uma pergunta nova
 void Answer(struct Character *player, struct Question *quest); //analise da resposta
-void Help(struct Extras *x, struct Extras *y); //ajuda aos universitários
 
+//Define como será mostrada uma mensagem de erro
 void Error(char *text){
 	al_show_native_message_box(NULL,"ERRO", "Ocorreu o seguinte erro e o programa sera finalizado:",text,NULL,ALLEGRO_MESSAGEBOX_ERROR);
 }
 
 int main(void) {
-	//primitive variable
+	//VARIÁVEIS PRIMITIVAS
+	//Construção da estrutura do jogo
 	const int FPS = 60;
 	bool done = false;
 	bool redraw = true;
 	bool isGameOver = false;
 	bool FirstTime = true;
-	bool keys[7] = {false, false, false, false, false, false, false};
 	int state = MENU; //inicia no menu
+
+	//Leitura do teclado
+	bool keys[8] = {false, false, false, false, false, false, false, false};
+
 	//Variáveis para leitura arquivos csv
 	char titleques[100], QuestID[60], Questions[60];
 	char titlealt[100], AltID[180], Alternatives[180];
 
-	//object variables
+	//Variáveis de objeto
 	struct Character player; //cria o jogador
 	struct Extras interviewer; //cria a entrevistador
 	struct Extras x; //cria o professor x
 	struct Extras y; //cria o professor y
 	struct Question quest; //cria uma estrutura para organizar a resposta
 
-	//Allegro variables
+	//Variáveis do Allegro
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_FONT *font = NULL;
+	ALLEGRO_FONT *fontG = NULL;
 
-	//Allegro image variables
+	//Variáveis do Allegro relacionadas a imagem
 	ALLEGRO_BITMAP *menuimage = NULL;
 	ALLEGRO_BITMAP *charactermenu = NULL;
 	ALLEGRO_BITMAP *thematicmenu = NULL;
 
-	//Allegro audio variables
+	//Variáveis do Allegro relacionadas a audio
 	ALLEGRO_SAMPLE *game_theme = NULL;
     ALLEGRO_SAMPLE_INSTANCE *game_theme_instance = NULL;
 
-	//Initialization Functions
+	//FUNÇÕES DE INICIALIZAÇÃO
 	if (!al_init()) { 
         Error("Falha ao inicializar o Allegro");
         return -1;
@@ -77,20 +84,20 @@ int main(void) {
 
 	if(!al_install_audio()) {
         return -1;
-        printf("Erro ao iniciar os sistemas de Audio!\n");
+        Error("Erro ao iniciar os sistemas de Audio!\n");
     }
 
     if(!al_init_acodec_addon()) {
         return -1;
-        printf("Erro ao iniciar os sistemas de codec de Audio!\n");
+        Error("Erro ao iniciar os sistemas de codec de Audio!\n");
     }
 
     if (!al_reserve_samples(1)) {
         return -1;
-        printf("Erro ao reservar as samples de Audio!\n");
+        Error("Erro ao reservar as samples de Audio!\n");
     }
 
-	display = al_create_display(WIDTH, HEIGHT);			//create our display object
+	display = al_create_display(WIDTH, HEIGHT); //Cria o objeto display
 	
 	if(!display) {
 		Error("Falha ao criar o display");									//test display object
@@ -99,17 +106,17 @@ int main(void) {
 
 	if(!al_init_primitives_addon()) {
         return -1;
-        printf("Erro inciar os addons primitivos!\n");
+        Error("Erro inciar os addons primitivos!\n");
     }
 
     if(!al_install_keyboard()) {
         return -1;
-        printf("Erro instalar/iniciar o teclado!\n");
+        Error("Erro instalar/iniciar o teclado!\n");
     }
 
     if(!al_init_image_addon()) {
         return -1;
-        printf("Erro iniciar o addon de imagem!\n");
+        Error("Erro iniciar o addon de imagem!\n");
     }
 
 	al_init_primitives_addon();
@@ -117,26 +124,27 @@ int main(void) {
 	al_init_ttf_addon();
 	al_init_image_addon();
 
-	// Configura o título da janela
+	//CONFIGURA O TÍTULO DA JANELA
     al_set_window_title(display, "IFSC do Milhão");
 
-	//Carrega os arquivos utilizados
+	//CARREGA OS ARQUIVOS UTILIZADOS
+	//Carrega os arquivos relacionados a imagem
 	menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_image.png"); //carrega a imagem do menu
-	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_character.png"); //carrega a imagem do menu
-	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_thematic.png"); //carrega a imagem do menu
+	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_character.png"); //carrega a imagem do menu de personagens
+	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_thematic.png"); //carrega a imagem do menu de temáticas
+	
+	//Carrega os arquivos relacionados a fonte
 	font = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 20, 0);
-	//Carrega o Audio
+	fontG = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 30, 0);
+
+	//Carrega os arquivos relacionados a audio
 	al_reserve_samples(2);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
     game_theme = al_load_sample("Audio/game_theme.wav");//carrega o tema
     game_theme_instance = al_create_sample_instance(game_theme);//cria uma sample instance e coloca o tema dentro
     al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP);//configura o playmode da sample instance, nesse caso loop
     al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());//da o "atach" da sample_instance ao mixer
 
-	//testar carregamento dos arquivos
-	///
-	//
-	//
-
+	//CONTROLE DE TEMPO DO JOGO
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / FPS);
 
@@ -150,7 +158,7 @@ int main(void) {
 	while(!done) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-		if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+		if(ev.type == ALLEGRO_EVENT_KEY_DOWN) { //Verifica qual tecla é apertada quando alguma é ativada
 			switch(ev.keyboard.keycode) {
 				case ALLEGRO_KEY_ESCAPE:
                 	keys[ESC] = true;
@@ -175,7 +183,7 @@ int main(void) {
                 	break;
 			}
 		}
-		else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
+		else if(ev.type == ALLEGRO_EVENT_KEY_UP) { //Registra que a tecla foi solta
             switch(ev.keyboard.keycode) {
             case ALLEGRO_KEY_SPACE:
                 keys[SPACE] = false;
@@ -205,7 +213,7 @@ int main(void) {
         }
 		else if(ev.type == ALLEGRO_EVENT_TIMER) {
 			redraw = true;
-			if (state == MENU) {
+			if (state == MENU) { //Verifica o teclado na tela do menu principal
                 if(keys[SPACE]) {
                     state = CHOOSE_CHARACTER;
 				}
@@ -213,24 +221,24 @@ int main(void) {
                     done = true;
 				}
             }
-			else if (state == CHOOSE_CHARACTER) {
-                if(keys[P]) {
-					ChooseCharacter(&player, 2);
-					state = CHOOSE_THEMATIC;
-				}
-				if(keys[A]) {
+			else if (state == CHOOSE_CHARACTER) { //Verifica o teclado na tela do menu de escolha do personagem
+				if(keys[A]) { //Caso escolha jogar com o aluno
 					ChooseCharacter(&player, 1);
-					state = CHOOSE_THEMATIC;
+					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
+				}
+				if(keys[P]) { //Caso escolha jogar com a professora
+					ChooseCharacter(&player, 2);
+					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
 				}
                 if(keys[ESC]) {
 					done = true;
 				}
             }
-			else if (state == CHOOSE_THEMATIC) {
+			else if (state == CHOOSE_THEMATIC) { //Verifica o teclado na tela do menu de escolha da temática
 				for(int i=1; i<4; i++) {
 					if(keys[i]) {
-						ChooseThematic(i);
-						state = PLAYING;
+						ChooseThematic(i); //Escolhe a temática correspondente ao que foi lido pelo teclado
+						state = PLAYING; //Avança para a tela da jogada
 					}
 				}
                 if(keys[ESC]) {
@@ -238,38 +246,38 @@ int main(void) {
 				}
             }
 			else if (state == PLAYING) {
-                if(FirstTime) { //Roda apenas ao entrar no mapa pela primeira vez
-                    Character(&player); //inicia o personagem do jogador
+                if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
+                    Character(&player); //Inicia o personagem do jogador
 					//help professor
-					Interviewer(&interviewer, &quest); //aparição de um entrevistador
-                    FirstTime = false; //Joga firstTime para false, de modo a não entrar no If novamente
+					Interviewer(&interviewer, &quest); //Inicia o entrevistador
+                    FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodade
                 }
-				NewQuestion(&quest);
+				NewQuestion(&quest); //Chama a função que printa nova pergunta
 				for (int i=1; i<4; i++) {
-					if (keys[NUM1]) {
-						quest.player_answer = 1;
-						Answer(&player, &quest);
-					}
-					else if (keys[NUM2]) {
-						quest.player_answer = 2;
-						Answer(&player, &quest);
-					}
-					else if (keys[NUM3]) {
-						quest.player_answer = 3;
-						Answer(&player, &quest);
+					if (keys[i]) {
+						quest.player_answer = i; //Guarda a reposta do jogador no struct
+						Answer(&player, &quest); //Chama a função que verifica a resposta do jogador
 					}
 				}
-				if(player.score == 10) {
+				if(player.score == 10) { //Se o jogador alcancar 10 pontos, terá ganho o jogo
 					state = WON;
 				}
-				if(player.score < 6 && quest.num == 10) {
+				if(player.score < 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e não atingir no mínimo 6 pontos, ele perde
 					state = GAMEOVER;
 				}
                 if(keys[ESC]) {
 					done = true;
 				}
             }
-			else if (state == GAMEOVER) {
+			else if (state == GAMEOVER) { //Faz a leitura do que o jogador escolherá fazer depois de perder
+                if(keys[ESC]) {
+					done = true;
+				}
+                else if (keys[SPACE]) {
+                    state = MENU;
+                }
+            }
+			else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
                 if(keys[ESC]) {
 					done = true;
 				}
@@ -280,6 +288,9 @@ int main(void) {
 
 			if(redraw && al_is_event_queue_empty(event_queue)) {
             	redraw = false;
+				if(!isGameOver) {
+					al_draw_textf(font, al_map_rgb(255, 255, 255), 5, 5, 0, "Você pode pedir ajuda para os universitários %i vezes. Sua nota atual: %i", player.lives, player.score);
+				}
 				if (state == MENU) {
 					al_draw_bitmap(menuimage,0,0,0); //imagem de fundo
 					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 290, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
@@ -292,14 +303,18 @@ int main(void) {
             	}
 				else if (state == CHOOSE_CHARACTER) {
 					al_draw_bitmap(charactermenu,0,0,0); //imagem menu de personagem
-					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "A PARA JOGAR COM ALUNO");
-                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P PARA JOGAR COM PROFESSORA");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 60, ALLEGRO_ALIGN_CENTER, "ESCOLHA, COM O TECLADO, SEU PERSONAGEM");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "A) PARA JOGAR COM ALUNO");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P) PARA JOGAR COM PROFESSORA");
 				}
 				else if (state == CHOOSE_THEMATIC) {
-					al_draw_bitmap(menuimage,0,0,0); //imagem menu da tematica
-					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "1 PARA JOGAR COM TEMÁTICA IFSC");
-                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "2 PARA JOGAR COM TEMÁTICA CONHECIMENTOS GERAIS");
-					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "3 PARA JOGAR COM TODAS AS TEMÁTICA");
+					al_draw_bitmap(thematicmenu,0,0,0); //imagem menu da tematica
+					al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH/2, 90, ALLEGRO_ALIGN_CENTER, "ESCOLHA, COM O TECLADO, UMA");
+					al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH/2, 130, ALLEGRO_ALIGN_CENTER, "TEMÁTICA PARA JOGAR");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 275, ALLEGRO_ALIGN_CENTER, "1) PARA JOGAR COM A TEMÁTICA IFSC");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 435, ALLEGRO_ALIGN_CENTER, "2) PARA JOGAR COM A TEMÁTICA");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 455, ALLEGRO_ALIGN_CENTER, "CONHECIMENTOS GERAIS");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "3) PARA JOGAR COM A TODAS AS TEMÁTICA");
 				}
             	else if (state == PLAYING) {
                 	if(!isGameOver) {
@@ -312,39 +327,34 @@ int main(void) {
                 	}
             	}
             	else if (state == GAMEOVER) {
+					al_clear_to_color(al_map_rgb(0,0,0));
                 	isGameOver = true;
                 	al_draw_text(font, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "DERROTA");
-                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ENTER para sair");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
                 	al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER, "pressione SPACE para ir ao menu");
-                	al_draw_textf(font, al_map_rgb(0,0,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"high score: %d", player.score);
+                	al_draw_textf(font, al_map_rgb(0,0,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
+            	}
+				else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
+					isGameOver = true;
+					al_clear_to_color(al_map_rgb(0,0,0));
+					if (player.score >= 6 & player.score != 10) {
+						al_draw_textf(font, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns, você conseguiu %i pontos!", player.score);
+						al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
+                		al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
+                		al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER, "pressione SPACE para ir ao menu");
+					}
+					else if (player.score == 10) {
+						al_draw_text(font, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "VOCÊ GABARITOU!");
+                		al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
+                		al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
+                		al_draw_text(font, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER, "pressione SPACE para ir ao menu");
+					}
             	}
 
             al_flip_display();
             al_clear_to_color(al_map_rgb(0,0,0));
         	}
-		}
-
-		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-			done = true;
-		}
-		if(redraw && al_is_event_queue_empty(event_queue)) {
-			redraw = false; 
-			if(!isGameOver) {
-				al_draw_textf(font, al_map_rgb(255, 0, 255), 5, 5, 0, "Você pode pedir ajuda para os universitários %i vezes. Sua nota atual: %i", player.lives, player.score);
-				if (player.score <= 6 & player.score != 10) {
-					al_draw_textf(font, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns, você conseguiu %i pontos!", player.score);
-				}
-				if (player.score == 10) {
-					al_draw_textf(font, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns, você gabaritou!");
-				}
-			}
-			else {
-				al_draw_textf(font, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Game Over. Pontuação final: %i", player.score);
-			}
-		
-			al_flip_display();
-			al_clear_to_color(al_map_rgb(0,0,0));
 		}
 	}
 	al_destroy_bitmap(menuimage);
@@ -358,11 +368,6 @@ int main(void) {
 	return 0;
 }
 
-void ChooseThematic(int which) {
-    //colocar fundo do display com imagem para esta escolha
-	//colocar textos em cima dos blocos de opções
-}
-
 void ChooseCharacter (struct Character *player, int which) {
 	if (which == 1) {
 		player->ID = STUDENT;
@@ -372,11 +377,16 @@ void ChooseCharacter (struct Character *player, int which) {
 	}
 }
 
+void ChooseThematic(int which) {
+    //colocar fundo do display com imagem para esta escolha
+	//colocar textos em cima dos blocos de opções
+}
+
 void Character(struct Character *player) { //inicia o personagem
-	if (player->ID = STUDENT) {
+	if (player->ID == STUDENT) {
 		//imagem do estudante
 	}
-	if (player->ID = PROFESSOR) {
+	if (player->ID == PROFESSOR) {
 		//imagem do estudante
 	}
 	player->x = 25;
@@ -393,14 +403,18 @@ void Professor(struct Extras *x, struct Extras *y) {
 	// x->y = HEIGHT;
 }
 
-void Interviewer(struct Extras *interviewer, int quest) {
-// 	int interv; //qual entrevistador da vez
-
-// 	return interv;
+void Interviewer(struct Extras *interviewer, struct Question *quest) {
+	if ((rand() % 2 + 1) == 1) {
+		interviewer->ID = INTERVIEWER_PAMELA;
+		//carrega imagem pamela
+	}
+	else {
+		interviewer->ID = INTERVIEWER_VALTER;
+		//carrega imagem valter
+	}
 }
 
-void NewQuestion(struct Question quest) { //implementar logica para nao repetir pergunta
-	int quest;
+void NewQuestion(struct Question *quest) { //implementar logica para nao repetir pergunta
 	
 }
 

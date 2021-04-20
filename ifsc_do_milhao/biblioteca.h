@@ -21,6 +21,7 @@ struct Extras {
 struct Question {
 	int ID;
 	int thematic;
+	int num;
 	int answer;
 	int player_answer;
-}
+};
