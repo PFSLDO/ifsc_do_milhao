@@ -16,20 +16,19 @@ const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_
 const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/alternatives.csv";
 FILE  *fileques;
 FILE  *filealt;
-enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, P, A, H};
+enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, H};
 enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 
 //PROTÓTIPO DE FUNÇÕES
 //Relacionadas aos personagens
-void ChooseCharacter (struct Character *player, int which); //escolha do personagem do jogador
-void ChooseThematic(int which); //modalidade das perguntas
 void Character(struct Character *player); //inicia o personagem do jogador
 void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
 void Interviewer(struct Extras *interviewer, struct Question *quest); //aparição de um entrevistador
 
 //Relaciondas ao jogo
-void NewQuestion(struct Question *quest); //gera uma pergunta nova
-void Answer(struct Character *player, struct Question *quest); //analise da resposta
+void NewQuestion(struct Question *quest, int questID[60], char questions[60]); //gera uma pergunta nova
+void Answer(struct Character *player, struct Question *quest, int altID[180], char alternatives[180]); //analise da resposta
+void Help(struct Character *player, struct Question *quest); //mostra uma dica para a resposta
 
 //Define como será mostrada uma mensagem de erro
 void Error(char *text){
@@ -48,13 +47,13 @@ int main(void) {
 	int n = 0; //controla o número de linhas lidas do arquivo csv
 
 	//Leitura do teclado
-	bool keys[8] = {false, false, false, false, false, false, false, false};
+	bool keys[6] = {false, false, false, false, false, false};
 
 	//Variáveis para leitura arquivos csv
-	char titleques[100], Questions[60];
-	int QuestID[60];
-	char titlealt[100], Alternatives[180];
-	int AltID[180];
+	char titleques[100], questions[60];
+	int questID[60];
+	char titlealt[100], alternatives[180];
+	int altID[180];
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
@@ -157,7 +156,7 @@ int main(void) {
     }
     for(int i=0; i<80; i++) {
         fgets(titleques, sizeof(titleques),fileques);
-        n=fscanf(fileques, "%d, %s", &QuestID[i], &Questions[i]);
+        n=fscanf(fileques, "%d, %s", &questID[i], &questions[i]);
         if (n==EOF) {
             break;
         }
@@ -172,7 +171,7 @@ int main(void) {
     }
     for(int i=0; i<180; i++) {
         fgets(titlealt, sizeof(titlealt),filealt);
-        n=fscanf(filealt, "%d, %s", &AltID[i], &Alternatives[i]);
+        n=fscanf(filealt, "%d, %s", &altID[i], &alternatives[i]);
     }
     fclose(fileques);
 	
@@ -192,17 +191,8 @@ int main(void) {
 		al_wait_for_event(event_queue, &ev);
 		if(ev.type == ALLEGRO_EVENT_KEY_DOWN) { //Verifica qual tecla é apertada quando alguma é ativada
 			switch(ev.keyboard.keycode) {
-				case ALLEGRO_KEY_ESCAPE:
-                	keys[ESC] = true;
-                	break;
 				case ALLEGRO_KEY_SPACE:
                 	keys[SPACE] = true;
-                	break;
-				case ALLEGRO_KEY_P:
-                	keys[P] = true;
-                	break;
-				case ALLEGRO_KEY_A:
-                	keys[A] = true;
                 	break;
 				case ALLEGRO_KEY_1:
                 	keys[NUM1] = true;
@@ -213,6 +203,12 @@ int main(void) {
 				case ALLEGRO_KEY_3:
                 	keys[NUM3] = true;
                 	break;
+				case ALLEGRO_KEY_ESCAPE:
+                	keys[ESC] = true;
+                	break;
+				case ALLEGRO_KEY_H:
+                	keys[H] = true;
+                	break;
 			}
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_UP) { //Registra que a tecla foi solta
@@ -220,15 +216,6 @@ int main(void) {
             case ALLEGRO_KEY_SPACE:
                 keys[SPACE] = false;
                 break;
-            case ALLEGRO_KEY_ESCAPE:
-                keys[ESC] = false;
-                break;
-			case ALLEGRO_KEY_P:
-                keys[P] = false;
-            	break;
-			case ALLEGRO_KEY_A:
-            	keys[A] = false;
-            	break;
 			case ALLEGRO_KEY_1:
                 keys[NUM1] = false;
             	break;
@@ -238,6 +225,12 @@ int main(void) {
 			case ALLEGRO_KEY_3:
             	keys[NUM3] = false;
             	break;
+			case ALLEGRO_KEY_ESCAPE:
+                keys[ESC] = false;
+                break;
+			case ALLEGRO_KEY_H:
+                keys[H] = false;
+                break;
             }
         }
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -254,12 +247,12 @@ int main(void) {
 				}
             }
 			else if (state == CHOOSE_CHARACTER) { //Verifica o teclado na tela do menu de escolha do personagem
-				if(keys[A]) { //Caso escolha jogar com o aluno
-					ChooseCharacter(&player, 1);
+				if(keys[NUM1]) { //Caso escolha jogar com o aluno
+					player.ID = STUDENT;
 					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
 				}
-				if(keys[P]) { //Caso escolha jogar com a professora
-					ChooseCharacter(&player, 2);
+				if(keys[NUM2]) { //Caso escolha jogar com a professora
+					player.ID = PROFESSOR;
 					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
 				}
                 if(keys[ESC]) {
@@ -269,7 +262,7 @@ int main(void) {
 			else if (state == CHOOSE_THEMATIC) { //Verifica o teclado na tela do menu de escolha da temática
 				for(int i=1; i<4; i++) {
 					if(keys[i]) {
-						ChooseThematic(i); //Escolhe a temática correspondente ao que foi lido pelo teclado
+						quest.thematic = i;
 						state = PLAYING; //Avança para a tela da jogada
 					}
 				}
@@ -280,17 +273,19 @@ int main(void) {
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
                     Character(&player); //Inicia o personagem do jogador
-					//help professor
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
 					quest.num = 0;
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
-				NewQuestion(&quest); //Chama a função que printa nova pergunta
+				NewQuestion(&quest, questID, questions); //Chama a função que printa nova pergunta
 				for (int i=1; i<4; i++) {
 					if (keys[i]) {
 						quest.player_answer = i; //Guarda a reposta do jogador no struct
-						Answer(&player, &quest); //Chama a função que verifica a resposta do jogador
+						Answer(&player, &quest, altID, alternatives); //Chama a função que verifica a resposta do jogador
 					}
+				}
+				if(keys[H]) {
+					//help professor
 				}
 				if(player.score == 10) { //Se o jogador alcancar 10 pontos, terá ganho o jogo
 					state = WON;
@@ -402,20 +397,6 @@ int main(void) {
 	return 0;
 }
 
-void ChooseCharacter (struct Character *player, int which) {
-	if (which == 1) {
-		player->ID = STUDENT;
-	}
-	else if (which == 2) {
-		player->ID = PROFESSOR;
-	}
-}
-
-void ChooseThematic(int which) {
-    //colocar fundo do display com imagem para esta escolha
-	//colocar textos em cima dos blocos de opções
-}
-
 void Character(struct Character *player) { //inicia o personagem
 	if (player->ID == STUDENT) {
 		//imagem do estudante
@@ -448,11 +429,15 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 	}
 }
 
-void NewQuestion(struct Question *quest) { //implementar logica para nao repetir pergunta
+void NewQuestion(struct Question *quest, int questID[60], char questions[60]) { //implementar logica para nao repetir pergunta
 	
 }
 
-void Answer(struct Character *player, struct Question *quest) {
+void Help(struct Character *player, struct Question *quest) {
+
+}
+
+void Answer(struct Character *player, struct Question *quest, int altID[180], char alternatives[180]) {
 	if (quest->player_answer == quest->answer) {
 		player->score++;
 	}
