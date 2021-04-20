@@ -20,6 +20,7 @@ struct Extras {
 //Our Questions
 struct Question {
 	int thematic;
+	int ID;
 	int num;
 	int answer;
 	int player_answer;

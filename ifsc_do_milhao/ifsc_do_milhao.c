@@ -329,8 +329,8 @@ int main(void) {
 				else if (state == CHOOSE_CHARACTER) {
 					al_draw_bitmap(charactermenu,0,0,0); //imagem menu de personagem
 					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 60, ALLEGRO_ALIGN_CENTER, "ESCOLHA, COM O TECLADO, SEU PERSONAGEM");
-					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "A) PARA JOGAR COM ALUNO");
-                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P) PARA JOGAR COM PROFESSORA");
+					al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "1) PARA JOGAR COM ALUNO");
+                	al_draw_text(font, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "2) PARA JOGAR COM PROFESSORA");
 				}
 				else if (state == CHOOSE_THEMATIC) {
 					al_draw_bitmap(thematicmenu,0,0,0); //imagem menu da tematica
@@ -429,8 +429,17 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 	}
 }
 
-void NewQuestion(struct Question *quest, int questID[60], char questions[60]) { //implementar logica para nao repetir pergunta
-	
+void NewQuestion(struct Question *quest, int questID[60], char questions[60]) {
+	if (quest->thematic == 1) {
+		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
+	}
+	else if (quest->thematic == 2) {
+		quest->ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
+	}
+	else if (quest->thematic == 3) {
+		//
+	}
+	quest->num++;
 }
 
 void Help(struct Character *player, struct Question *quest) {
