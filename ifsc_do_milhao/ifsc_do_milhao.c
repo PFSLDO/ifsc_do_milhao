@@ -280,6 +280,7 @@ int main(void) {
                     Character(&player); //Inicia o personagem do jogador
 					//help professor
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
+					quest.num = 0;
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodade
                 }
 				NewQuestion(&quest); //Chama a função que printa nova pergunta

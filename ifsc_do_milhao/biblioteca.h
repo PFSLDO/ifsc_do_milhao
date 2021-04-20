@@ -19,7 +19,6 @@ struct Extras {
 
 //Our Questions
 struct Question {
-	int ID;
 	int thematic;
 	int num;
 	int answer;
