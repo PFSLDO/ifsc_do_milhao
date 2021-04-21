@@ -26,7 +26,7 @@ void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
 void Interviewer(struct Extras *interviewer, struct Question *quest); //aparição de um entrevistador
 
 //Relaciondas ao jogo
-void NewQuestion(struct Question *quest, int questID[60], char questions[60]); //gera uma pergunta nova
+void NewQuestion(struct Question *quest, int questID[60], char questions[60], ALLEGRO_FONT *font); //gera uma pergunta nova
 void Answer(struct Character *player, struct Question *quest, int altID[180], char alternatives[180]); //analise da resposta
 void Help(struct Character *player, struct Question *quest); //mostra uma dica para a resposta
 
@@ -154,9 +154,9 @@ int main(void) {
         Error("Erro ao abrir o arquivo de perguntas.\n");
         return 0;
     }
-    for(int i=0; i<80; i++) {
+    while(1) {
         fgets(titleques, sizeof(titleques),fileques);
-        n=fscanf(fileques, "%d, %s", &questID[i], &questions[i]);
+        n=fscanf(fileques, "%d, %[^,]", &questID[0], &questions[0]);
         if (n==EOF) {
             break;
         }
@@ -169,9 +169,9 @@ int main(void) {
         Error("Erro ao abrir o arquivo de perguntas.\n");
         return 0;
     }
-    for(int i=0; i<180; i++) {
+    while(1) {
         fgets(titlealt, sizeof(titlealt),filealt);
-        n=fscanf(filealt, "%d, %s", &altID[i], &alternatives[i]);
+        n=fscanf(filealt, "%d, %[^,]", &altID[0], &alternatives[0]);
     }
     fclose(fileques);
 	
@@ -277,11 +277,11 @@ int main(void) {
 					quest.num = 0;
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
-				NewQuestion(&quest, questID, questions); //Chama a função que printa nova pergunta
+				//NewQuestion(&quest, questID, questions, font); //Chama a função que printa nova pergunta
 				for (int i=1; i<4; i++) {
 					if (keys[i]) {
 						quest.player_answer = i; //Guarda a reposta do jogador no struct
-						Answer(&player, &quest, altID, alternatives); //Chama a função que verifica a resposta do jogador
+						//Answer(&player, &quest, altID, alternatives); //Chama a função que verifica a resposta do jogador
 					}
 				}
 				if(keys[H]) {
@@ -344,6 +344,7 @@ int main(void) {
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
+						al_draw_textf(font, al_map_rgb(0,0,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"%c", questions[0]);
                     	al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
 						al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
@@ -429,15 +430,20 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 	}
 }
 
-void NewQuestion(struct Question *quest, int questID[60], char questions[60]) {
+void NewQuestion(struct Question *quest, int questID[60], char questions[60], ALLEGRO_FONT *font) {
 	if (quest->thematic == 1) {
 		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
+		int id=0;
+		while(questID[id]!=quest->ID) {
+			id++;
+		}
+		al_draw_textf(font, al_map_rgb(0,0,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"%c", questions[id]);
 	}
 	else if (quest->thematic == 2) {
 		quest->ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
 	}
 	else if (quest->thematic == 3) {
-		//
+
 	}
 	quest->num++;
 }
