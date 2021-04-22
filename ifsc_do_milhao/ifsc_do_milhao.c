@@ -26,8 +26,8 @@ void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
 void Interviewer(struct Extras *interviewer, struct Question *quest); //aparição de um entrevistador
 
 //Relaciondas ao jogo
-void NewQuestion(struct Question *quest, char questions[60][100], ALLEGRO_FONT *font); //gera uma pergunta nova
-void Answer(struct Character *player, struct Question *quest, int verifyid[180]); //analise da resposta
+void NewQuestion(struct Question *quest); //gera uma pergunta nova
+void Answer(struct Character *player, struct Question *quest, int questID[60], int verifyid[180]); //analise da resposta
 void Help(struct Character *player, struct Question *quest); //mostra uma dica para a resposta
 
 //Define como será mostrada uma mensagem de erro
@@ -311,18 +311,18 @@ int main(void) {
 					quest.num = 1;
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
-				NewQuestion(&quest, questions, fontP); //Chama a função que printa nova pergunta
+				NewQuestion(&quest); //Chama a função que printa nova pergunta
 				if(keys[A]) {
 					quest.player_answer = 1;
-					Answer(&player, &quest, verifyid); //Chama a função que verifica a resposta do jogador
+					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
 				}
 				if(keys[B]) {
 					quest.player_answer = 2;
-					Answer(&player, &quest, verifyid); //Chama a função que verifica a resposta do jogador
+					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
 				}
 				if(keys[C]) {
 					quest.player_answer = 3;
-					Answer(&player, &quest, verifyid); //Chama a função que verifica a resposta do jogador
+					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
 				}
 				if(keys[H]) {
 					//help professor
@@ -475,7 +475,7 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 	}
 }
 
-void NewQuestion(struct Question *quest, char questions[60][100], ALLEGRO_FONT *fontP) {
+void NewQuestion(struct Question *quest) {
 	if (quest->thematic == 1) {
 		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
 		printf("%d", quest->ID);
@@ -496,10 +496,13 @@ void Help(struct Character *player, struct Question *quest) {
 
 }
 
-void Answer(struct Character *player, struct Question *quest, int verifyid[180]) {
-	int i = quest->ID + 10;
-	while(verifyid!=1) {
-		i = i + 10;
+void Answer(struct Character *player, struct Question *quest, int questID[60], int verifyid[180]) {
+	int i = 0;
+	while(questID[i]!=quest->ID) {
+		i++;
+	}
+	while(verifyid[i]!=1) {
+		i++;
 	}
 	quest->answer = i;
 	if (quest->player_answer == quest->answer) {
