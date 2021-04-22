@@ -22,6 +22,7 @@ struct Question {
 	int thematic;
 	int ID;
 	int num;
+	int answerID;
 	int answer;
 	int player_answer;
 };

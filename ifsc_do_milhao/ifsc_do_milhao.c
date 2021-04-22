@@ -27,7 +27,7 @@ void Interviewer(struct Extras *interviewer, struct Question *quest); //apariç�
 
 //Relaciondas ao jogo
 void NewQuestion(struct Question *quest); //gera uma pergunta nova
-void Answer(struct Character *player, struct Question *quest, int questID[60], int verifyid[180]); //analise da resposta
+void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180]); //analise da resposta
 void Help(struct Character *player, struct Question *quest); //mostra uma dica para a resposta
 
 //Define como será mostrada uma mensagem de erro
@@ -43,6 +43,7 @@ int main(void) {
 	bool redraw = true;
 	bool isGameOver = false;
 	bool FirstTime = true;
+	bool Wait = false;
 	int state = MENU; //inicia no menu
 
 	//Leitura do teclado
@@ -52,7 +53,7 @@ int main(void) {
 	char titleques[100], questions[60][100];
 	int questID[60];
 	char titlealt[100], alternatives[180][50];
-	int altID[180], verifyid[180], temp[180];
+	int altID[180], verifyID[180], questIDans[180];
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
@@ -169,7 +170,7 @@ int main(void) {
     }
     for (int i=0; i<180; i++) {
         fgets(titlealt, sizeof(titlealt),filealt);
-        fscanf(filealt, "%d,%d,%[^,],%d", &temp[i], &altID[i], &alternatives[i][0], &verifyid[i]);
+        fscanf(filealt, "%d,%d,%[^,],%d", &questIDans[i], &altID[i], &alternatives[i][0], &verifyID[i]);
     }
     fclose(fileques);
 	
@@ -309,23 +310,30 @@ int main(void) {
                     Character(&player); //Inicia o personagem do jogador
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
 					quest.num = 1;
+
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
-				NewQuestion(&quest); //Chama a função que printa nova pergunta
+				if(!Wait) {
+					NewQuestion(&quest); //Chama a função que printa nova pergunta
+				}
+				Wait = true;
 				if(keys[A]) {
 					quest.player_answer = 1;
-					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
+					//Answer(&player, &quest, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
 					quest.num++;
+					Wait = false;
 				}
 				if(keys[B]) {
 					quest.player_answer = 2;
-					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
+					//Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
 					quest.num++;
+					Wait = false;
 				}
 				if(keys[C]) {
 					quest.player_answer = 3;
-					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
+					//Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
 					quest.num++;
+					Wait = false;
 				}
 				if(keys[H]) {
 					//help professor
@@ -387,10 +395,10 @@ int main(void) {
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[0]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[0]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[1]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[2]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
                     	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
@@ -480,15 +488,15 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 
 void NewQuestion(struct Question *quest) {
 	if (quest->thematic == 1) {
-		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
+		quest->ID = rand() % 30 + 0;
 		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	else if (quest->thematic == 2) {
-		quest->ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
+		quest->ID = rand() % 60 + 31;
 		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	else if (quest->thematic == 3) {
-		quest->ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
+		quest->ID = rand() % 60;
 		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 }
@@ -497,14 +505,15 @@ void Help(struct Character *player, struct Question *quest) {
 
 }
 
-void Answer(struct Character *player, struct Question *quest, int questID[60], int verifyid[180]) {
+void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180]) {
 	int i = 0;
-	while(questID[i]!=quest->ID) {
+	while(questIDans[i]!=questID[quest->ID]) {
+
+	}
+	while(verifyID[i]!=1) {
 		i++;
 	}
-	while(verifyid[i]!=1) {
-		i++;
-	}
+
 	quest->answer = i;
 	if (quest->player_answer == quest->answer) {
 		player->score++;
