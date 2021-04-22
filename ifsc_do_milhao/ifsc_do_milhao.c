@@ -396,9 +396,10 @@ int main(void) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+1]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+2]);
+						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 300, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+1]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+2]);
                     	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
