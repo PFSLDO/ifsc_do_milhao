@@ -7,6 +7,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "biblioteca.h"
 
 //VARIIÁVEIS GLOBAIS
@@ -81,6 +83,8 @@ int main(void) {
     ALLEGRO_SAMPLE_INSTANCE *game_theme_instance = NULL;
 
 	//FUNÇÕES DE INICIALIZAÇÃO
+	srand(time(0)); //aleatoriedade de rand()
+
 	if (!al_init()) { 
         Error("Falha ao inicializar o Allegro");
         return -1;
@@ -489,16 +493,13 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 
 void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 	if (quest->thematic == 1) {
-		quest->ID = rand() % 30 + 0;
-		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
+		quest->ID = rand() % 30;
 	}
 	else if (quest->thematic == 2) {
 		quest->ID = rand() % 60 + 31;
-		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	else if (quest->thematic == 3) {
 		quest->ID = rand() % 60;
-		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	int i = 0;
 	while(questIDans[i]!=questID[quest->ID]) {
