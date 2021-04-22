@@ -58,7 +58,7 @@ QuestionID,AlternativesID,AlternativeText,VerifyID
 1701,1731,C) Luiz Inácio,0
 1702,1712,A) Lá o Wi-fi do campus pega melhor,1
 1702,1722,B) Ele gosta do frio da parede,0
-1702,1732,"C) Ele está com covid - 19 e mantendo seu afastamento social de 1,5m ou mais",0
+1702,1732,"C) Ele está com covid - 19 e mantendo seu afastamento social de 1.5m ou mais",0
 1703,1713,A) Aulas de Reposição,1
 1703,1723,B) Grande vontade de aprender por parte dos alunos,0
 1703,1733,C) Tortura por parte dos professores,0
@@ -89,7 +89,6 @@ QuestionID,AlternativesID,AlternativeText,VerifyID
 1003,1013,A) Química,1
 1003,1023,B) Eletrotécnica,0
 1003,1033,C) Edificações,0
-,,,
 2101,2111,A) Diamante,0
 2101,2121,B) Adamantium,1
 2101,2131,C) Vibranium,0

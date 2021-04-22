@@ -309,7 +309,7 @@ int main(void) {
                 if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
                     Character(&player); //Inicia o personagem do jogador
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
-					quest.num = 1;
+					quest.num = 0;
 
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
@@ -320,28 +320,25 @@ int main(void) {
 				if(keys[A]) {
 					quest.player_answer = 0;
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
-					al_rest(0.5);
 					quest.num++;
 					Wait = false;
 				}
 				if(keys[B]) {
 					quest.player_answer = 1;
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
-					al_rest(0.5);
 					quest.num++;
 					Wait = false;
 				}
 				if(keys[C]) {
 					quest.player_answer = 2;
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
-					al_rest(0.5);
 					quest.num++;
 					Wait = false;
 				}
 				if(keys[H]) {
 					//help professor
 				}
-				if(player.score == 10) { //Se o jogador alcancar 10 pontos, terá ganho o jogo
+				if (player.score >= 6 && quest.num == 10) {
 					state = WON;
 				}
 				if(player.score < 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e não atingir no mínimo 6 pontos, ele perde
