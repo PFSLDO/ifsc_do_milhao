@@ -108,7 +108,7 @@ int main(void) {
 	display = al_create_display(WIDTH, HEIGHT); //Cria o objeto display
 	
 	if(!display) {
-		Error("Falha ao criar o display");									//test display object
+		Error("Falha ao criar o display");
 		return -1;
 	}
 
