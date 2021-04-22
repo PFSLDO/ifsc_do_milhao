@@ -508,14 +508,15 @@ void Help(struct Character *player, struct Question *quest) {
 void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180]) {
 	int i = 0;
 	while(questIDans[i]!=questID[quest->ID]) {
-
-	}
-	while(verifyID[i]!=1) {
 		i++;
 	}
-
-	quest->answer = i;
-	if (quest->player_answer == quest->answer) {
+	int j=i;
+	while(verifyID[j]!=1) {
+		j++;
+	}
+	quest->answerID = i;
+	quest->player_answer = quest->player_answer + i;
+	if (quest->player_answer == quest->answerID) {
 		player->score++;
 	}
 }
