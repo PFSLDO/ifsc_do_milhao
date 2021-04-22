@@ -384,10 +384,10 @@ int main(void) {
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.ID + 10]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.ID + 20]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.ID + 30]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[1301]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER,"%s", alternatives[(1301 + 10)]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 500, ALLEGRO_ALIGN_CENTER,"%s", alternatives[(1301 + 20)]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[(1301 + 30)]);
                     	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
@@ -478,7 +478,6 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 void NewQuestion(struct Question *quest) {
 	if (quest->thematic == 1) {
 		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
-		printf("%d", quest->ID);
 		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	else if (quest->thematic == 2) {
