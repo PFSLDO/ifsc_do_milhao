@@ -57,8 +57,8 @@ int main(void) {
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
 	struct Extras interviewer; //cria a entrevistador
-	struct Extras x; //cria o professor x
-	struct Extras y; //cria o professor y
+	// struct Extras x; //cria o professor x
+	// struct Extras y; //cria o professor y
 	struct Question quest; //cria uma estrutura para organizar a resposta
 
 	//Variáveis do Allegro
@@ -315,14 +315,17 @@ int main(void) {
 				if(keys[A]) {
 					quest.player_answer = 1;
 					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
+					quest.num++;
 				}
 				if(keys[B]) {
 					quest.player_answer = 2;
 					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
+					quest.num++;
 				}
 				if(keys[C]) {
 					quest.player_answer = 3;
 					Answer(&player, &quest, questID, verifyid); //Chama a função que verifica a resposta do jogador
+					quest.num++;
 				}
 				if(keys[H]) {
 					//help professor
@@ -384,10 +387,10 @@ int main(void) {
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[1301]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER,"%s", alternatives[(1301 + 10)]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 500, ALLEGRO_ALIGN_CENTER,"%s", alternatives[(1301 + 20)]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[(1301 + 30)]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[0]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[0]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[1]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 30, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[2]);
                     	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
@@ -488,7 +491,6 @@ void NewQuestion(struct Question *quest) {
 		quest->ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
 		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
-	quest->num++;
 }
 
 void Help(struct Character *player, struct Question *quest) {
