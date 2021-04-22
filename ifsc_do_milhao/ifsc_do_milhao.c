@@ -14,8 +14,8 @@
 //VARIIÁVEIS GLOBAIS
 const int WIDTH = 700;
 const int HEIGHT = 700;
-const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/questions.csv";
-const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/alternatives.csv";
+const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/questions.csv";
+const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/alternatives.csv";
 FILE  *fileques;
 FILE  *filealt;
 enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, H, S, P, A, B, C};
@@ -137,10 +137,10 @@ int main(void) {
 
 	//CARREGA OS ARQUIVOS UTILIZADOS
 	//Carrega os arquivos relacionados a imagem
-	menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_image.png"); //carrega a imagem do menu
-	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_character.png"); //carrega a imagem do menu de personagens
-	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_thematic.png"); //carrega a imagem do menu de temáticas
-	menuplaying = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/menu_playing.png"); //carrega a imagem do menu da jogada
+	menuimage = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_image.png"); //carrega a imagem do menu
+	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_character.png"); //carrega a imagem do menu de personagens
+	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_thematic.png"); //carrega a imagem do menu de temáticas
+	menuplaying = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_playing.png"); //carrega a imagem do menu da jogada
 	
 	//Carrega os arquivos relacionados a fonte
 	fontP = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 15, 0);
