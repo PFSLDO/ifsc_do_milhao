@@ -16,7 +16,7 @@ const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_
 const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/alternatives.csv";
 FILE  *fileques;
 FILE  *filealt;
-enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, H, S, P};
+enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, H, S, P, A, B, C};
 enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 
 //PROTÓTIPO DE FUNÇÕES
@@ -44,16 +44,15 @@ int main(void) {
 	bool isGameOver = false;
 	bool FirstTime = true;
 	int state = MENU; //inicia no menu
-	int n = 0; //controla o número de linhas lidas do arquivo csv
 
 	//Leitura do teclado
-	bool keys[8] = {false, false, false, false, false, false, false, false};
+	bool keys[11] = {false, false, false, false, false, false, false, false, false, false, false};
 
 	//Variáveis para leitura arquivos csv
 	char titleques[100], questions[60][100];
 	int questID[60];
 	char titlealt[100], alternatives[180][50];
-	int altID[180];
+	int altID[180], verifyid[180], temp[180];
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
@@ -158,11 +157,9 @@ int main(void) {
     }
     for (int i=0; i<60; i++) {
         fgets(titleques, sizeof(titleques),fileques);
-        n=fscanf(fileques, "%d,%[^,]", &questID[i], &questions[i][0]);
+        fscanf(fileques, "%d,%[^,]", &questID[i], &questions[i][0]);
     }
     fclose(fileques);
-
-	n = 0; //ver se precisa usar
 
 	//Faz a leitura dos arquivos com as respostas
 	filealt = fopen(ALT, "r");
@@ -172,7 +169,7 @@ int main(void) {
     }
     for (int i=0; i<180; i++) {
         fgets(titlealt, sizeof(titlealt),filealt);
-        n=fscanf(filealt, "%d,%[^,]", &altID[i], &alternatives[i][0]);
+        fscanf(filealt, "%d,%d,%[^,],%d", &temp[i], &altID[i], &alternatives[i][0], &verifyid[i]);
     }
     fclose(fileques);
 	
@@ -216,34 +213,52 @@ int main(void) {
 				case ALLEGRO_KEY_P:
                 	keys[P] = true;
                 	break;
+				case ALLEGRO_KEY_A:
+                	keys[A] = true;
+                	break;
+				case ALLEGRO_KEY_B:
+                	keys[B] = true;
+                	break;
+				case ALLEGRO_KEY_C:
+                	keys[C] = true;
+                	break;
 			}
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_UP) { //Registra que a tecla foi solta
             switch(ev.keyboard.keycode) {
-            case ALLEGRO_KEY_SPACE:
-                keys[SPACE] = false;
-                break;
-			case ALLEGRO_KEY_1:
-                keys[NUM1] = false;
-            	break;
-			case ALLEGRO_KEY_2:
-            	keys[NUM2] = false;
-            	break;
-			case ALLEGRO_KEY_3:
-            	keys[NUM3] = false;
-            	break;
-			case ALLEGRO_KEY_ESCAPE:
-                keys[ESC] = false;
-                break;
-			case ALLEGRO_KEY_H:
-                keys[H] = false;
-                break;
-			case ALLEGRO_KEY_S:
-                keys[S] = false;
-                break;
-			case ALLEGRO_KEY_P:
-                keys[P] = false;
-                break;
+            	case ALLEGRO_KEY_SPACE:
+                	keys[SPACE] = false;
+                	break;
+				case ALLEGRO_KEY_1:
+                	keys[NUM1] = false;
+            		break;
+				case ALLEGRO_KEY_2:
+            		keys[NUM2] = false;
+            		break;
+				case ALLEGRO_KEY_3:
+            		keys[NUM3] = false;
+            		break;
+				case ALLEGRO_KEY_ESCAPE:
+                	keys[ESC] = false;
+    	            break;
+				case ALLEGRO_KEY_H:
+            	    keys[H] = false;
+                	break;
+				case ALLEGRO_KEY_S:
+    	            keys[S] = false;
+        	        break;
+				case ALLEGRO_KEY_P:
+                	keys[P] = false;
+                	break;
+				case ALLEGRO_KEY_A:
+    	            keys[A] = false;
+        	        break;
+				case ALLEGRO_KEY_B:
+    	            keys[B] = false;
+        	        break;
+				case ALLEGRO_KEY_C:
+    	            keys[C] = false;
+        	        break;
             }
         }
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -293,15 +308,21 @@ int main(void) {
                 if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
                     Character(&player); //Inicia o personagem do jogador
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
-					quest.num = 0;
+					quest.num = 1;
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
-				//NewQuestion(&quest, questID, questions, fontP); //Chama a função que printa nova pergunta
-				for (int i=1; i<4; i++) {
-					if (keys[i]) {
-						quest.player_answer = i; //Guarda a reposta do jogador no struct
-						//Answer(&player, &quest, altID, alternatives); //Chama a função que verifica a resposta do jogador
-					}
+				NewQuestion(&quest, questID, questions, fontP); //Chama a função que printa nova pergunta
+				if(keys[A]) {
+					quest.player_answer = 1;
+					Answer(&player, &quest, altID, alternatives); //Chama a função que verifica a resposta do jogador
+				}
+				if(keys[B]) {
+					quest.player_answer = 2;
+					Answer(&player, &quest, altID, alternatives); //Chama a função que verifica a resposta do jogador
+				}
+				if(keys[C]) {
+					quest.player_answer = 3;
+					Answer(&player, &quest, altID, alternatives); //Chama a função que verifica a resposta do jogador
 				}
 				if(keys[H]) {
 					//help professor
@@ -363,7 +384,7 @@ int main(void) {
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
-						//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[0]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
                     	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
@@ -454,17 +475,16 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 void NewQuestion(struct Question *quest, int questID[60], char questions[60][100], ALLEGRO_FONT *fontP) {
 	if (quest->thematic == 1) {
 		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
-		int id=0;
-		while(questID[id]!=quest->ID) {
-			id++;
-		}
-		al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[id]);
+		printf("%d", quest->ID);
+		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	else if (quest->thematic == 2) {
 		quest->ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
+		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	else if (quest->thematic == 3) {
-
+		quest->ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
+		//al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest->ID]);
 	}
 	quest->num++;
 }
@@ -474,6 +494,7 @@ void Help(struct Character *player, struct Question *quest) {
 }
 
 void Answer(struct Character *player, struct Question *quest, int altID[180], char alternatives[180][50]) {
+	
 	if (quest->player_answer == quest->answer) {
 		player->score++;
 	}
