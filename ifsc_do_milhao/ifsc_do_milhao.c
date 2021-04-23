@@ -9,15 +9,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "biblioteca.h"
+#include "objects.h"
 
 //VARIIÁVEIS GLOBAIS
 const int WIDTH = 700;
 const int HEIGHT = 700;
 const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/questions.csv";
 const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/alternatives.csv";
+cons char TIPS[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/tips.csv";
 FILE  *fileques;
 FILE  *filealt;
+FILE  *filetips;
 enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, H, S, P, A, B, C};
 enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 
@@ -56,6 +58,7 @@ int main(void) {
 	int questID[60];
 	char titlealt[100], alternatives[180][50];
 	int altID[180], verifyID[180], questIDans[180];
+	//adicionar variaveis arquivo tips
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
@@ -149,7 +152,7 @@ int main(void) {
 
 	//Carrega os arquivos relacionados a audio
 	al_reserve_samples(2);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
-    game_theme = al_load_sample("Audio/game_theme.wav");//carrega o tema
+    game_theme = al_load_sample("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/audio/game_theme.wav");//carrega o tema
     game_theme_instance = al_create_sample_instance(game_theme);//cria uma sample instance e coloca o tema dentro
     al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP);//configura o playmode da sample instance, nesse caso loop
     al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());//da o "atach" da sample_instance ao mixer
@@ -187,7 +190,7 @@ int main(void) {
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
 	al_start_timer(timer);//Inicia o timer
-    al_play_sample_instance(game_theme_instance);//Começa a tocar o tema
+    al_play_sample_instance(game_theme_instance); //
 	
 	while(!done) {
 		ALLEGRO_EVENT ev;
