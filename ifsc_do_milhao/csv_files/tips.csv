@@ -1,15 +1,15 @@
 QuestionID,AlternativeID,Text_ID
 1101,1131,Apesar de muito divertido infelizmente não é o caso
 1102,1122,Alguém pra compartilhar e dividir as atividades seria interessante mas não é o caso
-1103,1113,um bloco só
+1103,1113,OK essa seria uma boa alternativa mas não é assim simples
 1201,1211,"Você conseguiu que o professor Rangel lhe ajudasse, ele disse que não pode ser ele se fosse o caso ele já teria se aposentado"
-1202,1232,gizely arte
+1202,1212,"Acho que seria um baque muito forte pra primeira fase, tente outra"
 1203,1223,"Você conseguiu que o próprio Albertinho lhe ajudasse, ele da uma risadinha e disse que matemática não é muito a praia dele"
 1301,1311,"Moça do fluxo: Quem me dera fosse assim, diminuíria o trabalho com essas crianças"
 1302,1322,"Eu não brigaria com qualquer professor não, alguns são fortes viu...então não é essa"
 1303,1333,"André coordenador apareceu pra defender seu departamento, ele diz que é almoxarifado, algo com alma já é passar dos limites eu vou dar suspensão"
 1401,1431,O que um elevador ajudaria em uma briga familiar? Mandar os parente pra cima e não trazer o elevador de volta?
-1402,1432,"Albertinho aparece pra lhe dizer que está muito triste que você não tem certeza que ele é de química, você ganhou uma dica mas deixou Albertinho chateado"
+1402,1432,"Albertinho aparece pra lhe dizer que está muito triste que você não tem certeza que ele é de química, você ganhou uma dica mas deixou Albertinho chateado, shame on you"
 1403,1423,Pode ter se aposentado mas ainda tem diploma
 1501,1531,"Oha, só se o sol tiver uns 100 graus"
 1502,1522,"Local pra sentar e hmm solzinho gostoso, vitaminas"
@@ -18,14 +18,45 @@ QuestionID,AlternativeID,Text_ID
 1602,1612,"Gravaria varios tombos e cenas lamentáveis, mas ninguém quer ver o próprio tombo não"
 1603,1633,Todos sempre tentam coletar as lágrimas mas tão muito ocupados correndo de volta pra aula
 1701,1731,Imagina o quanto ele iria sofrer
-1702,1722,Se for no verão até vai
-1703,1733,
-1801,1811,
-1802,1822,
-1803,1833,
-1901,1911,
-1902,1932,
-1903,1913,
-1001,1011,
-1002,1022,
-1003,1023,
+1702,1722,"Se for no verão até pode ser, mas pouco provável"
+1703,1733,"Olha, até que podia ser viu, do jeito que os professores são, mas não é o caso agora"
+1801,1811,"AAA, é sim OK, coquinha gelada melhora tudo no ser humano, mas grr, não dessa vez"
+1802,1822,Seria fácil demais se fosse alunos não acha? Não dessa vez
+1803,1833,"Ta escrito que é quadra de futset, try harder"
+1901,1911,"Talvez os alunos mais solitários joguem, mas estamos falando da galera gritando e surtando nas mesas"
+1902,1932,"Teve salto sim, impressionante como todo mundo se machucou todo ao cair"
+1903,1913,"Como queriamos que fosse 30% nossa, tem tantas aulas boas pra se faltar hmmm faltar aula, mas infelizmente não"
+1001,1011,"Apesar de serem muito queridas, tem pessoas certas pra fazer isso, não são elas"
+1002,1022,"Imagina isso, eu to assustado que a possibilidade foi considerada como uma alternativa, apenas...não..."
+1003,1023,"Todos sabem que alunos de eletrotécnica estão sempre pelo campus toda hora, então não pode ser"
+,,
+2101,2111,Seria muito quebradiço não acha?
+2102,2132,"Você achou um professor aleatório de edificações, que se sentiu ofendido por essa pergunta, decidiu ajudar mas ajudar pouco"
+2103,2123,Confesso que eu acharia um nome legal mas manada é conjunto de gado ou cavalos
+2201,2211,"Equilátero é o único que todos sabem, todos os lados iguais, então não dessa vez"
+2202,2232,"Vela nem veloso pode ser, a não ser que esteja falando do goleiro Veloso"
+2203,2223,"O pancreas é bem mais embaixo, sobe mais um pouco"
+2301,2331,"Você encontra um contrário a astrologia que diz, a quantidade que tem já é muita, imagina se tivesse 14, deus me livre"
+2302,2332,"Essa foi perto, boitatá não tem nenhuma e lembre-se, não toca fogo na floresta se não boitatá toca fogo em você"
+2303,2313,"10 reais 10 reais 10 reais disse o papagaio, apoós repetir que não está na nota"
+2401,2411,"Você para um músico para perguntar o que é instrumento de repercussão, o queixo dele cai no chão e ele vai embora em descrença"
+2402,2432,Apesar dos chocolates não é na Belgica não
+2403,2423,"Na música de Christian e Ralph ""Nova York"" não é dada como capital, então eu não colocaria nova york não, confio em Christian e Ralph"
+2501,2531,"Deus o que você tá pensando? Claro que não é o Van Damme, que insulto a Rocky Balboa"
+2502,2532,"Ele pode ser gigante e uma máquina, mas ele não pode vencer uma luta que ele não lutou"
+2503,2523,"Eles já eram amigos aí, top 3 amizades dos filmes, não gostar respeitar ok"
+2601,2621,Não é ter 1 bilhão de pessoas que é um país grande
+2602,2622,Se fosse assim equipes com o Felipe Melo ou o Pepe não jogariam mais
+2603,2633,"Apesar de muitas pessoas importantes nascerem lá, não é o caso de Che Guevara"
+2701,2731,"Você acha um professor de geografia que lhe olha ri ""não achou que seria assim fácil e teria maior no nome né hahahaha"""
+2702,2732,"Esse é do Leviatã, queremos O Príncipe"
+2703,2713,"Se contar o inferno como continente, estamos em dois continentes mas ainda não é considerado"
+2801,2831,"Achava que Madagascar era conhecido por ser quente e bem tropical, não seria ártico né"
+2802,2812,"Cobre nem tem A nem U no seu nome, não é esse não"
+2803,2833,"Não é essa tartaruga ninja, é outra"
+2901,2921,"The Police é Sting, nossa não saber disso é um ultraje ao mundo da música"
+2902,2912,"Apesar de uma grande nação, não é o lar de um dos mais importantes filósofos da história"
+2903,2933,"Como diria Camisa de Venus ""Eu Não Matei Joana D'arc"" Logo claramente por lógica inexistente, não é essa opção"
+2001,2031,"Seria muito legal ter uma religiosa como primeira no Nobel, infelizmente não foi dessa vez"
+2002,2032,"Ele foi capturado, logo excluímos essa opção"
+2003,2013,"Apesar de ser o epicentro de todo movimento nazista, o maior campo de concentração não ficaria tão perto dos líderes"
