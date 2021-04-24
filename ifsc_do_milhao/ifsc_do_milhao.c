@@ -16,7 +16,7 @@ const int WIDTH = 700;
 const int HEIGHT = 700;
 const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/questions.csv";
 const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/alternatives.csv";
-cons char TIPS[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/tips.csv";
+const char TIPS[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/tips.csv";
 FILE  *fileques;
 FILE  *filealt;
 FILE  *filetips;
@@ -234,39 +234,9 @@ int main(void) {
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_UP) { //Registra que a tecla foi solta
             switch(ev.keyboard.keycode) {
-            	case ALLEGRO_KEY_SPACE:
-                	keys[SPACE] = false;
-                	break;
-				case ALLEGRO_KEY_1:
-                	keys[NUM1] = false;
-            		break;
-				case ALLEGRO_KEY_2:
-            		keys[NUM2] = false;
-            		break;
-				case ALLEGRO_KEY_3:
-            		keys[NUM3] = false;
-            		break;
-				case ALLEGRO_KEY_ESCAPE:
-                	keys[ESC] = false;
+                case ALLEGRO_KEY_ESCAPE:
+					keys[ESC] = false;
     	            break;
-				case ALLEGRO_KEY_H:
-            	    keys[H] = false;
-                	break;
-				case ALLEGRO_KEY_S:
-    	            keys[S] = false;
-        	        break;
-				case ALLEGRO_KEY_P:
-                	keys[P] = false;
-                	break;
-				case ALLEGRO_KEY_A:
-    	            keys[A] = false;
-        	        break;
-				case ALLEGRO_KEY_B:
-    	            keys[B] = false;
-        	        break;
-				case ALLEGRO_KEY_C:
-    	            keys[C] = false;
-        	        break;
             }
         }
 		else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -277,39 +247,48 @@ int main(void) {
 			if (state == MENU) { //Verifica o teclado na tela do menu principal
                 if(keys[SPACE]) {
                     state = CHOOSE_CHARACTER;
+					keys[SPACE]=false;
 				}
                 if(keys[ESC]) {
                     done = true;
+					keys[ESC]=false;
 				}
             }
 			else if (state == CHOOSE_CHARACTER) { //Verifica o teclado na tela do menu de escolha do personagem
 				if(keys[S]) { //Caso escolha jogar com o aluno
 					player.ID = STUDENT;
 					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
+					keys[S]=false;
 				}
 				if(keys[P]) { //Caso escolha jogar com a professora
 					player.ID = PROFESSOR;
 					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
+					keys[P]=false;
 				}
                 if(keys[ESC]) {
 					done = true;
+					keys[ESC]=false;
 				}
             }
 			else if (state == CHOOSE_THEMATIC) { //Verifica o teclado na tela do menu de escolha da temática
 				if(keys[NUM1]) { //Caso escolha a temática 1
 					quest.thematic = 1;
 					state = PLAYING; //Avança para a tela da escolha da temática
+					keys[NUM1]=false;
 				}
 				if(keys[NUM2]) { //Caso escolha a temática 2
 					quest.thematic = 2;
 					state = PLAYING; //Avança para a tela da escolha da temática
+					keys[NUM2]=false;
 				}
 				if(keys[NUM3]) { //Caso escolha todas as temáticas
 					quest.thematic = 3;
 					state = PLAYING; //Avança para a tela da escolha da temática
+					keys[NUM3]=false;
 				}
                 if(keys[ESC]) {
 					done = true;
+					keys[ESC]=false;
 				}
             }
 			else if (state == PLAYING) {
@@ -329,21 +308,25 @@ int main(void) {
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
 					quest.num++;
 					Wait = false;
+					keys[A]=false;
 				}
 				if(keys[B]) {
 					quest.player_answer = 1;
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
 					quest.num++;
 					Wait = false;
+					keys[B]=false;
 				}
 				if(keys[C]) {
 					quest.player_answer = 2;
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
 					quest.num++;
 					Wait = false;
+					keys[C]=false;
 				}
 				if(keys[H]) {
 					//help professor
+					keys[H]=false;
 				}
 				if (player.score >= 6 && quest.num == 10) {
 					state = WON;
@@ -353,22 +336,31 @@ int main(void) {
 				}
                 if(keys[ESC]) {
 					done = true;
+					keys[ESC]=false;
 				}
             }
 			else if (state == GAMEOVER) { //Faz a leitura do que o jogador escolherá fazer depois de perder
+				player.score = 0;
+				player.lives = 3;
                 if(keys[ESC]) {
 					done = true;
+					keys[ESC]=false;
 				}
                 else if (keys[SPACE]) {
                     state = MENU;
+					keys[SPACE]=false;
                 }
             }
 			else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
-                if(keys[ESC]) {
+                player.score = 0;
+				player.lives = 3;
+				if(keys[ESC]) {
 					done = true;
+					keys[ESC]=false;
 				}
                 else if (keys[SPACE]) {
                     state = MENU;
+					keys[SPACE]=false;
                 }
             }
 
