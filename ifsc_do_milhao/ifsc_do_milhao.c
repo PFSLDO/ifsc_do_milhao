@@ -77,6 +77,7 @@ int main(void) {
 	ALLEGRO_BITMAP *charactermenu = NULL;
 	ALLEGRO_BITMAP *thematicmenu = NULL;
 	ALLEGRO_BITMAP *menuplaying = NULL;
+	ALLEGRO_BITMAP *end = NULL;
 	ALLEGRO_BITMAP *student = NULL;
 	ALLEGRO_BITMAP *professor = NULL;
 
@@ -143,6 +144,7 @@ int main(void) {
 	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_character.png"); //carrega a imagem do menu de personagens
 	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_thematic.png"); //carrega a imagem do menu de temáticas
 	menuplaying = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_playing.png"); //carrega a imagem do menu da jogada
+	end = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_final.png"); //carrega a imagem do menu do final do jogo
 	student = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/student.png"); //carrega a imagem do jogador estudante
 	professor = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/professor.png"); //carrega a imagem do jogador professor
 
@@ -418,19 +420,26 @@ int main(void) {
 					}
             	}
             	else if (state == GAMEOVER) {
-					al_clear_to_color(al_map_rgb(0,0,0));
                 	isGameOver = true;
 					FirstTime = true;
-                	al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "DERROTA");
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER, "pressione SPACE para ir ao menu");
-                	al_draw_textf(fontM, al_map_rgb(0,0,255), WIDTH / 2, 600, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
+					al_draw_bitmap(end,0,0,0); //imagem de fundo
+					if (player.ID == STUDENT) {
+						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER, "VOCÊ REPETIU DE SEMESTRE");
+						al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Boa sorte uma próxima vez!");
+						al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "Pelo menos é uma chance de ficar mais amigo dos mesmos professores :)");
+					}
+					if (player.ID == PROFESSOR) {
+						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
+						al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Podia ir melhor mas passar é o que importa!");
+					}
+					al_draw_textf(fontM, al_map_rgb(0,0,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
+                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
+                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
             	}
 				else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
 					isGameOver = true;
 					FirstTime = true;
-					al_clear_to_color(al_map_rgb(0,0,0));
+					al_draw_bitmap(end,0,0,0); //imagem de fundo
 					if (player.score >= 6 & player.score != 10) {
 						al_draw_textf(fontM, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns, você conseguiu %i pontos!", player.score);
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
