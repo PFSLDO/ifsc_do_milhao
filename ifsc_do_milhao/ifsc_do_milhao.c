@@ -396,10 +396,10 @@ int main(void) {
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
 					if (player.ID == STUDENT) {
-						al_draw_scaled_bitmap(student, 0, 0, 512, 512, player.x, player.y, 300, 300, 0);
+						al_draw_scaled_bitmap(student, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
 					}
 					if (player.ID == PROFESSOR) {
-						al_draw_bitmap(professor,player.x,player.y,0); //carrega imagem do professor
+						al_draw_scaled_bitmap(professor, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
 					}
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
@@ -465,7 +465,7 @@ int main(void) {
 
 void Character(struct Character *player) { //inicia o personagem
 	player->x = 50;
-	player->y = 170;
+	player->y = 175;
 	player->lives = 3; //quantas vezes pode pedir ajuda
 	player->score = 0; //começa o jogo com 0 pontos
 }
