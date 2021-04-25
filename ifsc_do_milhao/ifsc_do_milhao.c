@@ -424,15 +424,19 @@ int main(void) {
 					FirstTime = true;
 					al_draw_bitmap(end,0,0,0); //imagem de fundo
 					if (player.ID == STUDENT) {
-						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER, "VOCÊ REPETIU DE SEMESTRE");
-						al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Boa sorte uma próxima vez!");
-						al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "Pelo menos é uma chance de ficar mais amigo dos mesmos professores :)");
+						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ REPETIU DE SEMESTRE");
+						al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Menos truco da próxima vez!");
+						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "Pelo menos é uma chance de ficar");
+						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "mais próximo dos mesmos professores :)");
 					}
 					if (player.ID == PROFESSOR) {
-						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
-						al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Podia ir melhor mas passar é o que importa!");
+						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ TERMINOU O SEMESTRE SEM HONRA");
+						al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Menos pausas para o café da próxima vez!");
+						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "No último conselho de classe, você teve as piores notas");
+						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "e nenhum aluno lhe chamou pro barzinho na Hercílio Luz");
+
 					}
-					al_draw_textf(fontM, al_map_rgb(0,0,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
+					al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
             	}
