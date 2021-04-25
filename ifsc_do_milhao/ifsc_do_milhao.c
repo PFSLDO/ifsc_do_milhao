@@ -26,7 +26,6 @@ enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
 //PROTÓTIPO DE FUNÇÕES
 //Relacionadas aos personagens
 void Character(struct Character *player); //inicia o personagem do jogador
-void Professor(struct Extras *x, struct Extras *y); //aparição de um professor
 void Interviewer(struct Extras *interviewer, struct Question *quest); //aparição de um entrevistador
 
 //Relaciondas ao jogo
@@ -56,15 +55,13 @@ int main(void) {
 	//Variáveis para leitura arquivos csv
 	char titleques[100], questions[60][100];
 	int questID[60];
-	char titlealt[100], alternatives[180][50];
+	char titlealt[100], alternatives[180][100];
 	int altID[180], verifyID[180], questIDans[180];
 	//adicionar variaveis arquivo tips
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
 	struct Extras interviewer; //cria a entrevistador
-	// struct Extras x; //cria o professor x
-	// struct Extras y; //cria o professor y
 	struct Question quest; //cria uma estrutura para organizar a resposta
 
 	//Variáveis do Allegro
@@ -146,13 +143,13 @@ int main(void) {
 	menuplaying = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_playing.png"); //carrega a imagem do menu da jogada
 	
 	//Carrega os arquivos relacionados a fonte
-	fontP = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 15, 0);
-	fontM = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 20, 0);
-	fontG = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/arial.ttf", 30, 0);
+	fontP = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 13, 0);
+	fontM = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 18, 0);
+	fontG = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 28, 0);
 
 	//Carrega os arquivos relacionados a audio
 	al_reserve_samples(2);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
-    game_theme = al_load_sample("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/audio/game_theme.wav");//carrega o tema
+    game_theme = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/music.wav");//carrega o tema
     game_theme_instance = al_create_sample_instance(game_theme);//cria uma sample instance e coloca o tema dentro
     al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP);//configura o playmode da sample instance, nesse caso loop
     al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());//da o "atach" da sample_instance ao mixer
@@ -341,7 +338,7 @@ int main(void) {
 				}
             }
 			else if (state == GAMEOVER) { //Faz a leitura do que o jogador escolherá fazer depois de perder
-                if(keys[ESC]) {
+				if(keys[ESC]) {
 					done = true;
 					keys[ESC]=false;
 				}
@@ -368,25 +365,25 @@ int main(void) {
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 290, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 320, ALLEGRO_ALIGN_CENTER, "Utilize as teclas do seu computador para fazer as escolhas!");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 340, ALLEGRO_ALIGN_CENTER, "A escolha da resposta é feita com as teclas A, B e C");
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 360, ALLEGRO_ALIGN_CENTER, "Você poderá escolher o personagem e a temática das perguntas a seguir");
+                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 360, ALLEGRO_ALIGN_CENTER, "Você tem direito de pedir ajuda 3 vezes");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 390, ALLEGRO_ALIGN_CENTER, "BOA SORTE!");
-					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "SPACE PARA COMEÇAR A JOGAR");
+					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
+                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA COMEÇAR A JOGAR");
             	}
 				else if (state == CHOOSE_CHARACTER) {
 					al_draw_bitmap(charactermenu,0,0,0); //imagem menu de personagem
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 60, ALLEGRO_ALIGN_CENTER, "ESCOLHA, COM O TECLADO, SEU PERSONAGEM");
-					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 470, ALLEGRO_ALIGN_CENTER, "S) PARA JOGAR COM ALUNO");
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 597, ALLEGRO_ALIGN_CENTER, "P) PARA JOGAR COM PROFESSORA");
+					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "S) PARA JOGAR COM ALUNO");
+                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "P) PARA JOGAR COM PROFESSORA");
 				}
 				else if (state == CHOOSE_THEMATIC) {
 					al_draw_bitmap(thematicmenu,0,0,0); //imagem menu da tematica
 					al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH/2, 90, ALLEGRO_ALIGN_CENTER, "ESCOLHA, COM O TECLADO, UMA");
 					al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH/2, 130, ALLEGRO_ALIGN_CENTER, "TEMÁTICA PARA JOGAR");
-					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 275, ALLEGRO_ALIGN_CENTER, "1) PARA JOGAR COM A TEMÁTICA IFSC");
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 435, ALLEGRO_ALIGN_CENTER, "2) PARA JOGAR COM A TEMÁTICA");
-					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 455, ALLEGRO_ALIGN_CENTER, "CONHECIMENTOS GERAIS");
-					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "3) PARA JOGAR COM A TODAS AS TEMÁTICA");
+					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 278, ALLEGRO_ALIGN_CENTER, "1) PARA JOGAR COM A TEMÁTICA IFSC");
+                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 438, ALLEGRO_ALIGN_CENTER, "2) PARA JOGAR COM A TEMÁTICA");
+					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 458, ALLEGRO_ALIGN_CENTER, "CONHECIMENTOS GERAIS");
+					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 603, ALLEGRO_ALIGN_CENTER, "3) PARA JOGAR COM A TODAS AS TEMÁTICA");
 				}
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
@@ -396,8 +393,8 @@ int main(void) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+1]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+2]);
-                    	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 15, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
-						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 602, 372, 0, "%i,0", player.score);
+                    	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 20, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
+						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 599, 373, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 540, 0, "Sair (ESC)");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 670, 0, "Ajuda (H)");
@@ -462,14 +459,6 @@ void Character(struct Character *player) { //inicia o personagem
 	player->y = HEIGHT;
 	player->lives = 3;
 	player->score = 0;
-}
-
-void Professor(struct Extras *x, struct Extras *y) {
-	// char choice;
-	// //id conforme o escolhido
-	// x->ID = choice;
-	// x->x = 25;
-	// x->y = HEIGHT;
 }
 
 void Interviewer(struct Extras *interviewer, struct Question *quest) {
