@@ -292,9 +292,9 @@ int main(void) {
                 if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
                     Character(&player); //Inicia o personagem do jogador
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
-					quest.num = 0;
-					player.score = 0;
-					player.lives = 3;
+					quest.num = 0; //Zera a questão atual
+					player.score = 0; //Zera a pontuação do usuário
+					player.lives = 3; //Permite que o usuário peça ajuda 3 vezes
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
 				if(!Wait) {
@@ -302,23 +302,23 @@ int main(void) {
 				}
 				Wait = true;
 				if(keys[A]) {
-					quest.player_answer = 0;
+					quest.player_answer = 0; //Registra a escolha do usuário
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
-					quest.num++;
+					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[A]=false;
 				}
 				if(keys[B]) {
-					quest.player_answer = 1;
+					quest.player_answer = 1; //Registra a escolha do usuário
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
-					quest.num++;
+					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[B]=false;
 				}
 				if(keys[C]) {
-					quest.player_answer = 2;
+					quest.player_answer = 2; //Registra a escolha do usuário
 					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
-					quest.num++;
+					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[C]=false;
 				}
@@ -326,7 +326,7 @@ int main(void) {
 					//help professor
 					keys[H]=false;
 				}
-				if (player.score >= 6 && quest.num == 10) {
+				if (player.score >= 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e atingir uma nota igual ou acima de 6, ele ganha o jogo
 					state = WON;
 				}
 				if(player.score < 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e não atingir no mínimo 6 pontos, ele perde
@@ -342,7 +342,7 @@ int main(void) {
 					done = true;
 					keys[ESC]=false;
 				}
-                else if (keys[SPACE]) {
+                else if (keys[SPACE]) { //Volta para o menu inicial caso o jogador queira jogar novamente
                     state = MENU;
 					keys[SPACE]=false;
                 }
@@ -352,7 +352,7 @@ int main(void) {
 					done = true;
 					keys[ESC]=false;
 				}
-                else if (keys[SPACE]) {
+                else if (keys[SPACE]) { //Volta para o menu inicial caso o jogador queira jogar novamente
                     state = MENU;
 					keys[SPACE]=false;
                 }
@@ -480,7 +480,7 @@ void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 		quest->ID = rand() % 30; //Escolhe um valor aleatório entre 0 e 29 e coloca no ID da questão
 	}
 	else if (quest->thematic == 2) { //Caso o jogador tenha escolhido jogar com a temática 2
-		quest->ID = rand() % 60 + 30; //Escolhe um valor aleatório entre 30 e 59 e coloca no ID da questão
+		quest->ID = rand() % 59 + 30; //Escolhe um valor aleatório entre 30 e 59 e coloca no ID da questão
 	}
 	else if (quest->thematic == 3) { //Caso o jogador tenha escolhido jogar com a temática 3
 		quest->ID = rand() % 60; //Escolhe um valor aleatório entre 0 e 59 e coloca no ID da questão
@@ -489,7 +489,7 @@ void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 	while(questIDans[i]!=questID[quest->ID]) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
 		i++; 
 	}
-	quest->answerID = i; //answerID contém o valor da primeira opção de resposta da questão sorteada
+	quest->answerID = i; //answerID contém o valor correspondente a localização da primeira opção de resposta da questão sorteada
 }
 
 void Help(struct Character *player, struct Question *quest) {
@@ -497,13 +497,13 @@ void Help(struct Character *player, struct Question *quest) {
 }
 
 void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180]) {
-	int j=quest->answerID;
-	while(verifyID[j]!=1) {
+	int j=quest->answerID; //Cria uma variáve de controle que carrega o valor da primeira opção de resposta da questão sorteada
+	while(verifyID[j]!=1) { //Acrescimo na variável de controle até que ela contenha o valor correspondente a localização da resposta correta
 		j++;
 	}
-	quest->answer = j;
-	quest->player_answer = quest->player_answer + quest->answerID;
-	if (quest->player_answer == quest->answer) {
+	quest->answer = j; //answer contém o valor correspondente a localização da resposta correta da questão sorteada
+	quest->player_answer = quest->player_answer + quest->answerID; //Armazena o valor da resposta do usuário (1, 2 ou 3) com o acrescimo da localização da primeira resposta da questão sorteada, ou seja, player_answer contém o valor correspondente a localização da resposta escolhida pelo mesmo
+	if (quest->player_answer == quest->answer) { //Se a localização da resposta correta for a mesma da resposta do usuário, ele recebe um ponto
 		player->score++;
 	}
 }
