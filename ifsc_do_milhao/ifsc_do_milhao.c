@@ -389,7 +389,7 @@ int main(void) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
-						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 300, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num);
+						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 300, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num + 1);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+1]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+2]);
@@ -481,6 +481,21 @@ void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 	}
 	else if (quest->thematic == 3) {
 		quest->ID = rand() % 60;
+	}
+	int i = 0;
+	while(questIDans[i]!=questID[quest->ID]) {
+		i++;
+	}
+	quest->answerID = i;
+	///
+	if (quest->thematic == 1) {
+		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
+	}
+	else if (quest->thematic == 2) {
+		quest->ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
+	}
+	else if (quest->thematic == 3) {
+		quest->ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
 	}
 	int i = 0;
 	while(questIDans[i]!=questID[quest->ID]) {
