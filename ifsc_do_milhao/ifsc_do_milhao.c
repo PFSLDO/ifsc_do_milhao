@@ -77,6 +77,8 @@ int main(void) {
 	ALLEGRO_BITMAP *charactermenu = NULL;
 	ALLEGRO_BITMAP *thematicmenu = NULL;
 	ALLEGRO_BITMAP *menuplaying = NULL;
+	ALLEGRO_BITMAP *student = NULL;
+	ALLEGRO_BITMAP *professor = NULL;
 
 	//Variáveis do Allegro relacionadas a audio
 	ALLEGRO_SAMPLE *game_theme = NULL;
@@ -141,7 +143,9 @@ int main(void) {
 	charactermenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_character.png"); //carrega a imagem do menu de personagens
 	thematicmenu = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_thematic.png"); //carrega a imagem do menu de temáticas
 	menuplaying = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_playing.png"); //carrega a imagem do menu da jogada
-	
+	student = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/student.png"); //carrega a imagem do jogador estudante
+	professor = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/professor.png"); //carrega a imagem do jogador professor
+
 	//Carrega os arquivos relacionados a fonte
 	fontP = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 13, 0);
 	fontM = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 18, 0);
@@ -325,6 +329,7 @@ int main(void) {
 				}
 				if(keys[H]) {
 					//help professor
+					//al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
 					keys[H]=false;
 				}
 				if (player.score >= 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e atingir uma nota igual ou acima de 6, ele ganha o jogo
@@ -390,6 +395,12 @@ int main(void) {
 				}
             	else if (state == PLAYING) {
 					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
+					if (player.ID == STUDENT) {
+						al_draw_scaled_bitmap(student, 0, 0, 512, 512, player.x, player.y, 300, 300, 0);
+					}
+					if (player.ID == PROFESSOR) {
+						al_draw_bitmap(professor,player.x,player.y,0); //carrega imagem do professor
+					}
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
 						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 300, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num + 1);
@@ -453,14 +464,8 @@ int main(void) {
 }
 
 void Character(struct Character *player) { //inicia o personagem
-	if (player->ID == STUDENT) {
-		//imagem do estudante
-	}
-	if (player->ID == PROFESSOR) {
-		//imagem do estudante
-	}
-	player->x = 25;
-	player->y = HEIGHT;
+	player->x = 50;
+	player->y = 170;
 	player->lives = 3; //quantas vezes pode pedir ajuda
 	player->score = 0; //começa o jogo com 0 pontos
 }
