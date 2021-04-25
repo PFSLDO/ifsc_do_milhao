@@ -295,6 +295,7 @@ int main(void) {
 					quest.num = 0; //Zera a questão atual
 					player.score = 0; //Zera a pontuação do usuário
 					player.lives = 3; //Permite que o usuário peça ajuda 3 vezes
+					Wait = false;
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
 				if(!Wait) {
@@ -344,6 +345,7 @@ int main(void) {
 				}
                 else if (keys[SPACE]) { //Volta para o menu inicial caso o jogador queira jogar novamente
                     state = MENU;
+					isGameOver = false;
 					keys[SPACE]=false;
                 }
             }
@@ -354,6 +356,7 @@ int main(void) {
 				}
                 else if (keys[SPACE]) { //Volta para o menu inicial caso o jogador queira jogar novamente
                     state = MENU;
+					isGameOver = false;
 					keys[SPACE]=false;
                 }
             }
@@ -402,14 +405,11 @@ int main(void) {
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 540, 0, "Sair (ESC)");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 670, 0, "Ajuda (H)");
 					}
-                	else {
-                    	FirstTime = true;
-                    	state = GAMEOVER;
-                	}
             	}
             	else if (state == GAMEOVER) {
 					al_clear_to_color(al_map_rgb(0,0,0));
                 	isGameOver = true;
+					FirstTime = true;
                 	al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "DERROTA");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
@@ -418,6 +418,7 @@ int main(void) {
             	}
 				else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
 					isGameOver = true;
+					FirstTime = true;
 					al_clear_to_color(al_map_rgb(0,0,0));
 					if (player.score >= 6 & player.score != 10) {
 						al_draw_textf(fontM, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns, você conseguiu %i pontos!", player.score);
