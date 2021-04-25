@@ -390,6 +390,9 @@ int main(void) {
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
 						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 300, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num + 1);
+						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 380, ALLEGRO_ALIGN_CENTER,"A");
+						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 490, ALLEGRO_ALIGN_CENTER,"B");
+						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 600, ALLEGRO_ALIGN_CENTER,"C");
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+1]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+2]);
@@ -457,8 +460,8 @@ void Character(struct Character *player) { //inicia o personagem
 	}
 	player->x = 25;
 	player->y = HEIGHT;
-	player->lives = 3;
-	player->score = 0;
+	player->lives = 3; //quantas vezes pode pedir ajuda
+	player->score = 0; //começa o jogo com 0 pontos
 }
 
 void Interviewer(struct Extras *interviewer, struct Question *quest) {
@@ -473,35 +476,20 @@ void Interviewer(struct Extras *interviewer, struct Question *quest) {
 }
 
 void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
-	if (quest->thematic == 1) {
-		quest->ID = rand() % 30;
+	if (quest->thematic == 1) { //Caso o jogador tenha escolhido jogar com a temática 1
+		quest->ID = rand() % 30; //Escolhe um valor aleatório entre 0 e 29 e coloca no ID da questão
 	}
-	else if (quest->thematic == 2) {
-		quest->ID = rand() % 60 + 31;
+	else if (quest->thematic == 2) { //Caso o jogador tenha escolhido jogar com a temática 2
+		quest->ID = rand() % 60 + 30; //Escolhe um valor aleatório entre 30 e 59 e coloca no ID da questão
 	}
-	else if (quest->thematic == 3) {
-		quest->ID = rand() % 60;
+	else if (quest->thematic == 3) { //Caso o jogador tenha escolhido jogar com a temática 3
+		quest->ID = rand() % 60; //Escolhe um valor aleatório entre 0 e 59 e coloca no ID da questão
 	}
-	int i = 0;
-	while(questIDans[i]!=questID[quest->ID]) {
-		i++;
+	int i = 0; //Cria uma variável de controle
+	while(questIDans[i]!=questID[quest->ID]) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
+		i++; 
 	}
-	quest->answerID = i;
-	///
-	if (quest->thematic == 1) {
-		quest->ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
-	}
-	else if (quest->thematic == 2) {
-		quest->ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
-	}
-	else if (quest->thematic == 3) {
-		quest->ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
-	}
-	int i = 0;
-	while(questIDans[i]!=questID[quest->ID]) {
-		i++;
-	}
-	quest->answerID = i;
+	quest->answerID = i; //answerID contém o valor da primeira opção de resposta da questão sorteada
 }
 
 void Help(struct Character *player, struct Question *quest) {
