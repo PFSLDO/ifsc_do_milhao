@@ -403,7 +403,7 @@ int main(void) {
 					}
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
-						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 300, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num + 1);
+						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 670, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num + 1);
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 380, ALLEGRO_ALIGN_CENTER,"A");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 490, ALLEGRO_ALIGN_CENTER,"B");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 600, ALLEGRO_ALIGN_CENTER,"C");
