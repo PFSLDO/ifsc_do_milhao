@@ -296,7 +296,8 @@ int main(void) {
                     Character(&player); //Inicia o personagem do jogador
 					Interviewer(&interviewer, &quest); //Inicia o entrevistador
 					quest.num = 0;
-
+					player.score = 0;
+					player.lives = 3;
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
 				if(!Wait) {
@@ -340,8 +341,6 @@ int main(void) {
 				}
             }
 			else if (state == GAMEOVER) { //Faz a leitura do que o jogador escolherá fazer depois de perder
-				player.score = 0;
-				player.lives = 3;
                 if(keys[ESC]) {
 					done = true;
 					keys[ESC]=false;
@@ -352,8 +351,6 @@ int main(void) {
                 }
             }
 			else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
-                player.score = 0;
-				player.lives = 3;
 				if(keys[ESC]) {
 					done = true;
 					keys[ESC]=false;
