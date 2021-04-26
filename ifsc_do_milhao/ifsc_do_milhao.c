@@ -80,6 +80,8 @@ int main(void) {
 	ALLEGRO_BITMAP *end = NULL;
 	ALLEGRO_BITMAP *student = NULL;
 	ALLEGRO_BITMAP *professor = NULL;
+	ALLEGRO_BITMAP *pamela = NULL;
+	ALLEGRO_BITMAP *valter = NULL;
 
 	//Variáveis do Allegro relacionadas a audio
 	ALLEGRO_SAMPLE *game_theme = NULL;
@@ -149,6 +151,8 @@ int main(void) {
 	end = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_final.png"); //carrega a imagem do menu do final do jogo
 	student = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/student.png"); //carrega a imagem do jogador estudante
 	professor = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/professor.png"); //carrega a imagem do jogador professor
+	valter = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/valter.png"); //carrega a imagem do jogador professor
+	pamela = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/pamela.png"); //carrega a imagem do jogador professor
 
 	//Carrega os arquivos relacionados a fonte
 	fontP = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 13, 0);
@@ -403,18 +407,24 @@ int main(void) {
 					if (player.ID == STUDENT) {
 						al_draw_scaled_bitmap(student, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
 					}
-					if (player.ID == PROFESSOR) {
+					else if (player.ID == PROFESSOR) {
 						al_draw_scaled_bitmap(professor, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
 					}
+					if (interviewer.ID == INTERVIEWER_VALTER) {
+						al_draw_scaled_bitmap(valter, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
+					}
+					else if (interviewer.ID == INTERVIEWER_PAMELA) {
+						al_draw_scaled_bitmap(pamela, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
+					}
                 	if(!isGameOver) {
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.ID]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.question_loc]);
 						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 670, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num + 1);
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 380, ALLEGRO_ALIGN_CENTER,"A");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 490, ALLEGRO_ALIGN_CENTER,"B");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 600, ALLEGRO_ALIGN_CENTER,"C");
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+1]);
-						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.answerID+2]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc+1]);
+						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc+2]);
                     	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 20, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 599, 373, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
@@ -437,7 +447,6 @@ int main(void) {
 						al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Menos pausas para o café da próxima vez!");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "No último conselho de classe, você teve as piores notas");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "e nenhum aluno lhe chamou pro barzinho na Hercílio Luz");
-
 					}
 					al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
@@ -458,7 +467,6 @@ int main(void) {
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Menos pausas para chocolate quente do Vics!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "Você consegue se explicar mas os alunos não te amam");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "falta mais didática e empatia");
-
 						}
 						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
@@ -477,7 +485,6 @@ int main(void) {
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Os alunos falam bem de você para os outros");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "Você destruiu na avaliação do conselho e os outros professores");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "estão de queixo no chão tentando descobrir como você consegue");
-
 						}
 						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você gabaritou!");
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
@@ -511,31 +518,36 @@ void Character(struct Character *player) { //inicia o personagem
 }
 
 void Interviewer(struct Extras *interviewer, struct Question *quest) {
-	if ((rand() % 2 + 1) == 1) {
+	if (quest->question_loc < 30) {
 		interviewer->ID = INTERVIEWER_PAMELA;
-		//carrega imagem pamela
 	}
 	else {
 		interviewer->ID = INTERVIEWER_VALTER;
-		//carrega imagem valter
 	}
 }
 
 void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 	if (quest->thematic == 1) { //Caso o jogador tenha escolhido jogar com a temática 1
-		quest->ID = rand() % 30; //Escolhe um valor aleatório entre 0 e 29 e coloca no ID da questão
+		quest->question_ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
 	}
-	else if (quest->thematic == 2) { //Caso o jogador tenha escolhido jogar com a temática 2
-		quest->ID = rand() % 59 + 30; //Escolhe um valor aleatório entre 30 e 59 e coloca no ID da questão
+	else if (quest->thematic == 2) {
+		quest->question_ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
 	}
-	else if (quest->thematic == 3) { //Caso o jogador tenha escolhido jogar com a temática 3
-		quest->ID = rand() % 60; //Escolhe um valor aleatório entre 0 e 59 e coloca no ID da questão
+	else if (quest->thematic == 3) {
+		quest->question_ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
 	}
+	
+	int j =0;
+	while(quest->question_loc!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
+		j++;
+	}
+	quest->question_loc = j;
+
 	int i = 0; //Cria uma variável de controle
-	while(questIDans[i]!=questID[quest->ID]) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
+	while(questIDans[i]!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
 		i++; 
 	}
-	quest->answerID = i; //answerID contém o valor correspondente a localização da primeira opção de resposta da questão sorteada
+	quest->first_answer_loc = i; //FirstAnswerLOC contém o valor correspondente a localização da primeira opção de resposta da questão sorteada
 }
 
 void Help(struct Character *player, struct Question *quest) {
@@ -543,13 +555,13 @@ void Help(struct Character *player, struct Question *quest) {
 }
 
 void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer) {
-	int j=quest->answerID; //Cria uma variáve de controle que carrega o valor da primeira opção de resposta da questão sorteada
+	int j=quest->first_answer_loc; //Cria uma variáve de controle que carrega o valor da primeira opção de resposta da questão sorteada
 	while(verifyID[j]!=1) { //Acrescimo na variável de controle até que ela contenha o valor correspondente a localização da resposta correta
 		j++;
 	}
-	quest->answer = j; //answer contém o valor correspondente a localização da resposta correta da questão sorteada
-	quest->player_answer = quest->player_answer + quest->answerID; //Armazena o valor da resposta do usuário (1, 2 ou 3) com o acrescimo da localização da primeira resposta da questão sorteada, ou seja, player_answer contém o valor correspondente a localização da resposta escolhida pelo mesmo
-	if (quest->player_answer == quest->answer) { //Se a localização da resposta correta for a mesma da resposta do usuário, ele recebe um ponto
+	quest->real_answer = j; //answer contém o valor correspondente a localização da resposta correta da questão sorteada
+	quest->player_answer = quest->player_answer + quest->first_answer_loc; //Armazena o valor da resposta do usuário (1, 2 ou 3) com o acrescimo da localização da primeira resposta da questão sorteada, ou seja, player_answer contém o valor correspondente a localização da resposta escolhida pelo mesmo
+	if (quest->player_answer == quest->real_answer) { //Se a localização da resposta correta for a mesma da resposta do usuário, ele recebe um ponto
 		player->score++;
 		al_play_sample(right_answer,5,0,1,ALLEGRO_PLAYMODE_ONCE, NULL); //Toca o audio do Silvio Santos comemorando o acerto
 	}

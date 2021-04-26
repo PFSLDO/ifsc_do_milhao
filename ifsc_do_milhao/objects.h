@@ -20,9 +20,10 @@ struct Extras {
 //Our Questions
 struct Question {
 	int thematic;
-	int ID;
+	int question_ID;
+	int question_loc;
 	int num;
-	int answerID;
-	int answer;
+	int first_answer_loc;
+	int real_answer;
 	int player_answer;
 };
