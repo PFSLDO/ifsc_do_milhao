@@ -444,7 +444,7 @@ int main(void) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc+1]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc+2]);
-                    	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 20, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda para os universitários %i vezes", player.lives);
+                    	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 20, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda %i vezes", player.lives);
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 599, 373, 0, "%i,0", player.score);
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 540, 0, "Sair (ESC)");
