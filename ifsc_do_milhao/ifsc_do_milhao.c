@@ -157,8 +157,8 @@ int main(void) {
 	end = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/menu_final.png"); //carrega a imagem do menu do final do jogo
 	student = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/student.png"); //carrega a imagem do jogador estudante
 	professor = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/professor.png"); //carrega a imagem do jogador professor
-	valter = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/valter.png"); //carrega a imagem do jogador professor
-	pamela = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/pamela.png"); //carrega a imagem do jogador professor
+	valter = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/valter.png"); //carrega a imagem do valter
+	pamela = al_load_bitmap("/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/images/pamela.png"); //carrega a imagem da pamela
 
 	//Carrega os arquivos relacionados a fonte
 	fontP = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 13, 0);
@@ -167,48 +167,48 @@ int main(void) {
 
 	//Carrega os arquivos relacionados a audio
 	al_reserve_samples(4);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
-    game_theme = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/music.wav");//carrega o tema
-    right_answer = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/right.wav");//carrega o tema
-    wrong_answer = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/wrong.wav");//carrega o tema
-	game_theme_instance = al_create_sample_instance(game_theme);//cria uma sample instance e coloca o tema dentro
-    al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP);//configura o playmode da sample instance, nesse caso loop
-    al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());//da o "atach" da sample_instance ao mixer
+    game_theme = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/music.wav"); //Carrega a música tema do jogo
+    right_answer = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/right.wav"); //Carrega o áudio da resposta certa
+    wrong_answer = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/wrong.wav"); //Carrega o áudio da resposta errada
+	game_theme_instance = al_create_sample_instance(game_theme); //Cria uma sample instance e coloca a música tema
+    al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP); //Configura o playmode da sample instance como loop
+    al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());
 
 	//Faz a leitura dos arquivos com as perguntas
-	fileques = fopen(QUEST, "r");
-    if (fileques == NULL) {
+	fileques = fopen(QUEST, "r"); //Abre o arquivo no modo leitura
+    if (fileques == NULL) { //Caso o arquivo esteja vazio, coloca uma mensagem de erro
         Error("Erro ao abrir o arquivo de perguntas.\n");
         return 0;
     }
-    for (int i=0; i<60; i++) {
-        fgets(titleques, sizeof(titleques),fileques);
+    for (int i=0; i<60; i++) { //Lê todas as linhas do arquivo e armazena os valores nas variáveis
+        fgets(titleques, sizeof(titleques),fileques); //Lê e ignora a primeira linha do arquivo que contém o título
         fscanf(fileques, "%d,%[^,]", &questID[i], &questions[i][0]);
     }
-    fclose(fileques);
+    fclose(fileques); //Fecha o arquivo
 
 	//Faz a leitura dos arquivos com as respostas
-	filealt = fopen(ALT, "r");
-    if (filealt == NULL) {
+	filealt = fopen(ALT, "r"); //Abre o arquivo no modo leitura
+    if (filealt == NULL) { //Caso o arquivo esteja vazio, coloca uma mensagem de erro
         Error("Erro ao abrir o arquivo de perguntas.\n");
         return 0;
     }
-    for (int i=0; i<180; i++) {
-        fgets(titlealt, sizeof(titlealt),filealt);
+    for (int i=0; i<180; i++) { //Lê todas as linhas do arquivo e armazena os valores nas variáveis
+        fgets(titlealt, sizeof(titlealt),filealt); //Lê e ignora a primeira linha do arquivo que contém o título
         fscanf(filealt, "%d,%d,%[^,],%d", &questIDans[i], &altID[i], &alternatives[i][0], &verifyID[i]);
     }
-    fclose(fileques);
+    fclose(fileques); //Fecha o arquivo
 
 	//Faz a leitura dos arquivos com as dicas
-	filetips = fopen(TIPS, "r");
-    if (filetips == NULL) {
+	filetips = fopen(TIPS, "r"); //Abre o arquivo no modo leitura
+    if (filetips == NULL) { //Caso o arquivo esteja vazio, coloca uma mensagem de erro
         Error("Erro ao abrir o arquivo de perguntas.\n");
         return 0;
     }
-    for (int i=0; i<180; i++) {
-        fgets(titletips, sizeof(titletips),filetips);
+    for (int i=0; i<180; i++) { //Lê todas as linhas do arquivo e armazena os valores nas variáveis
+        fgets(titletips, sizeof(titletips),filetips); //Lê e ignora a primeira linha do arquivo que contém o título
         fscanf(filetips, "%d,%d,%[^,]", &questIDtips[i], &tipsID[i], &tips[i][0]);
     }
-    fclose(filetips);
+    fclose(filetips); //Fecha o arquivo
 	
 	//CONTROLE DE TEMPO DO JOGO
 	event_queue = al_create_event_queue();
