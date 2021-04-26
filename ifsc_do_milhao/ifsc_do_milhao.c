@@ -320,7 +320,7 @@ int main(void) {
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
                     Character(&player); //Inicia o personagem do jogador
-					quest.num = 0; //Zera a questão atual
+					quest.num = 1; //Zera a questão atual
 					player.score = 0; //Zera a pontuação do usuário
 					player.lives = 3; //Permite que o usuário peça ajuda 3 vezes
 					Wait = false;
@@ -360,10 +360,10 @@ int main(void) {
 					NeedHelp = true;
 					keys[H]=false;
 				}
-				if (player.score >= 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e atingir uma nota igual ou acima de 6, ele ganha o jogo
+				if (player.score >= 6 && quest.num == 11) { //Se o jogador completar as 10 perguntas e atingir uma nota igual ou acima de 6, ele ganha o jogo
 					state = WON;
 				}
-				if(player.score < 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e não atingir no mínimo 6 pontos, ele perde
+				if(player.score < 6 && quest.num == 11) { //Se o jogador completar as 10 perguntas e não atingir no mínimo 6 pontos, ele perde
 					state = GAMEOVER;
 				}
                 if(keys[ESC]) {
@@ -437,7 +437,7 @@ int main(void) {
 					}
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.question_loc]);
-						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 670, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num + 1);
+						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 670, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num);
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 380, ALLEGRO_ALIGN_CENTER,"A");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 490, ALLEGRO_ALIGN_CENTER,"B");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 600, ALLEGRO_ALIGN_CENTER,"C");
