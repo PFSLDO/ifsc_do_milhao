@@ -31,7 +31,6 @@ void Interviewer(struct Extras *interviewer, struct Question *quest); //apariç�
 //Relaciondas ao jogo
 void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]); //gera uma pergunta nova
 void Answer(struct Character *player, struct Question *quest, int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer); //analise da resposta
-void Help(struct Character *player, struct Question *quest); //mostra uma dica para a resposta
 
 //Define como será mostrada uma mensagem de erro
 void Error(char *text) {
@@ -47,6 +46,7 @@ int main(void) {
 	bool isGameOver = false;
 	bool FirstTime = true;
 	bool Wait = false;
+	bool NeedHelp = false;
 	int state = MENU; //inicia no menu
 
 	//Leitura do teclado
@@ -55,9 +55,12 @@ int main(void) {
 	//Variáveis para leitura arquivos csv
 	char titleques[100], questions[60][100];
 	int questID[60];
+
 	char titlealt[100], alternatives[180][100];
 	int altID[180], verifyID[180], questIDans[180];
-	//adicionar variaveis arquivo tips
+
+	char titletips[100], tips[60][100];
+	int questIDtips[60], tipsID[60];
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
@@ -191,6 +194,18 @@ int main(void) {
         fscanf(filealt, "%d,%d,%[^,],%d", &questIDans[i], &altID[i], &alternatives[i][0], &verifyID[i]);
     }
     fclose(fileques);
+
+	//Faz a leitura dos arquivos com as dicas
+	filetips = fopen(TIPS, "r");
+    if (filetips == NULL) {
+        Error("Erro ao abrir o arquivo de perguntas.\n");
+        return 0;
+    }
+    for (int i=0; i<180; i++) {
+        fgets(titletips, sizeof(titletips),filetips);
+        fscanf(filetips, "%d,%d,%[^,]", &questIDtips[i], &tipsID[i], &tips[i][0]);
+    }
+    fclose(filetips);
 	
 	//CONTROLE DE TEMPO DO JOGO
 	event_queue = al_create_event_queue();
@@ -314,7 +329,7 @@ int main(void) {
 				if(!Wait) {
 					NewQuestion(&quest, questID, questIDans); //Chama a função que printa nova pergunta
 				}
-				//Interviewer(&interviewer, &quest); //Inicia o entrevistador
+				Interviewer(&interviewer, &quest); //Inicia o entrevistador
 				Wait = true;
 				if(keys[A]) {
 					quest.player_answer = 0; //Registra a escolha do usuário
@@ -322,6 +337,7 @@ int main(void) {
 					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[A]=false;
+					NeedHelp = false;
 				}
 				if(keys[B]) {
 					quest.player_answer = 1; //Registra a escolha do usuário
@@ -329,6 +345,7 @@ int main(void) {
 					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[B]=false;
+					NeedHelp = false;
 				}
 				if(keys[C]) {
 					quest.player_answer = 2; //Registra a escolha do usuário
@@ -336,9 +353,11 @@ int main(void) {
 					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[C]=false;
+					NeedHelp = false;
 				}
-				if(keys[H]) {
-					//help professor
+				if(keys[H] && player.lives>0) {
+					player.lives = player.lives - 1;
+					NeedHelp = true;
 					keys[H]=false;
 				}
 				if (player.score >= 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e atingir uma nota igual ou acima de 6, ele ganha o jogo
@@ -430,6 +449,9 @@ int main(void) {
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 540, 0, "Sair (ESC)");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 670, 0, "Ajuda (H)");
+						if(NeedHelp) {
+							al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 270, ALLEGRO_ALIGN_CENTER,"Dica: %s", tips[quest.question_loc]);
+						}
 					}
             	}
             	else if (state == GAMEOVER) { //Caso o jogador responsa as 10 perguntas e acerte menos de 6
@@ -512,7 +534,7 @@ int main(void) {
 }
 
 void Character(struct Character *player) { //inicia o personagem
-	player->x = 50;
+	player->x = 30;
 	player->y = 175;
 	player->lives = 3; //quantas vezes pode pedir ajuda
 	player->score = 0; //começa o jogo com 0 pontos
@@ -553,10 +575,6 @@ void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 		i++; 
 	}
 	quest->first_answer_loc = i; //FirstAnswerLOC contém o valor correspondente a localização da primeira opção de resposta da questão sorteada
-}
-
-void Help(struct Character *player, struct Question *quest) {
-
 }
 
 void Answer(struct Character *player, struct Question *quest, int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer) {
