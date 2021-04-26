@@ -450,7 +450,8 @@ int main(void) {
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 540, 0, "Sair (ESC)");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 670, 0, "Ajuda (H)");
 						if(NeedHelp) {
-							al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 270, ALLEGRO_ALIGN_CENTER,"Dica: %s", tips[quest.question_loc]);
+							//550, 440, 330
+							al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, tipsID[quest.question_loc], ALLEGRO_ALIGN_CENTER,"Dica: %s", tips[quest.question_loc]);
 						}
 					}
             	}
