@@ -502,7 +502,7 @@ int main(void) {
 						if (player.ID == PROFESSOR) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
 							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ É UM PROFESSOR MEDIANO");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Menos pausas para chocolate quente do Vics!");
-							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Você consegue se explicar mas os alunos não te amam");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Você consegue explicar mas os alunos não te amam");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "falta mais didática e empatia");
 						}
 						//Mostra os direitos autorais
