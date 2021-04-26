@@ -419,7 +419,7 @@ int main(void) {
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 670, 0, "Ajuda (H)");
 					}
             	}
-            	else if (state == GAMEOVER) {
+            	else if (state == GAMEOVER) { //Caso o jogador responsa as 10 perguntas e acerte menos de 6
                 	isGameOver = true;
 					FirstTime = true;
 					al_draw_bitmap(end,0,0,0); //imagem de fundo
@@ -440,21 +440,45 @@ int main(void) {
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
             	}
-				else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
+				else if (state == WON) {
 					isGameOver = true;
 					FirstTime = true;
 					al_draw_bitmap(end,0,0,0); //imagem de fundo
-					if (player.score >= 6 & player.score != 10) {
-						al_draw_textf(fontM, al_map_rgb(0, 255, 255), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTRE, "Parabéns, você conseguiu %i pontos!", player.score);
-						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
-                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
-                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER, "pressione SPACE para ir ao menu");
+					if (player.score >= 6 & player.score != 10) { //Caso o jogador responsa as 10 perguntas, acerte mais de 6 e menos de 10
+						if (player.ID == STUDENT) {
+							al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
+							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Mais foco da próxima vez!");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "podia ir melhor mas passar é o que importa");
+						}
+						if (player.ID == PROFESSOR) {
+							al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ É UM PROFESSOR MEDIANO");
+							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Menos pausas para chocolate quente do Vics!");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "Você consegue se explicar mas os alunos não te amam");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "falta mais didática e empatia");
+
+						}
+						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
+                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
+                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
 					}
 					else if (player.score == 10) {
-						al_draw_text(fontM, al_map_rgb(255,0,0), WIDTH / 2, 200, ALLEGRO_ALIGN_CENTER, "VOCÊ GABARITOU!");
-                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 300, ALLEGRO_ALIGN_CENTER, "pressione ESC para sair");
-                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 350, ALLEGRO_ALIGN_CENTER, "ou");
-                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 400, ALLEGRO_ALIGN_CENTER, "pressione SPACE para ir ao menu");
+						if (player.ID == STUDENT) {
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "ALUNO EXEMPLAR DA SUA TURMA");
+							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Continue assim!");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "eles vão escrever cartas de recomendação pra você");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "e citar seus trabalhos pra seus próximos alunos");
+
+						}
+						if (player.ID == PROFESSOR) {
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "MELHOR PROFESSOR DO IFSC");
+							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Os alunos falam bem de você para os outros");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "Você destruiu na avaliação do conselho e os outros professores");
+							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "estão de queixo no chão tentando descobrir como você consegue");
+
+						}
+						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você gabaritou!");
+                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
+                		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
 					}
             	}
 
