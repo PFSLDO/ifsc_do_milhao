@@ -305,7 +305,6 @@ int main(void) {
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
                     Character(&player); //Inicia o personagem do jogador
-					Interviewer(&interviewer, &quest); //Inicia o entrevistador
 					quest.num = 0; //Zera a questão atual
 					player.score = 0; //Zera a pontuação do usuário
 					player.lives = 3; //Permite que o usuário peça ajuda 3 vezes
@@ -315,6 +314,7 @@ int main(void) {
 				if(!Wait) {
 					NewQuestion(&quest, questID, questIDans); //Chama a função que printa nova pergunta
 				}
+				Interviewer(&interviewer, &quest); //Inicia o entrevistador
 				Wait = true;
 				if(keys[A]) {
 					quest.player_answer = 0; //Registra a escolha do usuário
@@ -411,10 +411,10 @@ int main(void) {
 						al_draw_scaled_bitmap(professor, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
 					}
 					if (interviewer.ID == INTERVIEWER_VALTER) {
-						al_draw_scaled_bitmap(valter, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
+						al_draw_scaled_bitmap(valter, 0, 0, 512, 512, interviewer.x, interviewer.y, 320, 320, 0);
 					}
 					else if (interviewer.ID == INTERVIEWER_PAMELA) {
-						al_draw_scaled_bitmap(pamela, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
+						al_draw_scaled_bitmap(pamela, 0, 0, 512, 512, interviewer.x, interviewer.y, 320, 320, 0);
 					}
                 	if(!isGameOver) {
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.question_loc]);
@@ -520,9 +520,13 @@ void Character(struct Character *player) { //inicia o personagem
 void Interviewer(struct Extras *interviewer, struct Question *quest) {
 	if (quest->question_loc < 30) {
 		interviewer->ID = INTERVIEWER_PAMELA;
+		interviewer->x = 550;
+		interviewer->y = 175;
 	}
 	else {
 		interviewer->ID = INTERVIEWER_VALTER;
+		interviewer->x = 550;
+		interviewer->y = 175;
 	}
 }
 
@@ -536,7 +540,7 @@ void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 	else if (quest->thematic == 3) {
 		quest->question_ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
 	}
-	
+
 	int j =0;
 	while(quest->question_loc!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
 		j++;
