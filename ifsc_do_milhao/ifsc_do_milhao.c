@@ -96,7 +96,7 @@ int main(void) {
     ALLEGRO_SAMPLE_INSTANCE *game_theme_instance = NULL;
 
 	//FUNÇÕES DE INICIALIZAÇÃO
-	srand(time(0)); //aleatoriedade de rand()
+	srand(time(0)); //Permite a aleatoriedade da função rand()
 
 	if (!al_init()) { 
         Error("Falha ao inicializar o Allegro");
@@ -274,133 +274,137 @@ int main(void) {
 		else if(ev.type == ALLEGRO_EVENT_TIMER) {
 			redraw = true;
 			if (state == MENU) { //Verifica o teclado na tela do menu principal
-                if(keys[SPACE]) {
-                    state = CHOOSE_CHARACTER;
+                if(keys[SPACE]) { //Caso escolha jogar
+                    state = CHOOSE_CHARACTER; //Avança para a tela da escolha do personagem
 					keys[SPACE]=false;
 				}
-                if(keys[ESC]) {
-                    done = true;
+                if(keys[ESC]) { //Caso escolha sair do jogo
+                    done = true; //Sai do loop
 					keys[ESC]=false;
 				}
             }
 			else if (state == CHOOSE_CHARACTER) { //Verifica o teclado na tela do menu de escolha do personagem
 				if(keys[S]) { //Caso escolha jogar com o aluno
-					player.ID = STUDENT;
+					player.ID = STUDENT; //Armazena a escolha do jogador
 					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
 					keys[S]=false;
 				}
 				if(keys[P]) { //Caso escolha jogar com a professora
-					player.ID = PROFESSOR;
+					player.ID = PROFESSOR; //Armazena a escolha do jogador
 					state = CHOOSE_THEMATIC; //Avança para a tela da escolha da temática
 					keys[P]=false;
 				}
-                if(keys[ESC]) {
-					done = true;
+                if(keys[ESC]) { //Caso escolha sair do jogo
+					done = true; //Sai do loop
 					keys[ESC]=false;
 				}
             }
 			else if (state == CHOOSE_THEMATIC) { //Verifica o teclado na tela do menu de escolha da temática
 				if(keys[NUM1]) { //Caso escolha a temática 1
-					quest.thematic = 1;
+					quest.thematic = 1; //Armazena a escolha do jogador
 					state = PLAYING; //Avança para a tela da escolha da temática
 					keys[NUM1]=false;
 				}
 				if(keys[NUM2]) { //Caso escolha a temática 2
-					quest.thematic = 2;
+					quest.thematic = 2; //Armazena a escolha do jogador
 					state = PLAYING; //Avança para a tela da escolha da temática
 					keys[NUM2]=false;
 				}
 				if(keys[NUM3]) { //Caso escolha todas as temáticas
-					quest.thematic = 3;
+					quest.thematic = 3; //Armazena a escolha do jogador
 					state = PLAYING; //Avança para a tela da escolha da temática
 					keys[NUM3]=false;
 				}
-                if(keys[ESC]) {
-					done = true;
+                if(keys[ESC]) { //Caso escolha sair do jogo
+					done = true; //Sai do loop
 					keys[ESC]=false;
 				}
             }
 			else if (state == PLAYING) {
                 if(FirstTime) { //Roda apenas ao entrar na jogada pela primeira vez
                     Character(&player); //Inicia o personagem do jogador
-					quest.num = 1; //Zera a questão atual
-					player.score = 0; //Zera a pontuação do usuário
-					player.lives = 3; //Permite que o usuário peça ajuda 3 vezes
-					Wait = false;
+					quest.num = 1; //Reinicia a contagem das questões
+					player.score = 0; //Reinicia a pontuação do usuário
+					player.tips = 3; //Reinicia o número de dicas disponíveis
+					Wait = false; //Registra que pode chamar uma questão nova
                     FirstTime = false; //Registra que a partir deste momento, não será a primeira vez na rodada
                 }
-				if(!Wait) {
-					NewQuestion(&quest, questID, questIDans); //Chama a função que printa nova pergunta
+				if(!Wait) { //Só chama uma nova questão quando o jogador tiver respondido a anterior
+					NewQuestion(&quest, questID, questIDans); //Chama a função que mostra uma nova pergunta
 				}
 				Interviewer(&interviewer, &quest); //Inicia o entrevistador
-				Wait = true;
-				if(keys[A]) {
+				Wait = true; //Registra que não poder chamar uma nova pergunta
+				if(keys[A]) { //Caso escolha a resposta 1
 					quest.player_answer = 0; //Registra a escolha do usuário
 					Answer(&player, &quest, verifyID, right_answer, wrong_answer); //Chama a função que verifica a resposta do jogador
 					quest.num++; //Contabiliza o valor da questão atual
-					Wait = false;
+					Wait = false; //Registra que pode chamar uma nova questão
 					keys[A]=false;
-					NeedHelp = false;
+					NeedHelp = false; //Reinicia a variável de controle das dicas
 				}
-				if(keys[B]) {
+				if(keys[B]) { //Caso escolha a resposta 2
 					quest.player_answer = 1; //Registra a escolha do usuário
 					Answer(&player, &quest, verifyID, right_answer, wrong_answer); //Chama a função que verifica a resposta do jogador
 					quest.num++; //Contabiliza o valor da questão atual
-					Wait = false;
+					Wait = false; //Registra que pode chamar uma nova questão
 					keys[B]=false;
-					NeedHelp = false;
+					NeedHelp = false; //Reinicia a variável de controle das dicas
 				}
-				if(keys[C]) {
+				if(keys[C]) { //Caso escolha a resposta 3
 					quest.player_answer = 2; //Registra a escolha do usuário
 					Answer(&player, &quest, verifyID, right_answer, wrong_answer); //Chama a função que verifica a resposta do jogador
 					quest.num++; //Contabiliza o valor da questão atual
-					Wait = false;
+					Wait = false; //Registra que pode chamar uma nova questão
 					keys[C]=false;
-					NeedHelp = false;
+					NeedHelp = false; //Reinicia a variável de controle das dicas
 				}
-				if(keys[H] && player.lives>0) {
-					player.lives = player.lives - 1;
-					NeedHelp = true;
+				if(keys[H] && player.tips>0) { //Caso o jogador peça por uma dica
+					player.tips = player.tips - 1; //Registra o uso de uma dica
+					NeedHelp = true; //Registra que o jogador está pedindo uma dica
 					keys[H]=false;
 				}
 				if (player.score >= 6 && quest.num == 11) { //Se o jogador completar as 10 perguntas e atingir uma nota igual ou acima de 6, ele ganha o jogo
-					state = WON;
+					state = WON; //Avança para a tela final
 				}
 				if(player.score < 6 && quest.num == 11) { //Se o jogador completar as 10 perguntas e não atingir no mínimo 6 pontos, ele perde
-					state = GAMEOVER;
+					state = GAMEOVER; //Avança para a tela final
 				}
-                if(keys[ESC]) {
-					done = true;
+                if(keys[ESC]) { //Caso escolha sair do jogo
+					done = true; //Sai do loop
 					keys[ESC]=false;
 				}
             }
 			else if (state == GAMEOVER) { //Faz a leitura do que o jogador escolherá fazer depois de perder
-				if(keys[ESC]) {
-					done = true;
+				isGameOver = true; //Registra que o jogo chegou ao fim
+				FirstTime = true; //Reinicia a variável que controla a primeira jogada
+				if(keys[ESC]) { //Caso escolha sair do jogo
+					done = true; //Sai do loop
 					keys[ESC]=false;
 				}
                 else if (keys[SPACE]) { //Volta para o menu inicial caso o jogador queira jogar novamente
-                    state = MENU;
-					isGameOver = false;
+                    state = MENU; //Avança para a tela do menu incial
+					isGameOver = false; //Reinicia a variável que controla o fim do jogo
 					keys[SPACE]=false;
                 }
             }
 			else if (state == WON) { //Faz a leitura do que o jogador escolherá fazer depois de ganhar
-				if(keys[ESC]) {
-					done = true;
+				isGameOver = true; //Registra que o jogo chegou ao fim
+				FirstTime = true; //Reinicia a variável que controla a primeira jogada
+				if(keys[ESC]) { //Caso escolha sair do jogo
+					done = true; //Sai do loop
 					keys[ESC]=false;
 				}
                 else if (keys[SPACE]) { //Volta para o menu inicial caso o jogador queira jogar novamente
-                    state = MENU;
-					isGameOver = false;
+                    state = MENU; //Avança para a tela do menu incial
+					isGameOver = false; //Reinicia a variável que controla o fim do jogo
 					keys[SPACE]=false;
                 }
             }
 
 			if(redraw && al_is_event_queue_empty(event_queue)) {
             	redraw = false;
-				if (state == MENU) {
-					al_draw_bitmap(menuimage,0,0,0); //imagem de fundo
+				if (state == MENU) { //Caso esteja na tela do menu incial
+					al_draw_bitmap(menuimage,0,0,0); //Coloca a imagem de fundo
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 290, ALLEGRO_ALIGN_CENTER, "COMO JOGAR:");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 320, ALLEGRO_ALIGN_CENTER, "Utilize as teclas do seu computador para fazer as escolhas!");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 340, ALLEGRO_ALIGN_CENTER, "A escolha da resposta é feita com as teclas A, B e C");
@@ -409,14 +413,14 @@ int main(void) {
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA COMEÇAR A JOGAR");
             	}
-				else if (state == CHOOSE_CHARACTER) {
-					al_draw_bitmap(charactermenu,0,0,0); //imagem menu de personagem
+				else if (state == CHOOSE_CHARACTER) { //Caso esteja na tela do menu de escolha do personagem
+					al_draw_bitmap(charactermenu,0,0,0); //Coloca a imagem de fundo
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 60, ALLEGRO_ALIGN_CENTER, "ESCOLHA, COM O TECLADO, SEU PERSONAGEM");
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "S) PARA JOGAR COM ALUNO");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "P) PARA JOGAR COM PROFESSORA");
 				}
-				else if (state == CHOOSE_THEMATIC) {
-					al_draw_bitmap(thematicmenu,0,0,0); //imagem menu da tematica
+				else if (state == CHOOSE_THEMATIC) { //Caso esteja na tela do menu de escolha da temática
+					al_draw_bitmap(thematicmenu,0,0,0); //Coloca a imagem de fundo
 					al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH/2, 90, ALLEGRO_ALIGN_CENTER, "ESCOLHA, COM O TECLADO, UMA");
 					al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH/2, 130, ALLEGRO_ALIGN_CENTER, "TEMÁTICA PARA JOGAR");
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 278, ALLEGRO_ALIGN_CENTER, "1) PARA JOGAR COM A TEMÁTICA IFSC");
@@ -424,178 +428,201 @@ int main(void) {
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 458, ALLEGRO_ALIGN_CENTER, "CONHECIMENTOS GERAIS");
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 603, ALLEGRO_ALIGN_CENTER, "3) PARA JOGAR COM A TODAS AS TEMÁTICA");
 				}
-            	else if (state == PLAYING) {
-					al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
-					if (player.ID == STUDENT) {
+            	else if (state == PLAYING) { //Caso esteja na tela do jogo
+					al_draw_bitmap(menuplaying,0,0,0); //Coloca a imagem de fundo
+					if (player.ID == STUDENT) { //Caso o jogador tenha escolhido jogar com o estudante, a imagem do estudante aparecerá na tela
 						al_draw_scaled_bitmap(student, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
 					}
-					else if (player.ID == PROFESSOR) {
+					else if (player.ID == PROFESSOR) { //Caso o jogador tenha escolhido jogar com a professora, a imagem da professora aparecerá na tela
 						al_draw_scaled_bitmap(professor, 0, 0, 512, 512, player.x, player.y, 320, 320, 0);
 					}
-					if (interviewer.ID == INTERVIEWER_VALTER) {
+					if (interviewer.ID == INTERVIEWER_VALTER) { //Caso o entrevistador da vez seja o Valter, a imagem dele aparecerá
 						al_draw_scaled_bitmap(valter, 0, 0, 512, 512, interviewer.x, interviewer.y, 330, 330, 0);
 					}
-					else if (interviewer.ID == INTERVIEWER_PAMELA) {
+					else if (interviewer.ID == INTERVIEWER_PAMELA) { //Caso o entrevistador da vez seja a Pamela, a imagem dela aparecerá
 						al_draw_scaled_bitmap(pamela, 0, 0, 512, 512, interviewer.x, interviewer.y, 330, 330, 0);
 					}
                 	if(!isGameOver) {
+						//Mostra uma questão
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2, 100, ALLEGRO_ALIGN_CENTER,"%s", questions[quest.question_loc]);
+						//Mostra em qual rodada o jogador está
 						al_draw_textf(fontM, al_map_rgb(255,255,255), WIDTH / 2 - 40, 670, ALLEGRO_ALIGN_CENTER,"Rodada atual: %d", quest.num);
+						//Mostra na lateral das opções as teclas correspondentes
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 380, ALLEGRO_ALIGN_CENTER,"A");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 490, ALLEGRO_ALIGN_CENTER,"B");
 						al_draw_textf(fontG, al_map_rgb(255,255,255), 32, 600, ALLEGRO_ALIGN_CENTER,"C");
+						//Mostra na tela as 3 alternativas para a questão
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 380, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 490, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc+1]);
 						al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, 600, ALLEGRO_ALIGN_CENTER,"%s", alternatives[quest.first_answer_loc+2]);
-                    	al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 20, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda %i vezes", player.lives);
+                    	//Mostra quantas dicas o jogador ainda pode pedir
+						al_draw_textf(fontM, al_map_rgb(255, 255, 255), WIDTH/2, 20, ALLEGRO_ALIGN_CENTER, "Você pode pedir ajuda %i vezes", player.tips);
+						//Mostra a nota atual do jogador
 						al_draw_textf(fontG, al_map_rgb(255, 255, 255), 599, 373, 0, "%i,0", player.score);
+						//Mostra os simbolos do jogo com suas funções
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 600, 440, 0, "Nota");
 						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 540, 0, "Sair (ESC)");
-						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 670, 0, "Ajuda (H)");
-						if(NeedHelp) {
-							//550, 440, 330
+						al_draw_textf(fontM, al_map_rgb(255, 255, 255), 575, 670, 0, "Dica (H)");
+						
+						if(NeedHelp) { //Caso jogador tenha pedido dica, uma dica aparecerá em cima de uma das alternativas
 							al_draw_textf(fontP, al_map_rgb(255,255,255), WIDTH / 2 - 40, tipsID[quest.question_loc], ALLEGRO_ALIGN_CENTER,"Dica: %s", tips[quest.question_loc]);
 						}
 					}
             	}
-            	else if (state == GAMEOVER) { //Caso o jogador responsa as 10 perguntas e acerte menos de 6
-                	isGameOver = true;
-					FirstTime = true;
-					al_draw_bitmap(end,0,0,0); //imagem de fundo
-					if (player.ID == STUDENT) {
+            	else if (state == GAMEOVER) { //Caso esteja na tela 
+					al_draw_bitmap(end,0,0,0); //Coloca a imagem de fundo
+					if (player.ID == STUDENT) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
 						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ REPETIU DE SEMESTRE");
 						al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Menos truco da próxima vez!");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Pelo menos é uma chance de ficar");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "mais próximo dos mesmos professores :)");
 					}
-					if (player.ID == PROFESSOR) {
+					if (player.ID == PROFESSOR) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
 						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ TERMINOU O SEMESTRE SEM HONRA");
 						al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Menos pausas para o café da próxima vez!");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "No último conselho de classe, você teve as piores notas");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "e nenhum aluno lhe chamou pro barzinho na Hercílio Luz");
 					}
+					//Mostra os direitos autorais
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 30, ALLEGRO_ALIGN_CENTER, "Desenvolvido por Pamela Fialho e Valter Rogério");
+					//Mostra a pontuação final
 					al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
-                	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
+                	//Mostra as opções
+					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
                 	al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
             	}
 				else if (state == WON) {
-					isGameOver = true;
-					FirstTime = true;
-					al_draw_bitmap(end,0,0,0); //imagem de fundo
+					al_draw_bitmap(end,0,0,0); //Coloca a imagem de fundo
 					if (player.score >= 6 & player.score != 10) { //Caso o jogador responsa as 10 perguntas, acerte mais de 6 e menos de 10
-						if (player.ID == STUDENT) {
+						if (player.ID == STUDENT) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
 							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Mais foco da próxima vez!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "podia ir melhor mas passar é o que importa");
 						}
-						if (player.ID == PROFESSOR) {
+						if (player.ID == PROFESSOR) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
 							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ É UM PROFESSOR MEDIANO");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Menos pausas para chocolate quente do Vics!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Você consegue se explicar mas os alunos não te amam");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "falta mais didática e empatia");
 						}
+						//Mostra os direitos autorais
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 30, ALLEGRO_ALIGN_CENTER, "Desenvolvido por Pamela Fialho e Valter Rogério");
+						//Mostra a pontuação final
 						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
 					}
 					else if (player.score == 10) {
-						if (player.ID == STUDENT) {
+						if (player.ID == STUDENT) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
 							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "ALUNO EXEMPLAR DA SUA TURMA");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Continue assim!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "eles vão escrever cartas de recomendação pra você");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "e citar seus trabalhos pra seus próximos alunos");
 
 						}
-						if (player.ID == PROFESSOR) {
+						if (player.ID == PROFESSOR) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
 							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "MELHOR PROFESSOR DO IFSC");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Os alunos falam bem de você para os outros");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Você destruiu na avaliação do conselho e os outros professores");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "estão de queixo no chão tentando descobrir como você consegue");
 						}
+						//Mostra os direitos autorais
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 30, ALLEGRO_ALIGN_CENTER, "Desenvolvido por Pamela Fialho e Valter Rogério");
+						//Mostra a pontuação final
 						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você gabaritou!");
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 600, ALLEGRO_ALIGN_CENTER, "SPACE PARA JOGAR NOVAMENTE");
 					}
             	}
-
             al_flip_display();
             al_clear_to_color(al_map_rgb(0,0,0));
         	}
 		}
 	}
-	//colocar todos
+	//Destroi o que foi iniciado
 	al_destroy_bitmap(menuimage);
 	al_destroy_bitmap(charactermenu);
 	al_destroy_bitmap(thematicmenu);
+	al_destroy_bitmap(menuplaying);
+	al_destroy_bitmap(end);
+	al_destroy_bitmap(student);
+	al_destroy_bitmap(professor);
+	al_destroy_bitmap(valter);
+	al_destroy_bitmap(pamela);
+	al_destroy_sample_instance(game_theme_instance);
+	al_destroy_sample(game_theme);
+	al_destroy_sample(right_answer);
+	al_destroy_sample(wrong_answer);
 	al_destroy_event_queue(event_queue);
 	al_destroy_timer(timer);
 	al_destroy_font(fontP);
 	al_destroy_font(fontM);
 	al_destroy_font(fontG);
-	al_destroy_display(display);						//destroy our display object
+	al_destroy_display(display);
 
 	return 0;
 }
 
-void Character(struct Character *player) { //inicia o personagem
+void Character(struct Character *player) { //Inicia o personagem
+	//Determina um valor para x e y que serão usados para mostrar a imagem do personagem
 	player->x = 30;
 	player->y = 175;
-	player->lives = 3; //quantas vezes pode pedir ajuda
-	player->score = 0; //começa o jogo com 0 pontos
+	player->tips = 3; //Determina quantas vezes o jogador pode pedir ajuda
+	player->score = 0; //Determina a pontuação inicial do jogador
 }
 
-void Interviewer(struct Character *interviewer, struct Question *quest) {
-	if (quest->question_loc < 30) {
-		interviewer->ID = INTERVIEWER_PAMELA;
+void Interviewer(struct Character *interviewer, struct Question *quest) { //Inicia o entrevistador
+	if (quest->question_loc < 30) { //Caso a pergunta seja da categoria 1 (IFSC), a Pamela será a entrevistadora
+		interviewer->ID = INTERVIEWER_PAMELA; //Registra a identidade do entrevitador
+		//Determina um valor para x e y que serão usados para mostrar a imagem do entrevistador
 		interviewer->x = 550;
 		interviewer->y = 175;
 	}
-	else {
-		interviewer->ID = INTERVIEWER_VALTER;
+	else { //Caso a pergunta seja da categoria 2 (conhecimentos gerais), o Valter será o entrevistador
+		interviewer->ID = INTERVIEWER_VALTER; //Registra a identidade do entrevitador
+		//Determina um valor para x e y que serão usados para mostrar a imagem do entrevistador
 		interviewer->x = 550;
 		interviewer->y = 175;
 	}
 }
 
-void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
-	if (quest->thematic == 1) { //Caso o jogador tenha escolhido jogar com a temática 1
-		quest->question_ID = 1000 + (quest->num * 100) + (rand() % 3 + 1);
+void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) { //Gera uma pergunta nova
+	if (quest->thematic == 1) { //Caso o jogador tenha escolhido jogar com a temática 1 (IFSC)
+		quest->question_ID = 1000 + (quest->num * 100) + (rand() % 3 + 1); //Faz um sorteio de um número que tenha 1000 (equivalente ao tema IFSC) + 100 vezes o número da questão atual + um número aleatório entre 1 e 3; o que permite que as perguntas nunca se repitam
 	}
-	else if (quest->thematic == 2) {
-		quest->question_ID = 2000 + (quest->num * 100) + (rand() % 3 + 1);
+	else if (quest->thematic == 2) { //Caso o jogador tenha escolhido jogar com a temática 1 (conhecimentos gerais)
+		quest->question_ID = 2000 + (quest->num * 100) + (rand() % 3 + 1); //Faz um sorteio de um número que tenha 2000 (equivalente ao tema conhecimento gerais) + 100 vezes o número da questão atual + um número aleatório entre 1 e 3; o que permite que as perguntas nunca se repitam
 	}
-	else if (quest->thematic == 3) {
-		quest->question_ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1);
+	else if (quest->thematic == 3) { //Caso o jogador tenha escolhido jogar com todas as temáticas
+		quest->question_ID = (rand() % 2 + 1) * 1000 + (quest->num * 100) + (rand() % 3 + 1); //Faz um sorteio de 1 (tema IFSC) ou 2 (conhecimentos gerais) + 100 vezes o número da questão atual + um número aleatório entre 1 e 3; o que permite que as perguntas nunca se repitam
 	}
 
-	int j =0;
-	while(questID[j]!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
+	int j =0; //Cria uma variável de controle
+	while(questID[j]!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da pergunta sorteada
 		j++;
 	}
-	quest->question_loc = j;
+	quest->question_loc = j; //question_loc carrega a localização da pergunta no vetor
 
 	int i = 0; //Cria uma variável de controle
 	while(questIDans[i]!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
-		i++; 
+		i++;
 	}
-	quest->first_answer_loc = i; //FirstAnswerLOC contém o valor correspondente a localização da primeira opção de resposta da questão sorteada
+	quest->first_answer_loc = i; //FirstAnswerLOC carrega a localização da primeira alternativa no vetor correspondente a pergunta sorteada
 }
 
-void Answer(struct Character *player, struct Question *quest, int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer) {
-	int j=quest->first_answer_loc; //Cria uma variáve de controle que carrega o valor da primeira opção de resposta da questão sorteada
+void Answer(struct Character *player, struct Question *quest, int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer) { //Verifica a resposta do jogador
+	int j=quest->first_answer_loc; //Cria uma variáve de controle que carrega a localização da primeira alternativa no vetor correspondente a pergunta sorteada
 	while(verifyID[j]!=1) { //Acrescimo na variável de controle até que ela contenha o valor correspondente a localização da resposta correta
 		j++;
 	}
-	quest->real_answer = j; //answer contém o valor correspondente a localização da resposta correta da questão sorteada
-	quest->player_answer = quest->player_answer + quest->first_answer_loc; //Armazena o valor da resposta do usuário (0, 1 ou 2) com o acrescimo da localização da primeira resposta da questão sorteada, ou seja, player_answer contém o valor correspondente a localização da resposta escolhida pelo mesmo
+	quest->real_answer = j; //real_answer contém a localização da resposta correta da questão sorteada no vetor
+	quest->player_answer = quest->player_answer + quest->first_answer_loc; //Armazena o valor da resposta do usuário (0, 1 ou 2) com o acrescimo da localização da primeira resposta da questão sorteada, ou seja, player_answer contém a localização da resposta escolhida pelo mesmo no vetor
+	
 	if (quest->player_answer == quest->real_answer) { //Se a localização da resposta correta for a mesma da resposta do usuário, ele recebe um ponto
 		player->score++;
 		al_play_sample(right_answer,5,0,1,ALLEGRO_PLAYMODE_ONCE, NULL); //Toca o audio do Silvio Santos comemorando o acerto
 	}
-	else {
-		al_play_sample(wrong_answer,1,0,1,ALLEGRO_PLAYMODE_ONCE, NULL); ////Toca o audio do Silvio Santos comentando o erro
+	else { //Se o usuário tiver escolhido outra opção que não seja a correta
+		al_play_sample(wrong_answer,1,0,1,ALLEGRO_PLAYMODE_ONCE, NULL); //Toca o audio do Silvio Santos comentando o erro
 	}
 }

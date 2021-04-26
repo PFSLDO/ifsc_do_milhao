@@ -6,7 +6,7 @@ struct Character {
 	int ID;
 	int x;
 	int y;
-	int lives;
+	int tips;
 	int score;
 };
 
