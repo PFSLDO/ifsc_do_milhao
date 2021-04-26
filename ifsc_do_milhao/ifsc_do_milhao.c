@@ -30,7 +30,7 @@ void Interviewer(struct Extras *interviewer, struct Question *quest); //apariç�
 
 //Relaciondas ao jogo
 void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]); //gera uma pergunta nova
-void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180]); //analise da resposta
+void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer); //analise da resposta
 void Help(struct Character *player, struct Question *quest); //mostra uma dica para a resposta
 
 //Define como será mostrada uma mensagem de erro
@@ -196,8 +196,8 @@ int main(void) {
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 
-	al_start_timer(timer);//Inicia o timer
-    al_play_sample_instance(game_theme_instance); //
+	al_start_timer(timer); //Inicia o timer
+    al_play_sample_instance(game_theme_instance); //Inicia a trilha sonora do jogo
 	
 	while(!done) {
 		ALLEGRO_EVENT ev;
@@ -314,28 +314,27 @@ int main(void) {
 				Wait = true;
 				if(keys[A]) {
 					quest.player_answer = 0; //Registra a escolha do usuário
-					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
+					Answer(&player, &quest, questID, questIDans, verifyID, right_answer, wrong_answer); //Chama a função que verifica a resposta do jogador
 					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[A]=false;
 				}
 				if(keys[B]) {
 					quest.player_answer = 1; //Registra a escolha do usuário
-					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
+					Answer(&player, &quest, questID, questIDans, verifyID, right_answer, wrong_answer); //Chama a função que verifica a resposta do jogador
 					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[B]=false;
 				}
 				if(keys[C]) {
 					quest.player_answer = 2; //Registra a escolha do usuário
-					Answer(&player, &quest, questID, questIDans, verifyID); //Chama a função que verifica a resposta do jogador
+					Answer(&player, &quest, questID, questIDans, verifyID, right_answer, wrong_answer); //Chama a função que verifica a resposta do jogador
 					quest.num++; //Contabiliza o valor da questão atual
 					Wait = false;
 					keys[C]=false;
 				}
 				if(keys[H]) {
 					//help professor
-					//al_draw_bitmap(menuplaying,0,0,0); //imagem de fundo
 					keys[H]=false;
 				}
 				if (player.score >= 6 && quest.num == 10) { //Se o jogador completar as 10 perguntas e atingir uma nota igual ou acima de 6, ele ganha o jogo
@@ -543,7 +542,7 @@ void Help(struct Character *player, struct Question *quest) {
 
 }
 
-void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180]) {
+void Answer(struct Character *player, struct Question *quest, int questID[60], int questIDans[180], int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer) {
 	int j=quest->answerID; //Cria uma variáve de controle que carrega o valor da primeira opção de resposta da questão sorteada
 	while(verifyID[j]!=1) { //Acrescimo na variável de controle até que ela contenha o valor correspondente a localização da resposta correta
 		j++;
@@ -552,5 +551,9 @@ void Answer(struct Character *player, struct Question *quest, int questID[60], i
 	quest->player_answer = quest->player_answer + quest->answerID; //Armazena o valor da resposta do usuário (1, 2 ou 3) com o acrescimo da localização da primeira resposta da questão sorteada, ou seja, player_answer contém o valor correspondente a localização da resposta escolhida pelo mesmo
 	if (quest->player_answer == quest->answer) { //Se a localização da resposta correta for a mesma da resposta do usuário, ele recebe um ponto
 		player->score++;
+		al_play_sample(right_answer,5,0,1,ALLEGRO_PLAYMODE_ONCE, NULL); //Toca o audio do Silvio Santos comemorando o acerto
+	}
+	else {
+		al_play_sample(wrong_answer,1,0,1,ALLEGRO_PLAYMODE_ONCE, NULL); ////Toca o audio do Silvio Santos comentando o erro
 	}
 }
