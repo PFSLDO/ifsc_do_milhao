@@ -314,7 +314,7 @@ int main(void) {
 				if(!Wait) {
 					NewQuestion(&quest, questID, questIDans); //Chama a função que printa nova pergunta
 				}
-				// Interviewer(&interviewer, &quest); //Inicia o entrevistador
+				//Interviewer(&interviewer, &quest); //Inicia o entrevistador
 				Wait = true;
 				if(keys[A]) {
 					quest.player_answer = 0; //Registra a escolha do usuário
@@ -543,7 +543,7 @@ void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]) {
 	}
 
 	int j =0;
-	while(quest->question_loc!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
+	while(questID[j]!=quest->question_ID) { //Acrescimo na variável de controle até que a mesma carregue o valor correspondente a localização da primeira resposta da pergunta sorteada
 		j++;
 	}
 	quest->question_loc = j;
