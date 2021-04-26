@@ -26,7 +26,7 @@ enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON}; //
 //PROTÓTIPO DE FUNÇÕES
 //Relacionadas aos personagens
 void Character(struct Character *player); //Inicia o personagem do jogador
-void Interviewer(struct Extras *interviewer, struct Question *quest); //Inicia o entrevistador
+void Interviewer(struct Character *interviewer, struct Question *quest); //Inicia o entrevistador
 
 //Relaciondas ao jogo
 void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]); //Gera uma pergunta nova
@@ -53,18 +53,21 @@ int main(void) {
 	bool keys[11] = {false, false, false, false, false, false, false, false, false, false, false};
 
 	//Variáveis para leitura arquivos csv
+	//Arquivo das perguntas
 	char titleques[100], questions[60][100];
 	int questID[60];
 
+	//Arquivo das respostas
 	char titlealt[100], alternatives[180][100];
 	int altID[180], verifyID[180], questIDans[180];
 
+	//Arquivo das dicas
 	char titletips[100], tips[60][100];
 	int questIDtips[60], tipsID[60];
 
 	//Variáveis de objeto
 	struct Character player; //cria o jogador
-	struct Extras interviewer; //cria a entrevistador
+	struct Character interviewer; //cria a entrevistador
 	struct Question quest; //cria uma estrutura para organizar a resposta
 
 	//Variáveis do Allegro
@@ -544,7 +547,7 @@ void Character(struct Character *player) { //inicia o personagem
 	player->score = 0; //começa o jogo com 0 pontos
 }
 
-void Interviewer(struct Extras *interviewer, struct Question *quest) {
+void Interviewer(struct Character *interviewer, struct Question *quest) {
 	if (quest->question_loc < 30) {
 		interviewer->ID = INTERVIEWER_PAMELA;
 		interviewer->x = 550;

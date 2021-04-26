@@ -10,13 +10,6 @@ struct Character {
 	int score;
 };
 
-//Our Interviewer and Professor
-struct Extras {
-	int ID;
-	int x;
-	int y;
-};
-
 //Our Questions
 struct Question {
 	int thematic;
