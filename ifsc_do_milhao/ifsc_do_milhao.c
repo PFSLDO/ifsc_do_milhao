@@ -83,6 +83,8 @@ int main(void) {
 
 	//Variáveis do Allegro relacionadas a audio
 	ALLEGRO_SAMPLE *game_theme = NULL;
+	ALLEGRO_SAMPLE *right_answer = NULL;
+	ALLEGRO_SAMPLE *wrong_answer = NULL;
     ALLEGRO_SAMPLE_INSTANCE *game_theme_instance = NULL;
 
 	//FUNÇÕES DE INICIALIZAÇÃO
@@ -154,9 +156,11 @@ int main(void) {
 	fontG = al_load_font("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/vcr.ttf", 28, 0);
 
 	//Carrega os arquivos relacionados a audio
-	al_reserve_samples(2);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
+	al_reserve_samples(4);//Reserva 2 samples, mais do que o suficiente para o que vai ser usado
     game_theme = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/music.wav");//carrega o tema
-    game_theme_instance = al_create_sample_instance(game_theme);//cria uma sample instance e coloca o tema dentro
+    right_answer = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/right.wav");//carrega o tema
+    wrong_answer = al_load_sample("/Users/pamela_fialho/Documents/GitHub/Listas_de_Exercicios_Programacao_em_Linguagem_C/atividade_expansao_dos_cometas/wrong.wav");//carrega o tema
+	game_theme_instance = al_create_sample_instance(game_theme);//cria uma sample instance e coloca o tema dentro
     al_set_sample_instance_playmode(game_theme_instance, ALLEGRO_PLAYMODE_LOOP);//configura o playmode da sample instance, nesse caso loop
     al_attach_sample_instance_to_mixer(game_theme_instance, al_get_default_mixer());//da o "atach" da sample_instance ao mixer
 
@@ -446,12 +450,12 @@ int main(void) {
 					al_draw_bitmap(end,0,0,0); //imagem de fundo
 					if (player.score >= 6 & player.score != 10) { //Caso o jogador responsa as 10 perguntas, acerte mais de 6 e menos de 10
 						if (player.ID == STUDENT) {
-							al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Mais foco da próxima vez!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "podia ir melhor mas passar é o que importa");
 						}
 						if (player.ID == PROFESSOR) {
-							al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ É UM PROFESSOR MEDIANO");
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 60, ALLEGRO_ALIGN_CENTER, "VOCÊ É UM PROFESSOR MEDIANO");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 150, ALLEGRO_ALIGN_CENTER, "Menos pausas para chocolate quente do Vics!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 220, ALLEGRO_ALIGN_CENTER, "Você consegue se explicar mas os alunos não te amam");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 260, ALLEGRO_ALIGN_CENTER, "falta mais didática e empatia");
