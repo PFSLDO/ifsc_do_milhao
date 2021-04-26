@@ -12,25 +12,25 @@
 #include "objects.h"
 
 //VARIIÁVEIS GLOBAIS
-const int WIDTH = 700;
-const int HEIGHT = 700;
+const int WIDTH = 700; //Define a largura da tela
+const int HEIGHT = 700; //Define a altura da tela
 const char QUEST[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/questions.csv";
 const char ALT[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/alternatives.csv";
 const char TIPS[] = "/Users/pamela_fialho/Documents/GitHub/ifsc_do_milhao/ifsc_do_milhao/csv_files/tips.csv";
-FILE  *fileques;
-FILE  *filealt;
-FILE  *filetips;
-enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, H, S, P, A, B, C};
-enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON};
+FILE  *fileques; //Ponteiro para arquivo das questões
+FILE  *filealt; //Ponteiro para arquivo das respostas
+FILE  *filetips; //Ponteiro para arquivo das dicas
+enum KEYS {SPACE, NUM1, NUM2, NUM3, ESC, H, S, P, A, B, C}; //Enumera as teclas usadas no jogo
+enum STATE {MENU, CHOOSE_CHARACTER, CHOOSE_THEMATIC, PLAYING, GAMEOVER, WON}; //Enumera os estados do jogo
 
 //PROTÓTIPO DE FUNÇÕES
 //Relacionadas aos personagens
-void Character(struct Character *player); //inicia o personagem do jogador
-void Interviewer(struct Extras *interviewer, struct Question *quest); //aparição de um entrevistador
+void Character(struct Character *player); //Inicia o personagem do jogador
+void Interviewer(struct Extras *interviewer, struct Question *quest); //Inicia o entrevistador
 
 //Relaciondas ao jogo
-void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]); //gera uma pergunta nova
-void Answer(struct Character *player, struct Question *quest, int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer); //analise da resposta
+void NewQuestion(struct Question *quest, int questID[60], int questIDans[180]); //Gera uma pergunta nova
+void Answer(struct Character *player, struct Question *quest, int verifyID[180], ALLEGRO_SAMPLE *right_answer, ALLEGRO_SAMPLE *wrong_answer); //Verifica a resposta do jogador
 
 //Define como será mostrada uma mensagem de erro
 void Error(char *text) {
