@@ -472,19 +472,20 @@ int main(void) {
             	else if (state == GAMEOVER) { //Caso esteja na tela 
 					al_draw_bitmap(end,0,0,0); //Coloca a imagem de fundo
 					if (player.ID == STUDENT) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
-						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ REPETIU DE SEMESTRE");
+						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 110, ALLEGRO_ALIGN_CENTER, "VOCÊ REPETIU DE SEMESTRE");
 						al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Menos truco da próxima vez!");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Pelo menos é uma chance de ficar");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "mais próximo dos mesmos professores :)");
 					}
 					if (player.ID == PROFESSOR) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
-						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ TERMINOU O SEMESTRE SEM HONRA");
+						al_draw_text(fontG, al_map_rgb(255,0,0), WIDTH / 2, 110, ALLEGRO_ALIGN_CENTER, "VOCÊ TERMINOU O SEMESTRE SEM HONRA");
 						al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Menos pausas para o café da próxima vez!");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "No último conselho de classe, você teve as piores notas");
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "e nenhum aluno lhe chamou pro barzinho na Hercílio Luz");
 					}
 					//Mostra os direitos autorais
 					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 30, ALLEGRO_ALIGN_CENTER, "Desenvolvido por Pamela Fialho e Valter Rogério");
+					al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 60, ALLEGRO_ALIGN_CENTER, "Programação em Linguagem C - 2020/2");
 					//Mostra a pontuação final
 					al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
                 	//Mostra as opções
@@ -495,18 +496,19 @@ int main(void) {
 					al_draw_bitmap(end,0,0,0); //Coloca a imagem de fundo
 					if (player.score >= 6 & player.score != 10) { //Caso o jogador responsa as 10 perguntas, acerte mais de 6 e menos de 10
 						if (player.ID == STUDENT) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
-							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 110, ALLEGRO_ALIGN_CENTER, "VOCÊ CONSEGUIU PASSAR DE SEMESTRE");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Mais foco da próxima vez!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "podia ir melhor mas passar é o que importa");
 						}
 						if (player.ID == PROFESSOR) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
-							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "VOCÊ É UM PROFESSOR MEDIANO");
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 110, ALLEGRO_ALIGN_CENTER, "VOCÊ É UM PROFESSOR MEDIANO");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Menos pausas para chocolate quente do Vics!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Você consegue explicar mas os alunos não te amam");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "falta mais didática e empatia");
 						}
 						//Mostra os direitos autorais
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 30, ALLEGRO_ALIGN_CENTER, "Desenvolvido por Pamela Fialho e Valter Rogério");
+						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 60, ALLEGRO_ALIGN_CENTER, "Programação em Linguagem C - 2020/2");
 						//Mostra a pontuação final
 						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você conseguiu %d pontos", player.score);
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
@@ -514,20 +516,21 @@ int main(void) {
 					}
 					else if (player.score == 10) {
 						if (player.ID == STUDENT) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
-							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "ALUNO EXEMPLAR DA SUA TURMA");
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 110, ALLEGRO_ALIGN_CENTER, "ALUNO EXEMPLAR DA SUA TURMA");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Continue assim!");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "eles vão escrever cartas de recomendação pra você");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "e citar seus trabalhos pra seus próximos alunos");
 
 						}
 						if (player.ID == PROFESSOR) { //Mostra uma frase de finalização customizada para o personagem escolhido pelo jogador
-							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 90, ALLEGRO_ALIGN_CENTER, "MELHOR PROFESSOR DO IFSC");
+							al_draw_text(fontG, al_map_rgb(0,255,0), WIDTH / 2, 110, ALLEGRO_ALIGN_CENTER, "MELHOR PROFESSOR DO IFSC");
 							al_draw_text(fontG, al_map_rgb(255,255,255), WIDTH / 2, 170, ALLEGRO_ALIGN_CENTER, "Os alunos falam bem de você para os outros");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 240, ALLEGRO_ALIGN_CENTER, "Você destruiu na avaliação do conselho e os outros professores");
 							al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH / 2, 290, ALLEGRO_ALIGN_CENTER, "estão de queixo no chão tentando descobrir como você consegue");
 						}
 						//Mostra os direitos autorais
 						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 30, ALLEGRO_ALIGN_CENTER, "Desenvolvido por Pamela Fialho e Valter Rogério");
+						al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 60, ALLEGRO_ALIGN_CENTER, "Programação em Linguagem C - 2020/2");
 						//Mostra a pontuação final
 						al_draw_textf(fontG, al_map_rgb(255,255,255), WIDTH / 2, 370, ALLEGRO_ALIGN_CENTER,"Você gabaritou!");
                 		al_draw_text(fontM, al_map_rgb(255,255,255), WIDTH/2, 473, ALLEGRO_ALIGN_CENTER, "ESC PARA SAIR DO JOGO");
